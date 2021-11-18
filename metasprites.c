@@ -234,7 +234,7 @@ void main() {
       x=0;
     }
     
-    if(heros.x == 120 && heros.y == 120){
+    if((heros.x >= 130 && heros.x <= 150) && (heros.y >= 130 && heros.y <= 150)){
       create_screen1();
 
     }
