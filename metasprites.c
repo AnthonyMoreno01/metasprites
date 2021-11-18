@@ -15,17 +15,43 @@
 
 ///// METASPRITES
 
-#define TILE 0xd8
-#define ATTR 0
+
+#define TILE 0xd8	// playable character attributes
+#define TILE1 0xCC	// heart attributes
+#define ATTR1 01	// heart attributes
+#define ATTR 02		// character attributes
+#define MAX_FLOORS 20
+
 
 // define a 2x2 metasprite
 const unsigned char metasprite[]={
-        0,      0,      TILE+0,   ATTR, 
-        0,      8,      TILE+1,   ATTR, 
-        8,      0,      TILE+2,   ATTR, 
-        8,      8,      TILE+3,   ATTR, 
+        0,      0,      TILE+0,   ATTR1, 
+        0,      8,      TILE+1,   ATTR1, 
+        8,      0,      TILE+2,   ATTR1, 
+        8,      8,      TILE+3,   ATTR1, 
         128};
 
+
+// Heart Metasprite info
+const unsigned char metasprite1[]={
+        0,      0,      TILE1,     ATTR, 
+        0,      8,      TILE1+1,   ATTR, 
+        8,      0,      TILE1+2,   ATTR, 
+        8,      8,      TILE1+3,   ATTR, 
+        128};
+
+Hero heros;
+Heart hearts;
+// array of floors
+Floor floors[MAX_FLOORS];
+unsigned char pad1;	// joystick
+unsigned char pad1_new; // joystick
+
+
+//Direction array affects movement and gravity
+typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_STAND } dir_t;
+const char DIR_X[5] = { 1, 0, -1, 0, 0};
+const char DIR_Y[5] = { 0, 1, 0, -1, 0};
 /*{pal:"nes",layout:"nes"}*/
 const char PALETTE[32] = { 
   0x03,			// screen color
@@ -41,6 +67,77 @@ const char PALETTE[32] = {
   0x0d,0x27,0x2a	// sprite palette 3
 };
 
+void move_player(Hero* h)
+{
+  h->x += DIR_X[h->dir];
+  h->y += DIR_Y[h->dir];
+}
+// read user input and set hero direction to that value
+void movement(Hero* h)
+{
+  byte dir;
+  pad1_new = pad_trigger(0); // read the first controller
+  pad1 = pad_state(0);
+  
+  
+  if (pad1 & JOY_LEFT_MASK) dir = D_LEFT;else
+  if (pad1 & JOY_RIGHT_MASK) dir = D_RIGHT;else
+  if (pad1 & JOY_UP_MASK) dir = D_UP;else
+  if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;
+  
+  else dir = D_STAND;
+  
+  h->dir = dir;
+}
+
+void resetmovement(Hero* h){
+
+  h->dir = D_STAND;
+  
+}
+void put_str(unsigned int adr, const char *str) 
+{
+  vram_adr(adr);        // set PPU read/write address
+  vram_write(str, strlen(str)); // write bytes to PPU
+}
+
+byte getchar(byte x, byte y) 
+{
+  // compute VRAM read address
+  word addr = NTADR_A(x,y);
+  // result goes into rd
+  byte rd;
+  // wait for VBLANK to start
+  ppu_wait_nmi();
+  // set vram address and read byte into rd
+  vram_adr(addr);
+  vram_read(&rd, 1);
+  // scroll registers are corrupt
+  // fix by setting vram address
+  vram_adr(0x0);
+  return rd;
+}
+
+//function displayes text
+void cputcxy(byte x, byte y, char ch) 
+{
+  vrambuf_put(NTADR_A(x,y), &ch, 1);
+}
+
+//function displayes text
+void cputsxy(byte x, byte y, const char* str) 
+{
+  vrambuf_put(NTADR_A(x,y), str, strlen(str));
+}
+
+void spawn_item(Heart* h)
+{
+  
+  h->x = 10;
+  h->y = 10;
+  oam_meta_spr( h->x , h->y, 16, metasprite1);
+  
+}
 // setup PPU and tables
 void setup_graphics() {
   // clear sprites
@@ -51,44 +148,98 @@ void setup_graphics() {
   ppu_on_all();
 }
 
-// number of actors (4 h/w sprites each)
-#define NUM_ACTORS 16
+//reset game
+void clrscrn()
+{
+  vrambuf_clear();
+  ppu_off();
+  vram_adr(0x2000);
+  vram_fill(0, 32*28);
+  vram_adr(0x0);
+}
 
-// actor x/y positions
-byte actor_x[NUM_ACTORS];
-byte actor_y[NUM_ACTORS];
-// actor x/y deltas per frame (signed)
-sbyte actor_dx[NUM_ACTORS];
-sbyte actor_dy[NUM_ACTORS];
 
+void init_game()
+{
+  vrambuf_clear();
+  
+  heros.bit1 = 0;
+  heros.bit2 = 0;
+  heros.bit3 = 0;
+  heros.bit4 = 0;
+
+ // vram_adr(NTADR_A(0,3));
+  //vram_fill(5, 32);
+  //vram_adr(0x23c0);
+  //vram_fill(0x55, 8);
+
+  oam_clear();
+  heros.x = 48;
+  heros.y = 120;
+  vrambuf_clear();
+
+  oam_meta_spr(heros.x, heros.y, 4, metasprite);
+  vrambuf_clear();
+  set_vram_update(updbuf);
+  
+  
+  cputsxy(11,1,"Score:");
+  cputcxy(17,1,'0');
+  cputcxy(18,1,'0');
+  cputcxy(19,1,'0');
+  cputcxy(20,1,'0');
+  
+  ppu_on_all();
+  
+  vrambuf_clear();
+  
+}
+
+
+void create_screen1(){
+  
+  heros.x = 48;
+  heros.y = 120;
+  
+  
+  
+}
+
+void create_screen2(){
+  
+}
 // main program
 void main() {
-  char i;	// actor index
-  char oam_id;	// sprite ID
+  //char i;	// actor index
+  //char oam_id;	// sprite ID
+  int x;
+  pal_all(PALETTE);
+  //joy_install (joy_static_stddrv);
   
-  // initialize PPU
-  setup_graphics();
-  // initialize actors with random values
-  for (i=0; i<NUM_ACTORS; i++) {
-    actor_x[i] = rand();
-    actor_y[i] = rand();
-    actor_dx[i] = (rand() & 7) - 3;
-    actor_dy[i] = (rand() & 7) - 3;
-  }
+  oam_clear();
+  
+  
+  init_game();
   // loop forever
+  clrscrn();
+  init_game();
   while (1) {
-    // start with OAMid/sprite 0
-    oam_id = 0;
-    // draw and move all actors
-    for (i=0; i<NUM_ACTORS; i++) {
-      oam_id = oam_meta_spr(actor_x[i], actor_y[i], oam_id, metasprite);
-      actor_x[i] += actor_dx[i];
-      actor_y[i] += actor_dy[i];
+    
+     
+    if(x == 500){
+      movement(&heros);
+      move_player(&heros);
+    oam_meta_spr(heros.x, heros.y, 4, metasprite); 
+      //resetmovement(&heros);
+      x=0;
     }
-    // hide rest of sprites
-    // if we haven't wrapped oam_id around to 0
-    if (oam_id!=0) oam_hide_rest(oam_id);
-    // wait for next frame
-    ppu_wait_frame();
+    
+    if(heros.x == 120 && heros.y == 120){
+      create_screen1();
+
+    }
+    
+    
+    x++;
   }
 }

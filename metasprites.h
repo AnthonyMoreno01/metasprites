@@ -16,6 +16,16 @@ typedef struct {
 
 } Heart;
 
+typedef struct Floor {
+  byte ypos;		// # of tiles from ground
+  int height:4;		// # of tiles to next floor
+  int gap:4;		// X position of gap
+  int ladder1:4;	// X position of first ladder
+  int ladder2:4;	// X position of second ladder
+  int objtype:4;	// item type (FloorItem)
+  int objpos:4;		// X position of object
+} Floor;
+
 
 //Prototypes;
 void play(void);
@@ -26,3 +36,7 @@ void main_scroll(void);
 void clrscrn(void);
 void add_point(Hero*);
 void title_screen(void);
+
+// various items the player can pick up
+typedef enum FloorItem { ITEM_NONE, ITEM_MINE, ITEM_HEART, ITEM_POWER };
+
