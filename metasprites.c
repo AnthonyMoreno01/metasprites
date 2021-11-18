@@ -1,18 +1,14 @@
-
-/*
-Metasprites combine several hardware sprites to make a larger
-sprite. Our demo uses 4 hardware sprites in a 2x2 pattern,
-forming 16x16 pixel sprites.
-*/
-
 #include <stdlib.h>
-#include <string.h>
-
-// include NESLIB header
 #include "neslib.h"
-
-// include CC65 NES Header (PPU)
+#include <string.h>
+#include <joystick.h>
 #include <nes.h>
+#include "metasprites.h"
+
+#include "vrambuf.h"
+//#link "vrambuf.c"
+// link the pattern table into CHR ROM
+//#link "chr_generic.s"
 
 // link the pattern table into CHR ROM
 //#link "chr_generic.s"
