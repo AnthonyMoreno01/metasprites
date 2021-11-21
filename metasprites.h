@@ -36,6 +36,15 @@ void main_scroll(void);
 void clrscrn(void);
 void add_point(Hero*);
 void title_screen(void);
+void create_start_area(void);
+void create_left_area(void);
+void create_right_area(void);
+void create_top_area(void);
+void create_bottom_area(void);
+void create_top_left_area(void);
+void create_top_right_area(void);
+void create_bottom_left_area(void);
+void create_bottom_right_area(void);
 
 // various items the player can pick up
 typedef enum FloorItem { ITEM_NONE, ITEM_MINE, ITEM_HEART, ITEM_POWER };
