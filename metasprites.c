@@ -105,6 +105,25 @@ void movement(Hero* h)
   h->dir = dir;
 }
 
+void move_enemy(Enemy* h)
+{
+  h->x += DIR_X[h->dir];
+  h->y += DIR_Y[h->dir];
+}
+
+// read user input and set hero direction to that value
+void enemy_movement(Enemy* h)
+{
+  byte dir;
+  
+  if (enemy.x > heros.x) dir = D_LEFT;	else
+  if (enemy.x < heros.x) dir = D_RIGHT;	else
+  if (enemy.y > heros.y) dir = D_UP;	else
+  if (enemy.y < heros.y) dir = D_DOWN;
+  
+  h->dir = dir;
+}
+
 //function displayes text
 void cputcxy(byte x, byte y, char ch) 
 {
@@ -160,29 +179,29 @@ void shoot(){
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
         
         if(enemy.is_alive && 
-          (bullet_player.x == enemy.x-11 && bullet_player.y == enemy.y) || 
-          (bullet_player.x == enemy.x-10 && bullet_player.y == enemy.y) || 
-          (bullet_player.x == enemy.x-9 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-8 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-7 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-6 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-5 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-4 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-3 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-2 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-1 && bullet_player.y == enemy.y)  ||  
-          (bullet_player.x == enemy.x && bullet_player.y == enemy.y)    || 
-          (bullet_player.x == enemy.x+1 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+2 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+3 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+4 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+5 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+6 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+7 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+8 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+9 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+10 && bullet_player.y == enemy.y) || 
-          (bullet_player.x == enemy.x+11 && bullet_player.y == enemy.y) )
+          (bullet_player.x == enemy.x-11 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-10 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-9  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-8  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-7  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-6  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-5  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-4  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-3  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-2  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-1  && bullet_player.y == enemy.y)  ||  
+          (bullet_player.x == enemy.x    && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+1  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+2  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+3  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+4  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+5  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+6  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+7  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+8  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+9  && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+10 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+11 && bullet_player.y == enemy.y)    )
         {
 	
         enemy.hp = enemy.hp-1;
@@ -841,10 +860,22 @@ void create_bottom_right_area()
     x++;
   }
 }
-
+void game_over(){
+  
+  clrscrn();
+  vrambuf_flush();
+  oam_clear();
+  ppu_on_all();
+  vrambuf_clear();
+  cputsxy(20,20,"Game Over");
+    vrambuf_flush();
+  while(1){
+    
+  }
+}
 void create_boss_area()
 {
-  int x,i;
+  int x,i,y;
   
   
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
@@ -872,10 +903,56 @@ void create_boss_area()
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
+      oam_meta_spr(enemy.x, enemy.y, 48, metasprite2); 
       x=0;
     }
     x++;
+      
+      if(y == 1000){
+        enemy_movement(&enemy);
+        move_enemy(&enemy);
+        if((heros.x == enemy.x-11 && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-10 && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-9  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-8  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-7  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-6  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-5  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-4  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-3  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-2  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x-1  && heros.y == enemy.y)  ||  
+          (heros.x == enemy.x    && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+1  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+2  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+3  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+4  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+5  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+6  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+7  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+8  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+9  && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+10 && heros.y == enemy.y)  || 
+          (heros.x == enemy.x+11 && heros.y == enemy.y))  {
+        
+        
+        if(heros.lives-- == 0x30){
+          game_over();
+        }else
+        {
+          heros.lives--;
+        cputcxy(18,1, heros.lives);
+          vrambuf_flush();
+        }
+        }
+        y = 0;
+      }
+      
+      
+      y++;
   }
+
+  
 }
 
 // main program

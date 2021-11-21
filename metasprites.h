@@ -4,7 +4,7 @@ typedef struct {
   byte dir;		// Hero direction
   int collided:1;	// Hero collided value
   byte lives;		// Hero score 1000-9999
-
+  
 } Hero;
 
 typedef struct {
@@ -49,3 +49,5 @@ void create_bottom_area(void); //heart 7
 void create_bottom_right_area(void); //heart 8
 void create_boss_area(void);
 void shoot(void);
+void check_bullet_collision(void);
+void check_enemy_collision(void);
