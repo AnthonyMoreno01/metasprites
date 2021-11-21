@@ -45,7 +45,6 @@ void create_top_left_area(void);
 void create_top_right_area(void);
 void create_bottom_left_area(void);
 void create_bottom_right_area(void);
+void create_boss_area(void);
 
-// various items the player can pick up
-typedef enum FloorItem { ITEM_NONE, ITEM_MINE, ITEM_HEART, ITEM_POWER };
 

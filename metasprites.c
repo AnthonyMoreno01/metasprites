@@ -247,7 +247,8 @@ void create_start_area(){
   cputcxy(17,27,0x05); 
   cputcxy(18,27,0x05);
 
-  
+
+
   vrambuf_flush();
     while (1) {
     
@@ -278,13 +279,9 @@ void create_start_area(){
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)){
       heros.y = 25;
       create_bottom_area();
-    }
-      
-    
+    }     
     x++;
-  }
-
-  
+  } 
 }
 
 
@@ -319,9 +316,9 @@ void create_left_area(){
 
   
   vrambuf_flush();
+  
     while (1) {
-    
-     
+       
     if(x == 500){
       movement(&heros);
       move_player(&heros);
@@ -329,17 +326,17 @@ void create_left_area(){
       x=0;
     }
    
-    // start right area
+    // move to start area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 15;
       create_start_area();
     }  
-    // start top area
+    // move to top left area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)){
       heros.y = 195;
       create_top_left_area();
     }    
-    // start bottom area
+    // move to bottom left area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)){
       heros.y = 25;
       create_bottom_left_area();
@@ -363,7 +360,6 @@ void create_right_area(){
   cputcxy(1,15,0x05);
   cputcxy(1,16,0x05);
   
-  
   //draw top area border
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
@@ -383,7 +379,6 @@ void create_right_area(){
   vrambuf_flush();
     while (1) {
     
-     
     if(x == 500){
       movement(&heros);
       move_player(&heros);
@@ -391,17 +386,17 @@ void create_right_area(){
       x=0;
     }
 
-    // start left area
+    // move to start area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 220;
       create_start_area();
     }    
-    // start top area
+    // move to top right area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)){
       heros.y = 195;
       create_top_right_area();
     }    
-    // start bottom area
+    // move to bottom right area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)){
       heros.y = 25;
       create_bottom_right_area();
@@ -423,7 +418,6 @@ void create_top_area(){
   cputcxy(30,14,0x05);
   cputcxy(30,15,0x05);
   cputcxy(30,16,0x05);
-  
   
   //draw left area border
   cputcxy(1,12,0x05);
@@ -451,23 +445,22 @@ void create_top_area(){
       x=0;
     }
    
-    // start right area
+    // move to top right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 15;
       create_top_right_area();
     }
-    // start left area
+    // move to top left area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 220;
       create_top_left_area();
     }      
-    // start bottom area
+    // move to start area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)){
       heros.y = 25;
       create_start_area();
     }
       
-    
     x++;
   }
 }
@@ -503,7 +496,6 @@ void create_bottom_area(){
   vrambuf_flush();
     while (1) {
     
-     
     if(x == 500){
       movement(&heros);
       move_player(&heros);
@@ -511,17 +503,17 @@ void create_bottom_area(){
       x=0;
     }
    
-    // start right area
+    // move to bottom right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 15;
       create_bottom_right_area();
     }
-    // start left area
+    // move to bottom left area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 220;
       create_bottom_left_area();
     }    
-    // start top area
+    // move to start area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)){
       heros.y = 195;
       create_start_area();
@@ -555,7 +547,6 @@ void create_top_left_area(){
   vrambuf_flush();
     while (1) {
     
-     
     if(x == 500){
       movement(&heros);
       move_player(&heros);
@@ -563,13 +554,13 @@ void create_top_left_area(){
       x=0;
     }
    
-    // start right area
+    // move to top area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 15;
       create_top_area();
     }
   
-    // start bottom area
+    // move to left area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)){
       heros.y = 25;
       create_left_area();
@@ -599,6 +590,13 @@ int x;
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
   
+  cputcxy(13,27,0x44);
+  cputcxy(14,27,0x41);
+  cputcxy(15,27,0x4E);
+  cputcxy(16,27,0x47);
+  cputcxy(17,27,0x45);
+  cputcxy(18,27,0x52);
+  
   vrambuf_flush();
     while (1) {
     
@@ -613,17 +611,20 @@ int x;
     // start right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 15;
-      create_bottom_area();
+      create_right_area();
     }
-
     // start top area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)){
       heros.y = 195;
-      create_left_area();
+      create_top_area();
     }    
-
+    // start bottom area
+    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)){
+      heros.y = 25;
+      create_boss_area();
+    }     
     x++;
-  }
+  } 
 }
 
 void create_top_right_area(){
@@ -646,26 +647,23 @@ void create_top_right_area(){
   cputcxy(17,27,0x05); 
   cputcxy(18,27,0x05);
 
-  
   vrambuf_flush();
     while (1) {
     
-     
     if(x == 500){
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-   
-
-    // start left area
+  
+    // move to top area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 220;
       create_top_area();
     }    
   
-    // start bottom area
+    // start right area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)){
       heros.y = 25;
       create_right_area();
@@ -696,13 +694,9 @@ int x;
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
   
-
-
-  
   vrambuf_flush();
     while (1) {
     
-     
     if(x == 500){
       movement(&heros);
       move_player(&heros);
@@ -710,19 +704,41 @@ int x;
       x=0;
     }
    
-
-    // start left area
+    // move to bottom area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90)){
       heros.x = 220;
       create_bottom_area();
     }    
-    // start top area
+    // move to right area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)){
       heros.y = 195;
       create_right_area();
     }    
+      
     x++;
-  }}
+  }
+}
+
+void create_boss_area(){
+int x;
+  
+  draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
+  
+  
+  vrambuf_flush();
+    while (1) {
+    
+    if(x == 500){
+      movement(&heros);
+      move_player(&heros);
+      oam_meta_spr(heros.x, heros.y, 4, metasprite); 
+      x=0;
+    }
+   
+    x++;
+  }
+
+}
 
 
 // main program
