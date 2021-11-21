@@ -912,28 +912,28 @@ void create_boss_area()
         enemy_movement(&enemy);
         move_enemy(&enemy);
         if((heros.x == enemy.x-11 && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-10 && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-9  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-8  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-7  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-6  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-5  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-4  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-3  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-2  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-1  && heros.y == enemy.y)  ||  
-          (heros.x == enemy.x    && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+1  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+2  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+3  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+4  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+5  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+6  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+7  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+8  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+9  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+10 && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+11 && heros.y == enemy.y))  {
+           (heros.x == enemy.x-10 && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-9  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-8  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-7  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-6  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-5  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-4  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-3  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-2  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x-1  && heros.y == enemy.y)  ||  
+           (heros.x == enemy.x    && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+1  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+2  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+3  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+4  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+5  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+6  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+7  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+8  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+9  && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+10 && heros.y == enemy.y)  || 
+           (heros.x == enemy.x+11 && heros.y == enemy.y))  {
         
         
           heros.lives--;
