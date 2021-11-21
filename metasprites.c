@@ -936,11 +936,14 @@ void create_boss_area()
           (heros.x == enemy.x+11 && heros.y == enemy.y))  {
         
         
-        if(heros.lives-- == 0x30){
+          heros.lives--;
+          heros.x = 120;
+          heros.y = 120;
+        if(heros.lives == 0x30){
           game_over();
         }else
         {
-          heros.lives--;
+        
         cputcxy(18,1, heros.lives);
           vrambuf_flush();
         }
