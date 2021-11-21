@@ -25,23 +25,22 @@ typedef struct Floor {
 
 
 //Prototypes;
-void play(void);
+
 void init_game(void);
 void game_over(void);
 void start_game(void);
-void main_scroll(void);
 void clrscrn(void);
-void add_point(Hero*);
 void title_screen(void);
-void create_start_area(void);
-void create_left_area(void);
-void create_right_area(void);
-void create_top_area(void);
-void create_bottom_area(void);
-void create_top_left_area(void);
-void create_top_right_area(void);
-void create_bottom_left_area(void);
-void create_bottom_right_area(void);
+
+void create_top_left_area(void); //heart 0
+void create_top_area(void); //heart 1
+void create_top_right_area(void); //heart 2
+void create_left_area(void); //heart 3
+void create_start_area(void); //heart 4
+void create_right_area(void); //heart 5
+void create_bottom_left_area(void); //heart 6
+void create_bottom_area(void); //heart 7
+void create_bottom_right_area(void); //heart 8
 void create_boss_area(void);
 
 

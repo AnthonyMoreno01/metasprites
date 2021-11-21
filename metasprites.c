@@ -13,42 +13,37 @@
 // link the pattern table into CHR ROM
 //#link "chr_generic.s"
 
-///// METASPRITES
-
 
 #define TILE 0xd8	// playable character attributes
 #define TILE1 0xCC	// heart attributes
 #define ATTR1 01	// heart attributes
 #define ATTR 02		// character attributes
-#define MAX_FLOORS 20
-
 #define COLS 32
 #define ROWS 27
+
 // define a 2x2 metasprite
 const unsigned char metasprite[]={
-        0,      0,      TILE+0,   ATTR1, 
-        0,      8,      TILE+1,   ATTR1, 
-        8,      0,      TILE+2,   ATTR1, 
-        8,      8,      TILE+3,   ATTR1, 
+        0,      0,      TILE+0,   ATTR, 
+        0,      8,      TILE+1,   ATTR, 
+        8,      0,      TILE+2,   ATTR, 
+        8,      8,      TILE+3,   ATTR, 
         128};
 
 
 // Heart Metasprite info
 const unsigned char metasprite1[]={
-        0,      0,      TILE1,     ATTR, 
-        0,      8,      TILE1+1,   ATTR, 
-        8,      0,      TILE1+2,   ATTR, 
-        8,      8,      TILE1+3,   ATTR, 
+        0,      0,      TILE1,     ATTR1, 
+        0,      8,      TILE1+1,   ATTR1, 
+        8,      0,      TILE1+2,   ATTR1, 
+        8,      8,      TILE1+3,   ATTR1, 
         128};
-
 
 //character set for box
 const char BOX_CHARS[8] = {0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A };
 
 Hero heros;
 Heart hearts[8];
-// array of floors
-Floor floors[MAX_FLOORS];
+
 unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
 
@@ -77,6 +72,7 @@ void move_player(Hero* h)
   h->x += DIR_X[h->dir];
   h->y += DIR_Y[h->dir];
 }
+
 // read user input and set hero direction to that value
 void movement(Hero* h)
 {
@@ -93,34 +89,6 @@ void movement(Hero* h)
   else dir = D_STAND;
   
   h->dir = dir;
-}
-
-void resetmovement(Hero* h){
-
-  h->dir = D_STAND;
-  
-}
-void put_str(unsigned int adr, const char *str) 
-{
-  vram_adr(adr);        // set PPU read/write address
-  vram_write(str, strlen(str)); // write bytes to PPU
-}
-
-byte getchar(byte x, byte y) 
-{
-  // compute VRAM read address
-  word addr = NTADR_A(x,y);
-  // result goes into rd
-  byte rd;
-  // wait for VBLANK to start
-  ppu_wait_nmi();
-  // set vram address and read byte into rd
-  vram_adr(addr);
-  vram_read(&rd, 1);
-  // scroll registers are corrupt
-  // fix by setting vram address
-  vram_adr(0x0);
-  return rd;
 }
 
 //function displayes text
@@ -150,23 +118,6 @@ void draw_box(byte x, byte y, byte x2, byte y2, const char* chars) {
     cputcxy(x1, y, chars[6]);
     cputcxy(x2, y, chars[7]);
   }
-}
-
-
-void spawn_item(Heart* h)
-{
-
-  oam_meta_spr( h->x , h->y, 20, metasprite1);
-  
-}
-// setup PPU and tables
-void setup_graphics() {
-  // clear sprites
-  oam_clear();
-  // set palette colors
-  pal_all(PALETTE);
-  // turn on PPU
-  ppu_on_all();
 }
 
 //reset game
