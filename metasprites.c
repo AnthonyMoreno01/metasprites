@@ -187,8 +187,8 @@ void init_game()
   heros.lives = 0x30;
 
   oam_clear();
-  heros.x = 150;
-  heros.y = 120;
+  heros.x = 120;
+  heros.y = 110;
   vrambuf_clear();
 
   oam_meta_spr(heros.x, heros.y, 4, metasprite);
@@ -810,46 +810,22 @@ int x;
 
 // main program
 void main() {
-  
+
+  int i =0;
   pal_all(PALETTE);
-  
   oam_clear();
-  
   init_game();
-  // loop forever
   clrscrn();
   init_game();
-  
-  
-  hearts[0].x = 150;
-  hearts[0].y = 100;
-  
-  hearts[1].x = 150;
-  hearts[1].y = 100;
-  
-  hearts[2].x = 150;
-  hearts[2].y = 100;
-  
-  hearts[3].x = 150;
-  hearts[3].y = 100;
-  
-  hearts[4].x = 150;
-  hearts[4].y = 100;
-  
-  hearts[5].x = 150;
-  hearts[5].y = 100;
-  
-  hearts[6].x = 150;
-  hearts[6].y = 100;
-  
-  hearts[7].x = 150;
-  hearts[7].y = 100;
-  
-  hearts[8].x = 150;
-  hearts[8].y = 100;
-  
-  while(1){
-  create_start_area();
+
+  for(i =0; i<9;i++){
+    hearts[i].x = 150;
+    hearts[i].y = 100;
   }
+  
+  
+  
+  create_start_area();
+  
 
 }
