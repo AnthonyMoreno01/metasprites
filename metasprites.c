@@ -241,7 +241,6 @@ void create_top_left_area()
   cputcxy(30,14,0x05);
   cputcxy(30,15,0x05);
   cputcxy(30,16,0x05);
-  
   //draw bottom area border
   cputcxy(13,27,0x05);
   cputcxy(14,27,0x05);
@@ -250,12 +249,11 @@ void create_top_left_area()
   cputcxy(17,27,0x05); 
   cputcxy(18,27,0x05);
 
-  
   vrambuf_flush();
     while (1) 
     {
     
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -318,7 +316,7 @@ void create_top_area()
   vrambuf_flush();
     while (1) 
     {
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -382,7 +380,7 @@ void create_top_right_area()
     while (1) 
     {
     
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -419,7 +417,6 @@ void create_top_right_area()
 void create_left_area()
 {
   int x;
-  
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1); 
   
@@ -448,7 +445,7 @@ void create_left_area()
   
     while (1) 
     {
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -489,8 +486,7 @@ void create_left_area()
 
 void create_right_area()
 {
-  int x;
-  
+  int x; 
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1); 
   //draw left area border
@@ -518,7 +514,7 @@ void create_right_area()
     while (1) 
     {
     
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -560,8 +556,7 @@ void create_right_area()
 
 void create_bottom_left_area()
 {
-int x;
-  
+  int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1); 
   //draw right area border
@@ -589,7 +584,7 @@ int x;
     while (1) 
     {
   
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -633,7 +628,6 @@ int x;
 void create_bottom_area()
 {
   int x;
-  
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1); 
   //draw right area border
@@ -661,7 +655,7 @@ void create_bottom_area()
     while (1) 
     {
     
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -703,8 +697,7 @@ void create_bottom_area()
 
 void create_bottom_right_area()
 {
-int x;
-  
+  int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[8].x, hearts[8].y, 20, metasprite1); 
   
@@ -726,7 +719,7 @@ int x;
     while (1) 
     {
     
-    if(x == 500)
+    if(x == 300)
     {
       movement(&heros);
       move_player(&heros);
@@ -762,11 +755,14 @@ int x;
 
 void create_boss_area()
 {
-int x;
-  
+  int x,i;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  
-  
+  for(i =0; i<9;i++)
+  {
+    hearts[i].x = 240;
+    hearts[i].y = 240;
+    oam_meta_spr(hearts[i].x, hearts[i].y, 20, metasprite1);  
+  }
   vrambuf_flush();
     while (1) 
     {
