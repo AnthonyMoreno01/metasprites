@@ -21,11 +21,12 @@
 
 #define DEF_METASPRITE_2x2(name,code,pal)\
 const unsigned char name[]={\
-        0,      0,      (code)+0,   pal, \
-        0,      8,      (code)+1,   pal, \
-        8,      0,      (code)+2,   pal, \
-        8,      8,      (code)+3,   pal, \
+        0,      0,      0xA2,   pal, \
+        0,      8,      0xA2,   pal, \
+        8,      0,      0xA2,   pal, \
+        8,      8,      0xA2,   pal, \
         128};
+ 
 // define a 2x2 metasprite
 const unsigned char metasprite[]={
         0,      0,      TILE+0,   ATTR, 
