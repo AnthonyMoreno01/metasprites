@@ -10,9 +10,9 @@
 //#link "chr_generic.s"
 
 
-#define TILE 0xd8	// playable character attributes
+#define TILE 0xD8	// playable character attributes
 #define TILE1 0xCC	// heart attributes
-#define TILE2 0xf8
+#define TILE2 0xF8
 #define ATTR1 01	// heart attributes
 #define ATTR 02		// character attributes
 #define COLS 32
@@ -27,14 +27,13 @@ const unsigned char name[]={\
         8,      8,      0xA2,   pal, \
         128};
  
-// define a 2x2 metasprite
+// Hero Metasprite info
 const unsigned char metasprite[]={
         0,      0,      TILE+0,   ATTR, 
         0,      8,      TILE+1,   ATTR, 
         8,      0,      TILE+2,   ATTR, 
         8,      8,      TILE+3,   ATTR, 
         128};
-
 
 // Heart Metasprite info
 const unsigned char metasprite1[]={
@@ -44,6 +43,7 @@ const unsigned char metasprite1[]={
         8,      8,      TILE1+3,   ATTR1, 
         128};
 
+// Enemy Metasprite info
 const unsigned char metasprite2[]={
         0,      0,      TILE2,     ATTR1, 
         0,      8,      TILE2+1,   ATTR1, 
@@ -228,8 +228,7 @@ void init_game()
   set_vram_update(updbuf);
   cputsxy(5,1,"LIVES:");
   cputcxy(11,1,'0');
-  cputsxy(20,1,"BOSS:");
-  cputcxy(26,1,enemy.hp);
+
   ppu_on_all();
   vrambuf_clear();
 }
@@ -273,7 +272,7 @@ void create_start_area()
      
     if(x == 300)
     {
-      shoot();
+      
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -846,6 +845,8 @@ void create_bottom_right_area()
 void create_boss_area()
 {
   int x,i;
+  
+  
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   for(i =0; i<9;i++)
   {
@@ -853,11 +854,21 @@ void create_boss_area()
     hearts[i].y = 240;
     oam_meta_spr(hearts[i].x, hearts[i].y, 20, metasprite1);  
   }
+  enemy.x = 20;
+  enemy.y = 20;
+  oam_meta_spr(enemy.x, enemy.y, 48, metasprite2); 
+  enemy.hp = 0x39;
+  enemy.is_alive = true;
+ 
+  cputsxy(20,1,"BOSS:");
+  cputcxy(26,1,enemy.hp);
+  vrambuf_flush();
   vrambuf_flush();
     while (1) 
     {
      if(x == 500)
      {
+      shoot();
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -883,10 +894,6 @@ void main()
     hearts[i].x = 150;
     hearts[i].y = 100;
   }
-  enemy.x = 20;
-  enemy.y = 20;
-  oam_meta_spr(enemy.x, enemy.y, 48, metasprite2); 
-  enemy.hp = 0x39;
-  enemy.is_alive = true;
+
   create_start_area();
 }
