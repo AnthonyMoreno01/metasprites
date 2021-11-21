@@ -4,13 +4,9 @@
 #include <joystick.h>
 #include <nes.h>
 #include "metasprites.h"
-
 #include "vrambuf.h"
 //#link "vrambuf.c"
-// link the pattern table into CHR ROM
 //#link "chr_generic.s"
-
-// link the pattern table into CHR ROM
 //#link "chr_generic.s"
 
 
@@ -39,7 +35,7 @@ const unsigned char metasprite1[]={
         128};
 
 //character set for box
-const char BOX_CHARS[8] = {0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A };
+const char BOX_CHARS[8]={0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A};
 
 Hero heros;
 Heart hearts[8];
@@ -80,13 +76,11 @@ void movement(Hero* h)
   pad1_new = pad_trigger(0); // read the first controller
   pad1 = pad_state(0);
   
-  
-  if (pad1 & JOY_LEFT_MASK) dir = D_LEFT;else
-  if (pad1 & JOY_RIGHT_MASK) dir = D_RIGHT;else
-  if (pad1 & JOY_UP_MASK) dir = D_UP;else
-  if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;
-  
-  else dir = D_STAND;
+  if (pad1 & JOY_LEFT_MASK) dir = D_LEFT;	else
+  if (pad1 & JOY_RIGHT_MASK) dir = D_RIGHT;	else
+  if (pad1 & JOY_UP_MASK) dir = D_UP;		else
+  if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;	else
+  dir = D_STAND;
   
   h->dir = dir;
 }
@@ -104,17 +98,20 @@ void cputsxy(byte x, byte y, const char* str)
 }
 
 
-void draw_box(byte x, byte y, byte x2, byte y2, const char* chars) {
+void draw_box(byte x, byte y, byte x2, byte y2, const char* chars) 
+{
   byte x1 = x;
   cputcxy(x, y, chars[2]);
   cputcxy(x2, y, chars[3]);
   cputcxy(x, y2, chars[0]);
   cputcxy(x2, y2, chars[1]);
-  while (++x < x2) {
+  while (++x < x2) 
+  {
     cputcxy(x, y, chars[5]);
     cputcxy(x, y2, chars[4]);
   }
-  while (++y < y2) {
+  while (++y < y2) 
+  {
     cputcxy(x1, y, chars[6]);
     cputcxy(x2, y, chars[7]);
   }
@@ -236,8 +233,8 @@ void create_top_left_area()
   int x;
   
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
+  oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);
   
-    oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);    
   //draw right area border
   cputcxy(30,12,0x05);
   cputcxy(30,13,0x05);
@@ -589,9 +586,11 @@ int x;
   cputcxy(18,27,0x52);
   
   vrambuf_flush();
-    while (1) {
+    while (1) 
+    {
   
-    if(x == 500){
+    if(x == 500)
+    {
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -724,9 +723,11 @@ int x;
   cputcxy(18,2,0x05);
   
   vrambuf_flush();
-    while (1) {
+    while (1) 
+    {
     
-    if(x == 500){
+    if(x == 500)
+    {
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -767,8 +768,10 @@ int x;
   
   
   vrambuf_flush();
-    while (1) {
-     if(x == 500){
+    while (1) 
+    {
+     if(x == 500)
+     {
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -778,11 +781,9 @@ int x;
   }
 }
 
-
 // main program
 void main() 
 {
-
   int i =0;
   pal_all(PALETTE);
   oam_clear();
@@ -790,7 +791,8 @@ void main()
   clrscrn();
   init_game();
 
-  for(i =0; i<9;i++){
+  for(i =0; i<9;i++)
+  {
     hearts[i].x = 150;
     hearts[i].y = 100;
   }
