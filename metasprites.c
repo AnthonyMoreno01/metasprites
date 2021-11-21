@@ -12,11 +12,20 @@
 
 #define TILE 0xd8	// playable character attributes
 #define TILE1 0xCC	// heart attributes
+#define TILE2 0xf8
 #define ATTR1 01	// heart attributes
 #define ATTR 02		// character attributes
 #define COLS 32
 #define ROWS 27
 
+
+#define DEF_METASPRITE_2x2(name,code,pal)\
+const unsigned char name[]={\
+        0,      0,      (code)+0,   pal, \
+        0,      8,      (code)+1,   pal, \
+        8,      0,      (code)+2,   pal, \
+        8,      8,      (code)+3,   pal, \
+        128};
 // define a 2x2 metasprite
 const unsigned char metasprite[]={
         0,      0,      TILE+0,   ATTR, 
@@ -34,12 +43,22 @@ const unsigned char metasprite1[]={
         8,      8,      TILE1+3,   ATTR1, 
         128};
 
+const unsigned char metasprite2[]={
+        0,      0,      TILE2,     ATTR1, 
+        0,      8,      TILE2+1,   ATTR1, 
+        8,      0,      TILE2+2,   ATTR1, 
+        8,      8,      TILE2+3,   ATTR1, 
+        128};
 //character set for box
 const char BOX_CHARS[8]={0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A};
 
+DEF_METASPRITE_2x2(bullet, 0xe4, 0); // $08
+
 Hero heros;
 Heart hearts[8];
+Enemy enemy;
 
+bool bullet_exists = false;
 unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
 
@@ -117,6 +136,72 @@ void draw_box(byte x, byte y, byte x2, byte y2, const char* chars)
   }
 }
 
+
+void shoot(){
+  struct Actor bullet_player;
+  int i;
+
+  pad1_new = pad_trigger(0); // read the first controller
+  pad1 = pad_state(0);
+  
+  if (pad1 & PAD_A && !bullet_exists){
+      // Bullet must spawn in front of player
+      bullet_player.x = heros.x;
+      bullet_player.y = heros.y - 12;
+      bullet_exists = true;
+    }
+    // If the player's bullet exists...
+    if (bullet_exists){
+      
+      // Check for enemy collision
+      for(i=0; i<2; i++){
+        bullet_player.y--;
+        oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+        
+        if(enemy.is_alive && 
+          (bullet_player.x == enemy.x-11 && bullet_player.y == enemy.y) || 
+          (bullet_player.x == enemy.x-10 && bullet_player.y == enemy.y) || 
+          (bullet_player.x == enemy.x-9 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-8 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-7 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-6 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-5 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-4 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-3 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-2 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x-1 && bullet_player.y == enemy.y)  ||  
+          (bullet_player.x == enemy.x && bullet_player.y == enemy.y)    || 
+          (bullet_player.x == enemy.x+1 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+2 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+3 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+4 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+5 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+6 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+7 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+8 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+9 && bullet_player.y == enemy.y)  || 
+          (bullet_player.x == enemy.x+10 && bullet_player.y == enemy.y) || 
+          (bullet_player.x == enemy.x+11 && bullet_player.y == enemy.y) )
+        {
+	
+        enemy.hp = enemy.hp-1;
+        cputsxy(20,1,"BOSS:");
+        cputcxy(26,1,enemy.hp);
+        vrambuf_flush();
+          break;
+        }
+      }
+
+      if (bullet_player.y < 1 || bullet_player.y > 190){
+        bullet_exists = false;
+        bullet_player.x = 240;
+        bullet_player.y = 240;
+        oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+      }
+    }
+  
+  
+}
 //reset game
 void clrscrn()
 {
@@ -130,6 +215,7 @@ void clrscrn()
 
 void init_game()
 {
+  enemy.hp = 0x39;
   vrambuf_clear();
   heros.lives = 0x30;
   oam_clear();
@@ -139,8 +225,10 @@ void init_game()
   oam_meta_spr(heros.x, heros.y, 4, metasprite);
   vrambuf_clear();
   set_vram_update(updbuf);
-  cputsxy(12,1,"LIVES:");
-  cputcxy(18,1,'0');
+  cputsxy(5,1,"LIVES:");
+  cputcxy(11,1,'0');
+  cputsxy(20,1,"BOSS:");
+  cputcxy(26,1,enemy.hp);
   ppu_on_all();
   vrambuf_clear();
 }
@@ -184,6 +272,7 @@ void create_start_area()
      
     if(x == 300)
     {
+      shoot();
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -780,6 +869,7 @@ void create_boss_area()
 // main program
 void main() 
 {
+  //struct Actor bullet_player;
   int i =0;
   pal_all(PALETTE);
   oam_clear();
@@ -792,6 +882,10 @@ void main()
     hearts[i].x = 150;
     hearts[i].y = 100;
   }
-  
+  enemy.x = 20;
+  enemy.y = 20;
+  oam_meta_spr(enemy.x, enemy.y, 48, metasprite2); 
+  enemy.hp = 0x39;
+  enemy.is_alive = true;
   create_start_area();
 }

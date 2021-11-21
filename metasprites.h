@@ -13,7 +13,23 @@ typedef struct {
 
 } Heart;
 
+typedef struct {
+  byte x;
+  byte y;
+  byte hp;
+  byte dir;
+  bool is_alive;
+} Enemy;
 
+struct Actor{
+  char label[30]; // What kind of actor is it?
+  byte x; // Current x-location
+  byte y; // Current y-location
+  sbyte dx; // Delta-x
+  sbyte dy; // Delta-y
+  bool is_alive; // Is the actor supposed to be 'alive' right now?
+  byte lives; // How many lives does it have?
+};
 //Prototypes;
 
 void init_game(void);
@@ -32,5 +48,4 @@ void create_bottom_left_area(void); //heart 6
 void create_bottom_area(void); //heart 7
 void create_bottom_right_area(void); //heart 8
 void create_boss_area(void);
-
-
+void shoot(void);
