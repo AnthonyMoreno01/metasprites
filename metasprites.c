@@ -448,6 +448,7 @@ void create_top_left_area()
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)&& enemy[1].hp != 0x30)
     {
       heros.y = 194;
+      oam_clear();
       create_boss_area(&enemy[1]);
     }     
     // check for heart collision    
@@ -567,6 +568,7 @@ void create_top_right_area()
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)&& enemy[2].hp != 0x30)
     {
       heros.y = 194;
+      oam_clear();
       create_boss_area(&enemy[2]);
     } 
     // check for heart collision    
@@ -694,7 +696,7 @@ void create_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 )
+      if(heros.lives == 0x30)
         break;
     x++;
   }
@@ -742,7 +744,7 @@ void create_bottom_left_area()
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[3].hp != 0x30)
     {
       heros.y = 24;
-      
+      oam_clear();
       create_boss_area(&enemy[3]);
     }  
     // check for heart collision  
@@ -862,7 +864,7 @@ void create_bottom_right_area()
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[4].hp != 0x30)
     {
       heros.y = 24;
-      
+      oam_clear();
       create_boss_area(&enemy[4]);
     }  
     // check for heart collision 
@@ -871,7 +873,7 @@ void create_bottom_right_area()
       hearts[7].x = 240;
       hearts[7].y = 240;
       heros.lives++;
-        cputcxy(11,1, heros.lives);
+      cputcxy(11,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
     }
@@ -884,7 +886,7 @@ void create_bottom_right_area()
 //creates boss zone and allows player to shoot
 void create_boss_area(Enemy* e)
 {
-  int x,i,y, p;
+  int x,y, p;
 
   switch(e->id){
 
@@ -921,12 +923,7 @@ void create_boss_area(Enemy* e)
   
  //draw tip
  cputsxy(6,27,"PRESS SPACE TO SHOOT");
-  for(i =0; i<9;i++)
-  {
-    hearts[i].x = 0;
-    hearts[i].y = 0;
-    oam_meta_spr(hearts[i].x, hearts[i].y, 20, metasprite1);  
-  }
+
 
   oam_meta_spr(e->x, e->y, 48, metasprite2); 
   e->hp = 0x39;
@@ -1020,6 +1017,14 @@ void create_boss_area(Enemy* e)
        e->y = 240;
        
        oam_meta_spr(e->x, e->y, 48, metasprite2); 
+       cputcxy(19,1,0x00);
+       cputcxy(20,1,0x00);
+       cputcxy(21,1,0x00);
+       cputcxy(22,1,0x00);
+       cputcxy(23,1,0x00);
+       cputcxy(24,1,0x00);
+       cputcxy(25,1,0x00);
+       cputcxy(26,1,0x00);
        
        switch(e->id){
          case 1: 
