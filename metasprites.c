@@ -36,7 +36,7 @@ DEF_METASPRITE_2x2(metasprite, 0xD8, 2);
 Hero heros;
 //creates heart sprite
 DEF_METASPRITE_2x2(metasprite1, 0xCC, 1);
-Heart hearts[7];
+Heart hearts[8];
 //creates enemy[0] sprite
 DEF_METASPRITE_2x2(metasprite2, 0xF8, 1);
 Enemy enemy[6];
@@ -330,7 +330,7 @@ void init_game()
   cputcxy(11,1,'1');
   ppu_on_all();
   vrambuf_clear();
-    for(i =0; i<8;i++)
+    for(i =0; i<9;i++)
   {
     hearts[i].x = 150;
     hearts[i].y = 100;
@@ -886,7 +886,7 @@ void create_bottom_right_area()
 //creates boss zone and allows player to shoot
 void create_boss_area(Enemy* e)
 {
-  int x,y, p;
+  int x,y,p;
 
   switch(e->id){
 
@@ -915,7 +915,7 @@ void create_boss_area(Enemy* e)
       p = 500;
       e->x = 20;
       e->y = 20;
-
+    default: p = 600; break;
   }
   
   
@@ -1003,12 +1003,27 @@ void create_boss_area(Enemy* e)
       //when enemy[0] hp is 3 increase movement
       if(e->hp == 0x33)
       {
-       p = 500;
+	switch(e->id)
+        {
+          case 1: p = 800; break;
+          case 2: p = 700; break;
+          case 3: p = 600; break;
+          case 4: p = 600; break;
+          case 5: p = 500; break;
+          default: p = 400; break;
+        }
       }
       //when enemy[0] hp is 1 increase movement
       if(e->hp == 0x31)
       {
-       p = 400;
+        switch(e->id){
+          case 1: p = 700; break;
+          case 2: p = 600; break;
+          case 3: p = 500; break;
+          case 4: p = 500; break;
+          case 5: p = 400; break;
+          default: p = 300; break;
+        }
       } 
       //when enemy[0] hp is 0 you win
      if(e->hp == 0x30)
