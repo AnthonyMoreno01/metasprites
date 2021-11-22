@@ -909,8 +909,8 @@ void create_boss_area(Enemy* e)
       e->x = 20;
       e->y = 20;
       break;
-    case 5:
-      p = 600;
+      case 5:
+      p = 500;
       e->x = 20;
       e->y = 20;
 
@@ -1060,7 +1060,7 @@ void title_screen()
   vrambuf_clear();
   cputsxy(10,6,"Dungeon Crawl");
   cputsxy(4,10,"Collect Hearts");
-  cputsxy(4,12,"And Defeat the Boss");
+  cputsxy(4,12,"& Defeat God King Wylie");
   cputsxy(4,14,"to Beat the Game");
   cputsxy(8,18,"Press Any Button");
   cputsxy(13,20,"To Play");
