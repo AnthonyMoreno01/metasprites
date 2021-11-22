@@ -34,17 +34,18 @@ struct Actor{
 
 void init_game(void);
 void game_over(void);
-void you_win(void);
+void win_screen(void);
 void start_game(void);
 void clrscrn(void);
 void title_screen(void);
 void play(void);
 
+void create_start_area(void); 
+
 void create_top_left_area(void); //heart 0
 void create_top_area(void); //heart 1
 void create_top_right_area(void); //heart 2
 void create_left_area(void); //heart 3
-void create_start_area(void); //heart 4
 void create_right_area(void); //heart 5
 void create_bottom_left_area(void); //heart 6
 void create_bottom_area(void); //heart 7

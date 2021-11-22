@@ -65,7 +65,7 @@ const char PALETTE[32] = {
   0x0d,0x2d,0x3a,0x0,	// sprite palette 2
   0x0d,0x27,0x2a	// sprite palette 3
 };
-
+//function moves hero in appropriate direction
 void move_player(Hero* h)
 {
   h->x += DIR_X[h->dir];
@@ -82,7 +82,11 @@ void movement(Hero* h)
   if (pad1 & JOY_RIGHT_MASK) dir = D_RIGHT;	else
   if (pad1 & JOY_UP_MASK) dir = D_UP;		else
   if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;	else
+   
+    //stops player from moving before input is read
 	dir = D_STAND;
+  
+  //stops player from moving out of bounds
   if (heros.x < 10){
     dir = D_RIGHT;
   }
@@ -97,13 +101,13 @@ void movement(Hero* h)
   }
   h->dir = dir;
 }
-
+//function moves enemy in appropriate direction
 void move_enemy(Enemy* h)
 {
   h->x += DIR_X[h->dir];
   h->y += DIR_Y[h->dir];
 }
-// read user input and set hero direction to that value
+// moves enemy based on hero location
 void enemy_movement(Enemy* h)
 {
   byte dir;
@@ -113,17 +117,17 @@ void enemy_movement(Enemy* h)
   if (enemy.y < heros.y) dir = D_DOWN;
   h->dir = dir;
 }
-//function displayes text
+//function displays text
 void cputcxy(byte x, byte y, char ch) 
 {
   vrambuf_put(NTADR_A(x,y), &ch, 1);
 }
-//function displayes text
+//function displays text
 void cputsxy(byte x, byte y, const char* str) 
 {
   vrambuf_put(NTADR_A(x,y), str, strlen(str));
 }
-
+//function displays lose screen and waits for input to play again
 void game_over()
 {
 joy_install (joy_static_stddrv);
@@ -145,8 +149,8 @@ joy_install (joy_static_stddrv);
     break;
   }
 }
-
-void you_win()
+//function displays win screen and waits for input to play again
+void win_screen()
 {
   joy_install (joy_static_stddrv);
   clrscrn();
@@ -186,24 +190,27 @@ void draw_box(byte x, byte y, byte x2, byte y2, const char* chars)
     cputcxy(x2, y, chars[7]);
   }
 }
-
-void draw_left_border(){
+//draws left zone border
+void draw_left_border()
+{
   cputcxy(1,12,0x07);
   cputcxy(1,13,0x07);
   cputcxy(1,14,0x07);
   cputcxy(1,15,0x07);
   cputcxy(1,16,0x07);
 }
-
-void draw_right_border(){
+//draws right zone border
+void draw_right_border()
+{
   cputcxy(30,12,0x06);
   cputcxy(30,13,0x06);
   cputcxy(30,14,0x06);
   cputcxy(30,15,0x06);
   cputcxy(30,16,0x06);
 }
-
-void draw_top_border(){
+//draws top zone border
+void draw_top_border()
+{
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
   cputcxy(15,2,0x05);
@@ -211,8 +218,9 @@ void draw_top_border(){
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
 }
-
-void draw_bottom_border(){
+//draws bottom zone border
+void draw_bottom_border()
+{
   cputcxy(13,27,0x08);
   cputcxy(14,27,0x08);
   cputcxy(15,27,0x08);
@@ -225,16 +233,16 @@ void draw_bottom_border(){
 void shoot(){
   struct Actor bullet_player;
   int i;
-  pad1_new = pad_trigger(0); // read the first controller
+  pad1_new = pad_trigger(0);
   pad1 = pad_state(0);
   if (pad1 & PAD_A && !bullet_exists)
   {
-      // Bullet must spawn in front of player
+      //Spawns bullet in front of hero location
       bullet_player.x = heros.x;
       bullet_player.y = heros.y - 12;
       bullet_exists = true;
     }
-    // If the player's bullet exists...
+    //if bullet exists 
     if (bullet_exists){
       
       // Check for enemy collision
@@ -275,6 +283,7 @@ void shoot(){
           break;
         }
       }
+      //check if bullet hit enemy
       if(enemy.is_alive == false)
       {
         bullet_exists = false;
@@ -283,6 +292,7 @@ void shoot(){
         enemy.is_alive = true;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
       }
+      //check if bullet is out of bounds
       if (bullet_player.y < 1 || bullet_player.y > 190)
       {
         bullet_exists = false;
@@ -301,8 +311,7 @@ void clrscrn()
   vram_fill(0, 32*28);
   vram_adr(0x0);
 }
-
-
+//initialize hero, hearts, and enemy
 void init_game()
 {
   int i;
@@ -328,7 +337,7 @@ void init_game()
     hearts[i].y = 100;
   }
 }
-
+//creates start area
 void create_start_area()
 {
   int x;
@@ -765,7 +774,7 @@ void create_bottom_area()
       vrambuf_flush();
       oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30 ||enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
         break;
     x++;
   }
@@ -819,7 +828,7 @@ void create_bottom_right_area()
   }
 }
 
-
+//creates boss zone and allows player to shoot
 void create_boss_area()
 {
   int x,i,y, p;
@@ -860,6 +869,7 @@ void create_boss_area()
       {
         enemy_movement(&enemy);
         move_enemy(&enemy);
+        //check for collision between enemy and hero
         if(
           (heros.x == enemy.x-11 && heros.y == enemy.y)  || 
           (heros.x == enemy.x-10 && heros.y == enemy.y)  || 
@@ -885,10 +895,12 @@ void create_boss_area()
           (heros.x == enemy.x+10 && heros.y == enemy.y)  || 
           (heros.x == enemy.x+11 && heros.y == enemy.y))  
         {
+          //if collision hero hp drops 1 and reset player to middle of screen
           heros.lives--;
           heros.x = 120;
           heros.y = 120;
-        if(heros.lives == 0x30 || enemy.hp == 0x30)
+          //when heros hp is 0 game over
+        if(heros.lives == 0x30)
         {
           game_over();
           break;
@@ -901,24 +913,26 @@ void create_boss_area()
         }
         y = 0;
       }
+      //when enemy hp is 3 increase movement
       if(enemy.hp == 0x33)
       {
        p = 750;
       }
+      //when enemy hp is 1 increase movement
       if(enemy.hp == 0x31)
       {
        p = 600;
-      }
-      
+      } 
+      //when enemy hp is 0 you win
      if(enemy.hp == 0x30)
      {
-       you_win();
+       win_screen();
        break;
      }
       y++;
   }
 }
-
+//creates title screen
 void title_screen()
 {
   pal_all(PALETTE);
@@ -936,7 +950,7 @@ void title_screen()
   cputsxy(13,20,"To Play");
   vrambuf_flush();
 }
-
+//endless function
 void play()
 {
   oam_clear();
