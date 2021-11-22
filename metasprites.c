@@ -69,8 +69,8 @@ unsigned char pad1_new; // joystick
 
 //Direction array affects movement and gravity
 typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_STAND } dir_t;
-const char DIR_X[5] = { 2, 0, -2, 0, 0};
-const char DIR_Y[5] = { 0, 2, 0, -2, 0};
+const char DIR_X[5] = { 1, 0, -1, 0, 0};
+const char DIR_Y[5] = { 0, 1, 0, -1, 0};
 /*{pal:"nes",layout:"nes"}*/
 const char PALETTE[32] = { 
   0x03,			// screen color
@@ -261,7 +261,7 @@ void init_game()
 {
   enemy.hp = 0x39;
   vrambuf_clear();
-  heros.lives = 0x30;
+  heros.lives = 0x31;
   oam_clear();
   heros.x = 120;
   heros.y = 110;
@@ -270,7 +270,7 @@ void init_game()
   vrambuf_clear();
   set_vram_update(updbuf);
   cputsxy(5,1,"LIVES:");
-  cputcxy(11,1,'0');
+  cputcxy(11,1,'1');
 
   ppu_on_all();
   vrambuf_clear();
@@ -280,7 +280,7 @@ void create_start_area()
 {
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);  
+  oam_meta_spr(240, 240, 20, metasprite1);  
   //draw right area border
   cputcxy(30,12,0x05);
   cputcxy(30,13,0x05);
@@ -346,16 +346,7 @@ void create_start_area()
       heros.y = 24;
       create_bottom_area();
     }    
-    // check for heart collision
-    if(hearts[4].x == heros.x && hearts[4].y == heros.y)
-    {
-      hearts[4].x = 240;
-      hearts[4].y = 240;
-      heros.lives++;
-      cputcxy(11,1, heros.lives);
-      vrambuf_flush();
-      oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);    
-    }
+
     x++;
   } 
 }
@@ -984,9 +975,6 @@ void create_boss_area()
         cputcxy(11,1, heros.lives);
           vrambuf_flush();
         }
-          
-
-
         }
 
         y = 0;
