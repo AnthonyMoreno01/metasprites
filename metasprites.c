@@ -163,9 +163,8 @@ joy_install (joy_static_stddrv);
   cputsxy(15,5,"Game Over");
   cputsxy(2,20,"Press Any Button");
   cputsxy(2,22," To Play Again");
-    vrambuf_flush();
-  
-
+  vrambuf_flush();
+  delay(100);
   while(1)
   {
    byte joy;
@@ -185,7 +184,7 @@ void you_win(){
   cputsxy(2,20,"Press Any Button");
   cputsxy(2,22," To Play Again");
   vrambuf_flush();
-  
+  delay(100);
   while(1)
   {
     byte joy;
