@@ -34,6 +34,7 @@ struct Actor{
 
 void init_game(void);
 void game_over(void);
+void you_win(void);
 void start_game(void);
 void clrscrn(void);
 void title_screen(void);
