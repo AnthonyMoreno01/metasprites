@@ -982,6 +982,10 @@ void create_boss_area()
       if(enemy.hp == 0x33){
        p = 750;
           }
+      if(enemy.hp == 0x31){
+       p = 600;
+          }
+      
      if(enemy.hp == 0x30){
        you_win();
           }
