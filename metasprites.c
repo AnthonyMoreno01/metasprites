@@ -764,7 +764,15 @@ void create_bottom_left_area()
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
   //draw boss area border
-  cputsxy(13,27,"DANGER");
+  cputsxy(5,27,"DANGER");
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
+  cputsxy(21,27,"DANGER");
+  
   
   vrambuf_flush();
     while (1) 
@@ -952,7 +960,7 @@ void create_boss_area()
   p = 1000;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   
-    //draw tip
+ //draw tip
  cputsxy(6,27,"PRESS SPACE TO SHOOT");
   for(i =0; i<9;i++)
   {
