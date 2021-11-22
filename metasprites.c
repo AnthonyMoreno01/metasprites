@@ -69,8 +69,8 @@ unsigned char pad1_new; // joystick
 
 //Direction array affects movement and gravity
 typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_STAND } dir_t;
-const char DIR_X[5] = { 1, 0, -1, 0, 0};
-const char DIR_Y[5] = { 0, 1, 0, -1, 0};
+const char DIR_X[5] = { 2, 0, -2, 0, 0};
+const char DIR_Y[5] = { 0, 2, 0, -2, 0};
 /*{pal:"nes",layout:"nes"}*/
 const char PALETTE[32] = { 
   0x03,			// screen color
