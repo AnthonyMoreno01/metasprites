@@ -187,6 +187,40 @@ void draw_box(byte x, byte y, byte x2, byte y2, const char* chars)
   }
 }
 
+void draw_left_border(){
+  cputcxy(1,12,0x07);
+  cputcxy(1,13,0x07);
+  cputcxy(1,14,0x07);
+  cputcxy(1,15,0x07);
+  cputcxy(1,16,0x07);
+}
+
+void draw_right_border(){
+  cputcxy(30,12,0x06);
+  cputcxy(30,13,0x06);
+  cputcxy(30,14,0x06);
+  cputcxy(30,15,0x06);
+  cputcxy(30,16,0x06);
+}
+
+void draw_top_border(){
+  cputcxy(13,2,0x05);
+  cputcxy(14,2,0x05);
+  cputcxy(15,2,0x05);
+  cputcxy(16,2,0x05);
+  cputcxy(17,2,0x05);
+  cputcxy(18,2,0x05);
+}
+
+void draw_bottom_border(){
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
+}
+
 //spawns bullet that interacts with enemy
 void shoot(){
   struct Actor bullet_player;
@@ -257,8 +291,6 @@ void shoot(){
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
       }
     }
-  
-  
 }
 //reset game
 void clrscrn()
@@ -303,38 +335,19 @@ void create_start_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(240, 240, 20, metasprite1);  
   //draw right area border
-  cputcxy(30,12,0x06);
-  cputcxy(30,13,0x06);
-  cputcxy(30,14,0x06);
-  cputcxy(30,15,0x06);
-  cputcxy(30,16,0x06);
+  draw_right_border();
   //draw left area border
-  cputcxy(1,12,0x07);
-  cputcxy(1,13,0x07);
-  cputcxy(1,14,0x07);
-  cputcxy(1,15,0x07);
-  cputcxy(1,16,0x07);
+  draw_left_border();
   //draw top area border
-  cputcxy(13,2,0x05);
-  cputcxy(14,2,0x05);
-  cputcxy(15,2,0x05);
-  cputcxy(16,2,0x05);
-  cputcxy(17,2,0x05);
-  cputcxy(18,2,0x05);
+  draw_top_border();
   //draw bottom area border
-  cputcxy(13,27,0x08);
-  cputcxy(14,27,0x08);
-  cputcxy(15,27,0x08);
-  cputcxy(16,27,0x08);
-  cputcxy(17,27,0x08); 
-  cputcxy(18,27,0x08);
+  draw_bottom_border();
 
   vrambuf_flush();
     while (1) 
     {
     if(x == 300)
     {
-      
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -378,18 +391,9 @@ void create_top_left_area()
   oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);
   
   //draw right area border
-  cputcxy(30,12,0x06);
-  cputcxy(30,13,0x06);
-  cputcxy(30,14,0x06);
-  cputcxy(30,15,0x06);
-  cputcxy(30,16,0x06);
+  draw_right_border();
   //draw bottom area border
-  cputcxy(13,27,0x08);
-  cputcxy(14,27,0x08);
-  cputcxy(15,27,0x08);
-  cputcxy(16,27,0x08);
-  cputcxy(17,27,0x08); 
-  cputcxy(18,27,0x08);
+  draw_bottom_border();
 
   vrambuf_flush();
     while (1) 
@@ -436,24 +440,11 @@ void create_top_area()
   oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1); 
   
   //draw right area border
-  cputcxy(30,12,0x06);
-  cputcxy(30,13,0x06);
-  cputcxy(30,14,0x06);
-  cputcxy(30,15,0x06);
-  cputcxy(30,16,0x06);
+  draw_right_border();
   //draw left area border
-  cputcxy(1,12,0x07);
-  cputcxy(1,13,0x07);
-  cputcxy(1,14,0x07);
-  cputcxy(1,15,0x07);
-  cputcxy(1,16,0x07);
+  draw_left_border();
   //draw start area border
-  cputcxy(13,27,0x08);
-  cputcxy(14,27,0x08);
-  cputcxy(15,27,0x08);
-  cputcxy(16,27,0x08);
-  cputcxy(17,27,0x08); 
-  cputcxy(18,27,0x08);
+  draw_bottom_border();
   
   vrambuf_flush();
     while (1) 
@@ -507,18 +498,9 @@ void create_top_right_area()
   oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1); 
   
   //draw left area border
-  cputcxy(1,12,0x07);
-  cputcxy(1,13,0x07);
-  cputcxy(1,14,0x07);
-  cputcxy(1,15,0x07);
-  cputcxy(1,16,0x07);
+  draw_left_border();
   //draw bottom area border
-  cputcxy(13,27,0x08);
-  cputcxy(14,27,0x08);
-  cputcxy(15,27,0x08);
-  cputcxy(16,27,0x08);
-  cputcxy(17,27,0x08); 
-  cputcxy(18,27,0x08);
+  draw_bottom_border();
 
   vrambuf_flush();
     while (1) 
@@ -566,25 +548,11 @@ void create_left_area()
   oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1); 
   
   //draw right area border
-  cputcxy(30,12,0x06);
-  cputcxy(30,13,0x06);
-  cputcxy(30,14,0x06);
-  cputcxy(30,15,0x06);
-  cputcxy(30,16,0x06);
+  draw_right_border();
   //draw top area border
-  cputcxy(13,2,0x05);
-  cputcxy(14,2,0x05);
-  cputcxy(15,2,0x05);
-  cputcxy(16,2,0x05);
-  cputcxy(17,2,0x05);
-  cputcxy(18,2,0x05);
+  draw_top_border();
   //draw bottom area border
-  cputcxy(13,27,0x08);
-  cputcxy(14,27,0x08);
-  cputcxy(15,27,0x08);
-  cputcxy(16,27,0x08);
-  cputcxy(17,27,0x08); 
-  cputcxy(18,27,0x08);
+  draw_bottom_border();
 
   vrambuf_flush();
   
@@ -637,25 +605,11 @@ void create_right_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1); 
   //draw left area border
-  cputcxy(1,12,0x07);
-  cputcxy(1,13,0x07);
-  cputcxy(1,14,0x07);
-  cputcxy(1,15,0x07);
-  cputcxy(1,16,0x07);
+  draw_left_border();
   //draw top area border
-  cputcxy(13,2,0x05);
-  cputcxy(14,2,0x05);
-  cputcxy(15,2,0x05);
-  cputcxy(16,2,0x05);
-  cputcxy(17,2,0x05);
-  cputcxy(18,2,0x05);
+  draw_top_border();
   //draw bottom area border
-  cputcxy(13,27,0x08);
-  cputcxy(14,27,0x08);
-  cputcxy(15,27,0x08);
-  cputcxy(16,27,0x08);
-  cputcxy(17,27,0x08); 
-  cputcxy(18,27,0x08);
+  draw_bottom_border();
   
   vrambuf_flush();
     while (1) 
@@ -708,26 +662,12 @@ void create_bottom_left_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1); 
   //draw right area border
-  cputcxy(30,12,0x06);
-  cputcxy(30,13,0x06);
-  cputcxy(30,14,0x06);
-  cputcxy(30,15,0x06);
-  cputcxy(30,16,0x06);
+  draw_right_border();
   //draw top area border
-  cputcxy(13,2,0x05);
-  cputcxy(14,2,0x05);
-  cputcxy(15,2,0x05);
-  cputcxy(16,2,0x05);
-  cputcxy(17,2,0x05);
-  cputcxy(18,2,0x05);
+  draw_top_border();
   //draw boss area border
   cputsxy(5,27,"DANGER");
-  cputcxy(13,27,0x08);
-  cputcxy(14,27,0x08);
-  cputcxy(15,27,0x08);
-  cputcxy(16,27,0x08);
-  cputcxy(17,27,0x08); 
-  cputcxy(18,27,0x08);
+  draw_bottom_border();
   cputsxy(21,27,"DANGER");
   
   vrambuf_flush();
@@ -781,24 +721,11 @@ void create_bottom_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1); 
   //draw right area border
-  cputcxy(30,12,0x06);
-  cputcxy(30,13,0x06);
-  cputcxy(30,14,0x06);
-  cputcxy(30,15,0x06);
-  cputcxy(30,16,0x06);
+  draw_right_border();
   //draw left area border
-  cputcxy(1,12,0x07);
-  cputcxy(1,13,0x07);
-  cputcxy(1,14,0x07);
-  cputcxy(1,15,0x07);
-  cputcxy(1,16,0x07);
+  draw_left_border();
   //draw top area border
-  cputcxy(13,2,0x05);
-  cputcxy(14,2,0x05);
-  cputcxy(15,2,0x05);
-  cputcxy(16,2,0x05);
-  cputcxy(17,2,0x05);
-  cputcxy(18,2,0x05);
+  draw_top_border();
 
   vrambuf_flush();
     while (1) 
@@ -850,18 +777,9 @@ void create_bottom_right_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[8].x, hearts[8].y, 20, metasprite1); 
   //draw left area border
-  cputcxy(1,12,0x07);
-  cputcxy(1,13,0x07);
-  cputcxy(1,14,0x07);
-  cputcxy(1,15,0x07);
-  cputcxy(1,16,0x07);
+  draw_left_border();
   //draw top area border
-  cputcxy(13,2,0x05);
-  cputcxy(14,2,0x05);
-  cputcxy(15,2,0x05);
-  cputcxy(16,2,0x05);
-  cputcxy(17,2,0x05);
-  cputcxy(18,2,0x05);
+  draw_top_border();
   
   vrambuf_flush();
     while (1) 

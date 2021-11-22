@@ -50,6 +50,13 @@ void create_bottom_left_area(void); //heart 6
 void create_bottom_area(void); //heart 7
 void create_bottom_right_area(void); //heart 8
 void create_boss_area(void);
+
 void shoot(void);
 void check_bullet_collision(void);
 void check_enemy_collision(void);
+
+void draw_left_border(void);
+void draw_right_border(void);
+void draw_bottom_border(void);
+void draw_top_border(void);
+
