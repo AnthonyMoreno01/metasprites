@@ -46,7 +46,7 @@ const char BOX_CHARS[8]={0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A};
 
 unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
-
+byte slain = 0x30;
 //Direction array affects movement and gravity
 typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_STAND } dir_t;
 const char DIR_X[5] = { 2, 0, -2, 0, 0};
@@ -278,7 +278,7 @@ void shoot(Enemy* e){
 	e->is_alive = false;
         e->hp = e->hp-1;
         //cputsxy(19,1,"BOSS:");
-        cputcxy(26,1,e->hp);
+        cputcxy(28,1,e->hp);
         vrambuf_flush();
           break;
         }
@@ -326,8 +326,8 @@ void init_game()
   oam_meta_spr(heros.x, heros.y, 4, metasprite);
   vrambuf_clear();
   set_vram_update(updbuf);
-  cputsxy(5,1,"LIVES:");
-  cputcxy(11,1,'1');
+  cputsxy(2,1,"LIVES:");
+  cputcxy(8,1,'1');
   ppu_on_all();
   vrambuf_clear();
     for(i =0; i<9;i++)
@@ -398,8 +398,15 @@ void create_start_area()
     
     create_boss_area(&enemy[5]);
   }
-      if(heros.lives == 0x30 )
+      if(heros.lives == 0x30 ){
+        
+        enemy[1].hp = 0x39;
+        enemy[2].hp = 0x39;
+        enemy[3].hp = 0x39;
+        enemy[4].hp = 0x39;
+        enemy[5].hp = 0x39;
         break;
+      }
     x++;
   } 
 }
@@ -457,7 +464,7 @@ void create_top_left_area()
       hearts[0].x = 240;
       hearts[0].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);    
     }
@@ -516,7 +523,7 @@ void create_top_area()
       hearts[1].x = 240;
       hearts[1].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1);    
     }
@@ -577,7 +584,7 @@ void create_top_right_area()
       hearts[2].x = 240;
       hearts[2].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1);    
     }
@@ -635,7 +642,7 @@ void create_left_area()
       hearts[3].x = 240;
       hearts[3].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1);    
     }
@@ -692,7 +699,7 @@ void create_right_area()
       hearts[4].x = 240;
       hearts[4].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);    
     }
@@ -753,7 +760,7 @@ void create_bottom_left_area()
       hearts[5].x = 240;
       hearts[5].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1);    
     }
@@ -815,7 +822,7 @@ void create_bottom_area()
       hearts[6].x = 240;
       hearts[6].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1);    
     }
@@ -873,7 +880,7 @@ void create_bottom_right_area()
       hearts[7].x = 240;
       hearts[7].y = 240;
       heros.lives++;
-      cputcxy(11,1, heros.lives);
+      cputcxy(8,1, heros.lives);
       vrambuf_flush();
       oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
     }
@@ -930,18 +937,42 @@ void create_boss_area(Enemy* e)
   e->is_alive = true;
  
  switch(e->id){
-     case 1: cputsxy(19,1,"BOSS1:"); break;
-     case 2: cputsxy(19,1,"BOSS2:"); break;
-     case 3: cputsxy(19,1,"BOSS3:"); break;
-     case 4: cputsxy(19,1,"BOSS4:"); break;
-     case 5: cputsxy(19,1,"WYLIE:"); break;
+     case 1: cputsxy(21,1,"BOSS 1:"); break;
+     case 2: cputsxy(21,1,"BOSS 2:"); break;
+     case 3: cputsxy(21,1,"BOSS 3:"); break;
+     case 4: cputsxy(21,1,"BOSS 4:"); break;
+     case 5: cputsxy(21,1," WYLIE:"); break;
  }
   
-  cputcxy(26,1,e->hp);
+  cputcxy(28,1,e->hp);
   vrambuf_flush();
   vrambuf_flush();
     while (1) 
     {
+     if(e->hp == 0x33)
+      {
+	switch(e->id)
+        {
+          case 1: p = 800; break;
+          case 2: p = 700; break;
+          case 3: p = 600; break;
+          case 4: p = 600; break;
+          case 5: p = 500; break;
+          default: p = 400; break;
+        }
+      }
+      //when enemy[0] hp is 1 increase movement
+      if(e->hp == 0x31)
+      {
+        switch(e->id){
+          case 1: p = 700; break;
+          case 2: p = 600; break;
+          case 3: p = 500; break;
+          case 4: p = 500; break;
+          case 5: p = 400; break;
+          default: p = 300; break;
+        }
+      } 
      if(x == 300)
      {
       shoot(e);
@@ -989,42 +1020,25 @@ void create_boss_area(Enemy* e)
           //when heros hp is 0 game over
         if(heros.lives == 0x30)
         {
+        enemy[1].hp = 0x39;
+        enemy[2].hp = 0x39;
+        enemy[3].hp = 0x39;
+        enemy[4].hp = 0x39;
+        enemy[5].hp = 0x39;
           game_over();
           break;
         }
         else
         {
-        cputcxy(11,1, heros.lives);
+        cputcxy(8,1, heros.lives);
           vrambuf_flush();
         }
         }
         y = 0;
       }
+       y++;
       //when enemy[0] hp is 3 increase movement
-      if(e->hp == 0x33)
-      {
-	switch(e->id)
-        {
-          case 1: p = 800; break;
-          case 2: p = 700; break;
-          case 3: p = 600; break;
-          case 4: p = 600; break;
-          case 5: p = 500; break;
-          default: p = 400; break;
-        }
-      }
-      //when enemy[0] hp is 1 increase movement
-      if(e->hp == 0x31)
-      {
-        switch(e->id){
-          case 1: p = 700; break;
-          case 2: p = 600; break;
-          case 3: p = 500; break;
-          case 4: p = 500; break;
-          case 5: p = 400; break;
-          default: p = 300; break;
-        }
-      } 
+
       //when enemy[0] hp is 0 you win
      if(e->hp == 0x30)
      {
@@ -1032,15 +1046,19 @@ void create_boss_area(Enemy* e)
        e->y = 240;
        
        oam_meta_spr(e->x, e->y, 48, metasprite2); 
-       cputcxy(19,1,0x00);
-       cputcxy(20,1,0x00);
+       slain++;
+       cputsxy(13,1,"SLAIN:");
+       cputcxy(19,1,slain);
        cputcxy(21,1,0x00);
        cputcxy(22,1,0x00);
        cputcxy(23,1,0x00);
        cputcxy(24,1,0x00);
        cputcxy(25,1,0x00);
        cputcxy(26,1,0x00);
+       cputcxy(27,1,0x00);
+       cputcxy(28,1,0x00);
        
+       //cputcxy();
        switch(e->id){
          case 1: 
            heros.y = 14;
@@ -1062,11 +1080,10 @@ void create_boss_area(Enemy* e)
            win_screen();
            break;
        }     
-       
        //win_screen();
        break;
      }
-      y++;
+     
   }
 }//creates title screen
 void title_screen()
