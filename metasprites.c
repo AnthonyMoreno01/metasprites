@@ -972,7 +972,7 @@ void create_boss_area()
   vrambuf_flush();
     while (1) 
     {
-     if(x == 500)
+     if(x == 300)
      {
       shoot();
       movement(&heros);
