@@ -348,7 +348,8 @@ void create_start_area()
 {
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  oam_meta_spr(240, 240, 20, metasprite1);  
+  oam_meta_spr(240, 240, 20, metasprite1);
+
   //draw right area border
   draw_right_border();
   //draw left area border
@@ -357,7 +358,7 @@ void create_start_area()
   draw_top_border();
   //draw bottom area border
   draw_bottom_border();
-
+  
   vrambuf_flush();
     while (1) 
     {
@@ -392,6 +393,11 @@ void create_start_area()
       heros.y = 24;
       create_bottom_area();
     }
+   if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
+     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+    
+    create_boss_area(&enemy[5]);
+  }
       if(heros.lives == 0x30 )
         break;
     x++;
