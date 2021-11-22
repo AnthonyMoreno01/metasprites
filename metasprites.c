@@ -536,7 +536,7 @@ void create_top_right_area()
   draw_left_border();
   //draw bottom area border
   draw_bottom_border();
-  if(enemy[1].hp != 0x30){
+  if(enemy[2].hp != 0x30){
   cputsxy(5,2,"DANGER");
   draw_top_border();
   cputsxy(21,2,"DANGER");
@@ -832,7 +832,7 @@ void create_bottom_right_area()
   draw_left_border();
   //draw top area border
   draw_top_border();
-  if(enemy[3].hp != 0x30){
+  if(enemy[4].hp != 0x30){
   cputsxy(5,27,"DANGER");
   draw_bottom_border();
   cputsxy(21,27,"DANGER");
@@ -863,7 +863,7 @@ void create_bottom_right_area()
     {
       heros.y = 24;
       
-      create_boss_area(&enemy[3]);
+      create_boss_area(&enemy[4]);
     }  
     // check for heart collision 
     if(hearts[7].x == heros.x && hearts[7].y == heros.y)
