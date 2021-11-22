@@ -220,6 +220,7 @@ void shoot(){
           (bullet_player.x == enemy.x+10 && bullet_player.y == enemy.y)  || 
           (bullet_player.x == enemy.x+11 && bullet_player.y == enemy.y)    )
         {
+          
 	enemy.is_alive = false;
         enemy.hp = enemy.hp-1;
         cputsxy(20,1,"BOSS:");
@@ -228,15 +229,19 @@ void shoot(){
           break;
         }
       }
-      if(enemy.is_alive == false){
-        
-      bullet_exists = false;
+      
+      
+      if(enemy.is_alive == false)
+      {
+
+        bullet_exists = false;
         bullet_player.x = 240;
         bullet_player.y = 240;
         enemy.is_alive = true;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
       }
-      if (bullet_player.y < 1 || bullet_player.y > 190){
+      if (bullet_player.y < 1 || bullet_player.y > 190)
+      {
         bullet_exists = false;
         bullet_player.x = 240;
         bullet_player.y = 240;
