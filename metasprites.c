@@ -37,9 +37,9 @@ Hero heros;
 //creates heart sprite
 DEF_METASPRITE_2x2(metasprite1, 0xCC, 1);
 Heart hearts[7];
-//creates enemy sprite
+//creates enemy[0] sprite
 DEF_METASPRITE_2x2(metasprite2, 0xF8, 1);
-Enemy enemy;
+Enemy enemy[4];
 //character set for box
 const char BOX_CHARS[8]={0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A};
 
@@ -101,20 +101,20 @@ void movement(Hero* h)
   }
   h->dir = dir;
 }
-//function moves enemy in appropriate direction
+//function moves enemy[0] in appropriate direction
 void move_enemy(Enemy* h)
 {
   h->x += DIR_X[h->dir];
   h->y += DIR_Y[h->dir];
 }
-// moves enemy based on hero location
+// moves enemy[0] based on hero location
 void enemy_movement(Enemy* h)
 {
   byte dir;
-  if (enemy.x > heros.x) dir = D_LEFT;	else
-  if (enemy.x < heros.x) dir = D_RIGHT;	else
-  if (enemy.y > heros.y) dir = D_UP;	else
-  if (enemy.y < heros.y) dir = D_DOWN;
+  if (enemy[0].x > heros.x) dir = D_LEFT;	else
+  if (enemy[0].x < heros.x) dir = D_RIGHT;	else
+  if (enemy[0].y > heros.y) dir = D_UP;	else
+  if (enemy[0].y < heros.y) dir = D_DOWN;
   h->dir = dir;
 }
 //function displays text
@@ -229,8 +229,8 @@ void draw_bottom_border()
   cputcxy(18,27,0x08);
 }
 
-//spawns bullet that interacts with enemy
-void shoot(){
+//spawns bullet that interacts with enemy[0]
+void shoot(Enemy* e){
   struct Actor bullet_player;
   int i;
   pad1_new = pad_trigger(0);
@@ -245,51 +245,51 @@ void shoot(){
     //if bullet exists 
     if (bullet_exists){
       
-      // Check for enemy collision
+      // Check for enemy[0] collision
       for(i=0; i<2; i++)
       {
         bullet_player.y--;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
-        if(enemy.is_alive && 
-          (bullet_player.x == enemy.x-11 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-10 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-9  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-8  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-7  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-6  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-5  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-4  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-3  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-2  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x-1  && bullet_player.y == enemy.y)  ||  
-          (bullet_player.x == enemy.x    && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+1  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+2  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+3  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+4  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+5  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+6  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+7  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+8  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+9  && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+10 && bullet_player.y == enemy.y)  || 
-          (bullet_player.x == enemy.x+11 && bullet_player.y == enemy.y)    )
+        if(e->is_alive && 
+          (bullet_player.x == e -> x-11 && bullet_player.y == e->y)  || 
+          (bullet_player.x == e ->x-10 && bullet_player.y == e->y)  || 
+          (bullet_player.x == e ->x-9  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e ->x-8  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e ->x-7  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e ->x-6  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e ->x-5  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x-4  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x-3  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x-2  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x-1  && bullet_player.y == e->y)  ||  
+          (bullet_player.x == e->x    && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+2  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+1  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+4  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+3  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+5  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+6  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+7  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+8  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+9  && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+10 && bullet_player.y == e->y)  || 
+          (bullet_player.x == e->x+11 && bullet_player.y == e->y)    )
         {   
-	enemy.is_alive = false;
-        enemy.hp = enemy.hp-1;
+	e->is_alive = false;
+        e->hp = e->hp-1;
         cputsxy(20,1,"BOSS:");
-        cputcxy(26,1,enemy.hp);
+        cputcxy(26,1,e->hp);
         vrambuf_flush();
           break;
         }
       }
-      //check if bullet hit enemy
-      if(enemy.is_alive == false)
+      //check if bullet hit enemy[0]
+      if(e->is_alive == false)
       {
         bullet_exists = false;
         bullet_player.x = 240;
         bullet_player.y = 240;
-        enemy.is_alive = true;
+        e->is_alive = true;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
       }
       //check if bullet is out of bounds
@@ -311,13 +311,13 @@ void clrscrn()
   vram_fill(0, 32*28);
   vram_adr(0x0);
 }
-//initialize hero, hearts, and enemy
+//initialize hero, hearts, and enemy[0]
 void init_game()
 {
   int i;
   clrscrn();
   heros.lives == 0x31;
-  enemy.hp = 0x39;
+  enemy[0].hp = 0x39;
   vrambuf_clear();
   heros.lives = 0x31;
   oam_clear();
@@ -386,7 +386,7 @@ void create_start_area()
       heros.y = 24;
       create_bottom_area();
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   } 
@@ -436,7 +436,7 @@ void create_top_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   }
@@ -494,7 +494,7 @@ void create_top_area()
       oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1);    
     }
       
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   }
@@ -544,7 +544,7 @@ void create_top_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1);    
     }
-    if(heros.lives == 0x30 || enemy.hp == 0x30)
+    if(heros.lives == 0x30 || enemy[0].hp == 0x30)
       break;
     x++;
   }
@@ -602,7 +602,7 @@ void create_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   }
@@ -659,7 +659,7 @@ void create_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   }
@@ -717,7 +717,7 @@ void create_bottom_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   } 
@@ -774,7 +774,7 @@ void create_bottom_area()
       vrambuf_flush();
       oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   }
@@ -822,7 +822,7 @@ void create_bottom_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
+      if(heros.lives == 0x30 || enemy[0].hp == 0x30)
         break;
     x++;
   }
@@ -843,57 +843,57 @@ void create_boss_area()
     hearts[i].y = 240;
     oam_meta_spr(hearts[i].x, hearts[i].y, 20, metasprite1);  
   }
-  enemy.x = 20;
-  enemy.y = 20;
-  oam_meta_spr(enemy.x, enemy.y, 48, metasprite2); 
-  enemy.hp = 0x39;
-  enemy.is_alive = true;
+  enemy[0].x = 20;
+  enemy[0].y = 20;
+  oam_meta_spr(enemy[0].x, enemy[0].y, 48, metasprite2); 
+  enemy[0].hp = 0x39;
+  enemy[0].is_alive = true;
  
   cputsxy(20,1,"BOSS:");
-  cputcxy(26,1,enemy.hp);
+  cputcxy(26,1,enemy[0].hp);
   vrambuf_flush();
   vrambuf_flush();
     while (1) 
     {
      if(x == 300)
      {
-      shoot();
+      shoot(&enemy[0]);
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
-      oam_meta_spr(enemy.x, enemy.y, 48, metasprite2); 
+      oam_meta_spr(enemy[0].x, enemy[0].y, 48, metasprite2); 
       x=0;
     }
     x++;
       if(y == p)
       {
-        enemy_movement(&enemy);
-        move_enemy(&enemy);
-        //check for collision between enemy and hero
+        enemy_movement(&enemy[0]);
+        move_enemy(&enemy[0]);
+        //check for collision between enemy[0] and hero
         if(
-          (heros.x == enemy.x-11 && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-10 && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-9  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-8  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-7  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-6  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-5  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-4  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-3  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-2  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x-1  && heros.y == enemy.y)  ||  
-          (heros.x == enemy.x    && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+1  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+2  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+3  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+4  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+5  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+6  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+7  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+8  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+9  && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+10 && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+11 && heros.y == enemy.y))  
+          (heros.x == enemy[0].x-11 && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-10 && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-9  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-8  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-7  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-6  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-5  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-4  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-3  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-2  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x-1  && heros.y == enemy[0].y)  ||  
+          (heros.x == enemy[0].x    && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+1  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+2  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+3  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+4  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+5  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+6  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+7  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+8  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+9  && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+10 && heros.y == enemy[0].y)  || 
+          (heros.x == enemy[0].x+11 && heros.y == enemy[0].y))  
         {
           //if collision hero hp drops 1 and reset player to middle of screen
           heros.lives--;
@@ -913,18 +913,18 @@ void create_boss_area()
         }
         y = 0;
       }
-      //when enemy hp is 3 increase movement
-      if(enemy.hp == 0x33)
+      //when enemy[0] hp is 3 increase movement
+      if(enemy[0].hp == 0x33)
       {
        p = 500;
       }
-      //when enemy hp is 1 increase movement
-      if(enemy.hp == 0x31)
+      //when enemy[0] hp is 1 increase movement
+      if(enemy[0].hp == 0x31)
       {
        p = 400;
       } 
-      //when enemy hp is 0 you win
-     if(enemy.hp == 0x30)
+      //when enemy[0] hp is 0 you win
+     if(enemy[0].hp == 0x30)
      {
        win_screen();
        break;

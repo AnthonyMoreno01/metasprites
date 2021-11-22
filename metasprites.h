@@ -52,7 +52,7 @@ void create_bottom_area(void); //heart 7
 void create_bottom_right_area(void); //heart 8
 void create_boss_area(void);
 
-void shoot(void);
+void shoot(Enemy*);
 void check_bullet_collision(void);
 void check_enemy_collision(void);
 
