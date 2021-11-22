@@ -913,7 +913,8 @@ void you_win(){
 }
 void create_boss_area()
 {
-  int x,i,y;
+  int x,i,y, p;
+  p = 1000;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   for(i =0; i<9;i++)
   {
@@ -944,7 +945,7 @@ void create_boss_area()
     }
     x++;
       
-      if(y == 750){
+      if(y == p){
         enemy_movement(&enemy);
         move_enemy(&enemy);
         if(
@@ -990,7 +991,9 @@ void create_boss_area()
 
         y = 0;
       }
-      
+      if(enemy.hp == 0x33){
+       p = 750;
+          }
      if(enemy.hp == 0x30){
        you_win();
           }
