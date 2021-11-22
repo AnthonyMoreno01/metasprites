@@ -153,6 +153,47 @@ void cputsxy(byte x, byte y, const char* str)
   vrambuf_put(NTADR_A(x,y), str, strlen(str));
 }
 
+void game_over(){
+joy_install (joy_static_stddrv);
+  clrscrn();
+  vrambuf_flush();
+  oam_clear();
+  ppu_on_all();
+  vrambuf_clear();
+  cputsxy(15,5,"Game Over");
+  cputsxy(2,20,"Press Any Button");
+  cputsxy(2,22," To Play Again");
+    vrambuf_flush();
+  
+
+  while(1)
+  {
+   byte joy;
+   joy = joy_read (JOY_1);
+   if(joy)
+    break;
+  }
+}
+void you_win(){
+  joy_install (joy_static_stddrv);
+  clrscrn();
+  vrambuf_flush();
+  oam_clear();
+  ppu_on_all();
+  vrambuf_clear();
+  cputsxy(15,5,"You win");
+  cputsxy(2,20,"Press Any Button");
+  cputsxy(2,22," To Play Again");
+  vrambuf_flush();
+  
+  while(1)
+  {
+    byte joy;
+    joy = joy_read (JOY_1);
+    if(joy)
+      break;
+  }
+}
 //function creates border
 void draw_box(byte x, byte y, byte x2, byte y2, const char* chars) 
 {
@@ -296,17 +337,17 @@ void create_start_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(240, 240, 20, metasprite1);  
   //draw right area border
-  cputcxy(30,12,0x05);
-  cputcxy(30,13,0x05);
-  cputcxy(30,14,0x05);
-  cputcxy(30,15,0x05);
-  cputcxy(30,16,0x05);
+  cputcxy(30,12,0x06);
+  cputcxy(30,13,0x06);
+  cputcxy(30,14,0x06);
+  cputcxy(30,15,0x06);
+  cputcxy(30,16,0x06);
   //draw left area border
-  cputcxy(1,12,0x05);
-  cputcxy(1,13,0x05);
-  cputcxy(1,14,0x05);
-  cputcxy(1,15,0x05);
-  cputcxy(1,16,0x05);
+  cputcxy(1,12,0x07);
+  cputcxy(1,13,0x07);
+  cputcxy(1,14,0x07);
+  cputcxy(1,15,0x07);
+  cputcxy(1,16,0x07);
   //draw top area border
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
@@ -315,12 +356,12 @@ void create_start_area()
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
   //draw bottom area border
-  cputcxy(13,27,0x05);
-  cputcxy(14,27,0x05);
-  cputcxy(15,27,0x05);
-  cputcxy(16,27,0x05);
-  cputcxy(17,27,0x05); 
-  cputcxy(18,27,0x05);
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
 
   vrambuf_flush();
   
@@ -376,18 +417,18 @@ void create_top_left_area()
   oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);
   
   //draw right area border
-  cputcxy(30,12,0x05);
-  cputcxy(30,13,0x05);
-  cputcxy(30,14,0x05);
-  cputcxy(30,15,0x05);
-  cputcxy(30,16,0x05);
+  cputcxy(30,12,0x06);
+  cputcxy(30,13,0x06);
+  cputcxy(30,14,0x06);
+  cputcxy(30,15,0x06);
+  cputcxy(30,16,0x06);
   //draw bottom area border
-  cputcxy(13,27,0x05);
-  cputcxy(14,27,0x05);
-  cputcxy(15,27,0x05);
-  cputcxy(16,27,0x05);
-  cputcxy(17,27,0x05); 
-  cputcxy(18,27,0x05);
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
 
   vrambuf_flush();
     while (1) 
@@ -435,24 +476,24 @@ void create_top_area()
   oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1); 
   
   //draw right area border
-  cputcxy(30,12,0x05);
-  cputcxy(30,13,0x05);
-  cputcxy(30,14,0x05);
-  cputcxy(30,15,0x05);
-  cputcxy(30,16,0x05);
+  cputcxy(30,12,0x06);
+  cputcxy(30,13,0x06);
+  cputcxy(30,14,0x06);
+  cputcxy(30,15,0x06);
+  cputcxy(30,16,0x06);
   //draw left area border
-  cputcxy(1,12,0x05);
-  cputcxy(1,13,0x05);
-  cputcxy(1,14,0x05);
-  cputcxy(1,15,0x05);
-  cputcxy(1,16,0x05);
+  cputcxy(1,12,0x07);
+  cputcxy(1,13,0x07);
+  cputcxy(1,14,0x07);
+  cputcxy(1,15,0x07);
+  cputcxy(1,16,0x07);
   //draw start area border
-  cputcxy(13,27,0x05);
-  cputcxy(14,27,0x05);
-  cputcxy(15,27,0x05);
-  cputcxy(16,27,0x05);
-  cputcxy(17,27,0x05); 
-  cputcxy(18,27,0x05);
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
   
   vrambuf_flush();
     while (1) 
@@ -507,18 +548,18 @@ void create_top_right_area()
   oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1); 
   
   //draw left area border
-  cputcxy(1,12,0x05);
-  cputcxy(1,13,0x05);
-  cputcxy(1,14,0x05);
-  cputcxy(1,15,0x05);
-  cputcxy(1,16,0x05);
+  cputcxy(1,12,0x07);
+  cputcxy(1,13,0x07);
+  cputcxy(1,14,0x07);
+  cputcxy(1,15,0x07);
+  cputcxy(1,16,0x07);
   //draw bottom area border
-  cputcxy(13,27,0x05);
-  cputcxy(14,27,0x05);
-  cputcxy(15,27,0x05);
-  cputcxy(16,27,0x05);
-  cputcxy(17,27,0x05); 
-  cputcxy(18,27,0x05);
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
 
   vrambuf_flush();
     while (1) 
@@ -554,8 +595,8 @@ void create_top_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 || enemy.hp == 0x30)
-        break;
+    if(heros.lives == 0x30 || enemy.hp == 0x30)
+      break;
     x++;
   }
 }
@@ -567,11 +608,11 @@ void create_left_area()
   oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1); 
   
   //draw right area border
-  cputcxy(30,12,0x05);
-  cputcxy(30,13,0x05);
-  cputcxy(30,14,0x05);
-  cputcxy(30,15,0x05);
-  cputcxy(30,16,0x05);
+  cputcxy(30,12,0x06);
+  cputcxy(30,13,0x06);
+  cputcxy(30,14,0x06);
+  cputcxy(30,15,0x06);
+  cputcxy(30,16,0x06);
   //draw top area border
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
@@ -580,12 +621,12 @@ void create_left_area()
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
   //draw bottom area border
-  cputcxy(13,27,0x05);
-  cputcxy(14,27,0x05);
-  cputcxy(15,27,0x05);
-  cputcxy(16,27,0x05);
-  cputcxy(17,27,0x05); 
-  cputcxy(18,27,0x05);
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
 
   vrambuf_flush();
   
@@ -638,11 +679,11 @@ void create_right_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1); 
   //draw left area border
-  cputcxy(1,12,0x05);
-  cputcxy(1,13,0x05);
-  cputcxy(1,14,0x05);
-  cputcxy(1,15,0x05);
-  cputcxy(1,16,0x05);
+  cputcxy(1,12,0x07);
+  cputcxy(1,13,0x07);
+  cputcxy(1,14,0x07);
+  cputcxy(1,15,0x07);
+  cputcxy(1,16,0x07);
   //draw top area border
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
@@ -651,12 +692,12 @@ void create_right_area()
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
   //draw bottom area border
-  cputcxy(13,27,0x05);
-  cputcxy(14,27,0x05);
-  cputcxy(15,27,0x05);
-  cputcxy(16,27,0x05);
-  cputcxy(17,27,0x05); 
-  cputcxy(18,27,0x05);
+  cputcxy(13,27,0x08);
+  cputcxy(14,27,0x08);
+  cputcxy(15,27,0x08);
+  cputcxy(16,27,0x08);
+  cputcxy(17,27,0x08); 
+  cputcxy(18,27,0x08);
   
   vrambuf_flush();
     while (1) 
@@ -710,11 +751,11 @@ void create_bottom_left_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1); 
   //draw right area border
-  cputcxy(30,12,0x05);
-  cputcxy(30,13,0x05);
-  cputcxy(30,14,0x05);
-  cputcxy(30,15,0x05);
-  cputcxy(30,16,0x05);
+  cputcxy(30,12,0x06);
+  cputcxy(30,13,0x06);
+  cputcxy(30,14,0x06);
+  cputcxy(30,15,0x06);
+  cputcxy(30,16,0x06);
   //draw top area border
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
@@ -778,17 +819,17 @@ void create_bottom_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1); 
   //draw right area border
-  cputcxy(30,12,0x05);
-  cputcxy(30,13,0x05);
-  cputcxy(30,14,0x05);
-  cputcxy(30,15,0x05);
-  cputcxy(30,16,0x05);
+  cputcxy(30,12,0x06);
+  cputcxy(30,13,0x06);
+  cputcxy(30,14,0x06);
+  cputcxy(30,15,0x06);
+  cputcxy(30,16,0x06);
   //draw left area border
-  cputcxy(1,12,0x05);
-  cputcxy(1,13,0x05);
-  cputcxy(1,14,0x05);
-  cputcxy(1,15,0x05);
-  cputcxy(1,16,0x05);
+  cputcxy(1,12,0x07);
+  cputcxy(1,13,0x07);
+  cputcxy(1,14,0x07);
+  cputcxy(1,15,0x07);
+  cputcxy(1,16,0x07);
   //draw top area border
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
@@ -851,11 +892,11 @@ void create_bottom_right_area()
   oam_meta_spr(hearts[8].x, hearts[8].y, 20, metasprite1); 
   
   //draw left area border
-  cputcxy(1,12,0x05);
-  cputcxy(1,13,0x05);
-  cputcxy(1,14,0x05);
-  cputcxy(1,15,0x05);
-  cputcxy(1,16,0x05);
+  cputcxy(1,12,0x07);
+  cputcxy(1,13,0x07);
+  cputcxy(1,14,0x07);
+  cputcxy(1,15,0x07);
+  cputcxy(1,16,0x07);
   //draw top area border
   cputcxy(13,2,0x05);
   cputcxy(14,2,0x05);
@@ -905,47 +946,6 @@ void create_bottom_right_area()
 }
 
 
-void game_over(){
-joy_install (joy_static_stddrv);
-  clrscrn();
-  vrambuf_flush();
-  oam_clear();
-  ppu_on_all();
-  vrambuf_clear();
-  cputsxy(15,5,"Game Over");
-  cputsxy(2,20,"Press Any Button");
-  cputsxy(2,22," To Play Again");
-    vrambuf_flush();
-  
-
-  while(1)
-  {
-   byte joy;
-   joy = joy_read (JOY_1);
-   if(joy)
-    break;
-  }
-}
-void you_win(){
-  joy_install (joy_static_stddrv);
-  clrscrn();
-  vrambuf_flush();
-  oam_clear();
-  ppu_on_all();
-  vrambuf_clear();
-  cputsxy(15,5,"You win");
-  cputsxy(2,20,"Press Any Button");
-  cputsxy(2,22," To Play Again");
-  vrambuf_flush();
-  
-  while(1)
-  {
-    byte joy;
-    joy = joy_read (JOY_1);
-    if(joy)
-      break;
-  }
-}
 void create_boss_area()
 {
   int x,i,y, p;
@@ -1031,7 +1031,7 @@ void create_boss_area()
       if(enemy.hp == 0x33)
       {
        p = 750;
-          }
+      }
       if(enemy.hp == 0x31)
       {
        p = 600;
