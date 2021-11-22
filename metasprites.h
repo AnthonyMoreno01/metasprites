@@ -38,6 +38,7 @@ void you_win(void);
 void start_game(void);
 void clrscrn(void);
 void title_screen(void);
+void play(void);
 
 void create_top_left_area(void); //heart 0
 void create_top_area(void); //heart 1

@@ -264,6 +264,9 @@ void clrscrn()
 
 void init_game()
 {
+  int i;
+  clrscrn();
+  heros.lives == 0x31;
   enemy.hp = 0x39;
   vrambuf_clear();
   heros.lives = 0x31;
@@ -279,6 +282,12 @@ void init_game()
 
   ppu_on_all();
   vrambuf_clear();
+  
+    for(i =0; i<9;i++)
+  {
+    hearts[i].x = 150;
+    hearts[i].y = 100;
+  }
 }
 
 void create_start_area()
@@ -327,30 +336,33 @@ void create_start_area()
       x=0;
     }
    
-    // start right area
+    // move to right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
     {
       heros.x = 14;
       create_right_area();
     }
-    // start left area
+    // move to left area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
     {
       heros.x = 220;
       create_left_area();
     }    
-    // start top area
+    // move to top area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
     {
       heros.y = 194;
       create_top_area();
     }    
-    // start bottom area
+    // move to bottom area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
     {
       heros.y = 24;
       create_bottom_area();
-    }    
+    }
+      
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
 
     x++;
   } 
@@ -410,7 +422,8 @@ void create_top_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);    
     }
-      
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
     x++;
   }
 }
@@ -480,6 +493,9 @@ void create_top_area()
       vrambuf_flush();
       oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1);    
     }
+      
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
     x++;
   }
 }
@@ -538,6 +554,8 @@ void create_top_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1);    
     }
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
     x++;
   }
 }
@@ -608,6 +626,8 @@ void create_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1);    
     }
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
     x++;
   }
 }
@@ -678,6 +698,8 @@ void create_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1);    
     }
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
     x++;
   }
 }
@@ -701,12 +723,7 @@ void create_bottom_left_area()
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
   //draw boss area border
-  cputcxy(13,27,0x44);
-  cputcxy(14,27,0x41);
-  cputcxy(15,27,0x4E);
-  cputcxy(16,27,0x47);
-  cputcxy(17,27,0x45);
-  cputcxy(18,27,0x52);
+  cputsxy(13,27,"DANGER");
   
   vrambuf_flush();
     while (1) 
@@ -748,6 +765,8 @@ void create_bottom_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1);    
     }
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
     x++;
   } 
 }
@@ -819,6 +838,8 @@ void create_bottom_area()
       vrambuf_flush();
       oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
     }
+      if(heros.lives == 0x30 || enemy.hp == 0x30 ||enemy.hp == 0x30)
+        break;
     x++;
   }
 }
@@ -842,7 +863,7 @@ void create_bottom_right_area()
   cputcxy(16,2,0x05);
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
-  
+
   vrambuf_flush();
     while (1) 
     {
@@ -877,34 +898,52 @@ void create_bottom_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[8].x, hearts[8].y, 20, metasprite1);    
     }
+      if(heros.lives == 0x30 || enemy.hp == 0x30)
+        break;
     x++;
   }
 }
 
 
 void game_over(){
-  
+joy_install (joy_static_stddrv);
   clrscrn();
   vrambuf_flush();
   oam_clear();
   ppu_on_all();
   vrambuf_clear();
-  cputsxy(20,20,"Game Over");
+  cputsxy(15,5,"Game Over");
+  cputsxy(2,20,"Press Any Button");
+  cputsxy(2,22," To Play Again");
     vrambuf_flush();
-  while(1){
-    
+  
+
+  while(1)
+  {
+   byte joy;
+   joy = joy_read (JOY_1);
+   if(joy)
+    break;
   }
 }
 void you_win(){
+  joy_install (joy_static_stddrv);
   clrscrn();
   vrambuf_flush();
   oam_clear();
   ppu_on_all();
   vrambuf_clear();
-  cputsxy(20,20,"You win");
-    vrambuf_flush();
-  while(1){
-    
+  cputsxy(15,5,"You win");
+  cputsxy(2,20,"Press Any Button");
+  cputsxy(2,22," To Play Again");
+  vrambuf_flush();
+  
+  while(1)
+  {
+    byte joy;
+    joy = joy_read (JOY_1);
+    if(joy)
+      break;
   }
 }
 void create_boss_area()
@@ -912,6 +951,9 @@ void create_boss_area()
   int x,i,y, p;
   p = 1000;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
+  
+    //draw tip
+ cputsxy(6,27,"PRESS SPACE TO SHOOT");
   for(i =0; i<9;i++)
   {
     hearts[i].x = 240;
@@ -973,49 +1015,76 @@ void create_boss_area()
           heros.lives--;
           heros.x = 120;
           heros.y = 120;
-        if(heros.lives == 0x30){
+        if(heros.lives == 0x30 || enemy.hp == 0x30)
+        {
           game_over();
-        }else
+          break;
+        }
+        else
         {
         cputcxy(11,1, heros.lives);
           vrambuf_flush();
         }
         }
-
         y = 0;
       }
-      if(enemy.hp == 0x33){
+      if(enemy.hp == 0x33)
+      {
        p = 750;
           }
-      if(enemy.hp == 0x31){
+      if(enemy.hp == 0x31)
+      {
        p = 600;
-          }
+      }
       
-     if(enemy.hp == 0x30){
+     if(enemy.hp == 0x30)
+     {
        you_win();
-          }
+       break;
+     }
       y++;
   }
-
-  
 }
 
-// main program
-void main() 
+void title_screen()
 {
-  //struct Actor bullet_player;
-  int i =0;
   pal_all(PALETTE);
+  init_game();
+  clrscrn();
+  vrambuf_flush();
+  oam_clear();
+  ppu_on_all();
+  vrambuf_clear();
+  cputsxy(10,8,"Dungeon Crawl");
+  cputsxy(5,10,"Collect the Hearts");
+  cputsxy(7,12,"to with the Game");
+  cputsxy(2,20,"Press Any Button To Play");
+  vrambuf_flush();
+}
+
+void play()
+{
   oam_clear();
   init_game();
   clrscrn();
   init_game();
-
-  for(i =0; i<9;i++)
-  {
-    hearts[i].x = 150;
-    hearts[i].y = 100;
-  }
-
   create_start_area();
+}
+// main program
+void main() 
+{
+joy_install (joy_static_stddrv);
+  title_screen();
+  
+  while(1)
+  {
+    byte joy;
+    joy = joy_read (JOY_1);
+    if(joy)
+      break;
+  }
+  
+  while(1)
+play();
+
 }
