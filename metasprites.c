@@ -944,7 +944,7 @@ void create_boss_area()
     }
     x++;
       
-      if(y == 500){
+      if(y == 750){
         enemy_movement(&enemy);
         move_enemy(&enemy);
         if(
