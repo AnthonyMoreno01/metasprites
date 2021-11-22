@@ -8,18 +8,11 @@
 //#link "vrambuf.c"
 //#link "chr_generic.s"
 //#link "chr_generic.s"
-
-
-#define TILE 0xD8	// playable character attributes
-#define TILE1 0xCC	// heart attributes
-#define TILE2 0xF8
-#define ATTR1 01	// heart attributes
-#define ATTR 02		// character attributes
 #define COLS 32
 #define ROWS 27
 
-//creates bullet
-#define DEF_METASPRITE_2x2(name,code,pal)\
+
+#define DEF_METASPRITE_2x2static(name,code,pal)\
 const unsigned char name[]={\
         0,      0,      0xA2,   pal, \
         0,      8,      0xA2,   pal, \
@@ -27,45 +20,32 @@ const unsigned char name[]={\
         8,      8,      0xA2,   pal, \
         128};
  
-// Hero Metasprite info
-const unsigned char metasprite[]={
-        0,      0,      TILE+0,   ATTR, 
-        0,      8,      TILE+1,   ATTR, 
-        8,      0,      TILE+2,   ATTR, 
-        8,      8,      TILE+3,   ATTR, 
+#define DEF_METASPRITE_2x2(name,code,pal)\
+const unsigned char name[]={\
+        0,      0,      code,     pal, \
+        0,      8,      code+1,   pal, \
+        8,      0,      code+2,   pal, \
+        8,      8,      code+3,   pal, \
         128};
 
-// Heart Metasprite info
-const unsigned char metasprite1[]={
-        0,      0,      TILE1,     ATTR1, 
-        0,      8,      TILE1+1,   ATTR1, 
-        8,      0,      TILE1+2,   ATTR1, 
-        8,      8,      TILE1+3,   ATTR1, 
-        128};
-
-// Enemy Metasprite info
-const unsigned char metasprite2[]={
-        0,      0,      TILE2,     ATTR1, 
-        0,      8,      TILE2+1,   ATTR1, 
-        8,      0,      TILE2+2,   ATTR1, 
-        8,      8,      TILE2+3,   ATTR1, 
-        128};
-
+//creates bullet sprite
+DEF_METASPRITE_2x2static(bullet, 0xe4, 0);
+bool bullet_exists = false;
+//creates hero sprite
+DEF_METASPRITE_2x2(metasprite, 0xD8, 2);
+Hero heros;
+//creates heart sprite
+DEF_METASPRITE_2x2(metasprite1, 0xCC, 1);
+Heart hearts[8];
+//creates enemy sprite
+DEF_METASPRITE_2x2(metasprite2, 0xF8, 1);
+Enemy enemy;
 //character set for box
 const char BOX_CHARS[8]={0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A};
 
-//creates bullet sprite
-DEF_METASPRITE_2x2(bullet, 0xe4, 0);
 
-//initialize sprites
-Hero heros;
-Heart hearts[8];
-Enemy enemy;
-
-bool bullet_exists = false;
 unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
-
 
 //Direction array affects movement and gravity
 typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_STAND } dir_t;
@@ -91,7 +71,6 @@ void move_player(Hero* h)
   h->x += DIR_X[h->dir];
   h->y += DIR_Y[h->dir];
 }
-
 // read user input and set hero direction to that value
 void movement(Hero* h)
 {
@@ -103,8 +82,7 @@ void movement(Hero* h)
   if (pad1 & JOY_RIGHT_MASK) dir = D_RIGHT;	else
   if (pad1 & JOY_UP_MASK) dir = D_UP;		else
   if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;	else
-  
-    dir = D_STAND;
+	dir = D_STAND;
   if (heros.x < 10){
     dir = D_RIGHT;
   }
@@ -117,8 +95,6 @@ void movement(Hero* h)
   if (heros.y > 200){
     dir = D_UP;
   }
-  
-    
   h->dir = dir;
 }
 
@@ -127,33 +103,29 @@ void move_enemy(Enemy* h)
   h->x += DIR_X[h->dir];
   h->y += DIR_Y[h->dir];
 }
-
 // read user input and set hero direction to that value
 void enemy_movement(Enemy* h)
 {
   byte dir;
-  
   if (enemy.x > heros.x) dir = D_LEFT;	else
   if (enemy.x < heros.x) dir = D_RIGHT;	else
   if (enemy.y > heros.y) dir = D_UP;	else
   if (enemy.y < heros.y) dir = D_DOWN;
-  
   h->dir = dir;
 }
-
 //function displayes text
 void cputcxy(byte x, byte y, char ch) 
 {
   vrambuf_put(NTADR_A(x,y), &ch, 1);
 }
-
 //function displayes text
 void cputsxy(byte x, byte y, const char* str) 
 {
   vrambuf_put(NTADR_A(x,y), str, strlen(str));
 }
 
-void game_over(){
+void game_over()
+{
 joy_install (joy_static_stddrv);
   clrscrn();
   vrambuf_flush();
@@ -173,7 +145,9 @@ joy_install (joy_static_stddrv);
     break;
   }
 }
-void you_win(){
+
+void you_win()
+{
   joy_install (joy_static_stddrv);
   clrscrn();
   vrambuf_flush();
@@ -217,11 +191,10 @@ void draw_box(byte x, byte y, byte x2, byte y2, const char* chars)
 void shoot(){
   struct Actor bullet_player;
   int i;
-
   pad1_new = pad_trigger(0); // read the first controller
   pad1 = pad_state(0);
-  
-  if (pad1 & PAD_A && !bullet_exists){
+  if (pad1 & PAD_A && !bullet_exists)
+  {
       // Bullet must spawn in front of player
       bullet_player.x = heros.x;
       bullet_player.y = heros.y - 12;
@@ -231,10 +204,10 @@ void shoot(){
     if (bullet_exists){
       
       // Check for enemy collision
-      for(i=0; i<2; i++){
+      for(i=0; i<2; i++)
+      {
         bullet_player.y--;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
-        
         if(enemy.is_alive && 
           (bullet_player.x == enemy.x-11 && bullet_player.y == enemy.y)  || 
           (bullet_player.x == enemy.x-10 && bullet_player.y == enemy.y)  || 
@@ -259,8 +232,7 @@ void shoot(){
           (bullet_player.x == enemy.x+9  && bullet_player.y == enemy.y)  || 
           (bullet_player.x == enemy.x+10 && bullet_player.y == enemy.y)  || 
           (bullet_player.x == enemy.x+11 && bullet_player.y == enemy.y)    )
-        {
-          
+        {   
 	enemy.is_alive = false;
         enemy.hp = enemy.hp-1;
         cputsxy(20,1,"BOSS:");
@@ -269,11 +241,8 @@ void shoot(){
           break;
         }
       }
-      
-      
       if(enemy.is_alive == false)
       {
-
         bullet_exists = false;
         bullet_player.x = 240;
         bullet_player.y = 240;
@@ -319,10 +288,8 @@ void init_game()
   set_vram_update(updbuf);
   cputsxy(5,1,"LIVES:");
   cputcxy(11,1,'1');
-
   ppu_on_all();
   vrambuf_clear();
-  
     for(i =0; i<9;i++)
   {
     hearts[i].x = 150;
@@ -363,10 +330,8 @@ void create_start_area()
   cputcxy(18,27,0x08);
 
   vrambuf_flush();
-  
     while (1) 
     {
-     
     if(x == 300)
     {
       
@@ -375,7 +340,6 @@ void create_start_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-   
     // move to right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
     {
@@ -400,10 +364,8 @@ void create_start_area()
       heros.y = 24;
       create_bottom_area();
     }
-      
       if(heros.lives == 0x30 || enemy.hp == 0x30)
         break;
-
     x++;
   } 
 }
@@ -432,7 +394,6 @@ void create_top_left_area()
   vrambuf_flush();
     while (1) 
     {
-    
     if(x == 300)
     {
       movement(&heros);
@@ -504,7 +465,6 @@ void create_top_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-   
     // move to top right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
     {
@@ -571,7 +531,6 @@ void create_top_right_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-  
     // move to top area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
     {
@@ -701,7 +660,6 @@ void create_right_area()
   vrambuf_flush();
     while (1) 
     {
-    
     if(x == 300)
     {
       movement(&heros);
@@ -772,11 +730,9 @@ void create_bottom_left_area()
   cputcxy(18,27,0x08);
   cputsxy(21,27,"DANGER");
   
-  
   vrambuf_flush();
     while (1) 
     {
-  
     if(x == 300)
     {
       movement(&heros);
@@ -784,7 +740,6 @@ void create_bottom_left_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-   
     // start right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
     {
@@ -845,11 +800,9 @@ void create_bottom_area()
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
 
-  
   vrambuf_flush();
     while (1) 
     {
-    
     if(x == 300)
     {
       movement(&heros);
@@ -857,7 +810,6 @@ void create_bottom_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-  
     // move to bottom right area
     if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
     {
@@ -897,7 +849,6 @@ void create_bottom_right_area()
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[8].x, hearts[8].y, 20, metasprite1); 
-  
   //draw left area border
   cputcxy(1,12,0x07);
   cputcxy(1,13,0x07);
@@ -911,11 +862,10 @@ void create_bottom_right_area()
   cputcxy(16,2,0x05);
   cputcxy(17,2,0x05);
   cputcxy(18,2,0x05);
-
+  
   vrambuf_flush();
     while (1) 
     {
-    
     if(x == 300)
     {
       movement(&heros);
@@ -923,7 +873,6 @@ void create_bottom_right_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-   
     // move to bottom area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
     {
@@ -989,8 +938,8 @@ void create_boss_area()
       x=0;
     }
     x++;
-      
-      if(y == p){
+      if(y == p)
+      {
         enemy_movement(&enemy);
         move_enemy(&enemy);
         if(
@@ -1016,9 +965,8 @@ void create_boss_area()
           (heros.x == enemy.x+8  && heros.y == enemy.y)  || 
           (heros.x == enemy.x+9  && heros.y == enemy.y)  || 
           (heros.x == enemy.x+10 && heros.y == enemy.y)  || 
-          (heros.x == enemy.x+11 && heros.y == enemy.y))  {
-        
-        
+          (heros.x == enemy.x+11 && heros.y == enemy.y))  
+        {
           heros.lives--;
           heros.x = 120;
           heros.y = 120;
@@ -1080,9 +1028,8 @@ void play()
 // main program
 void main() 
 {
-joy_install (joy_static_stddrv);
+  joy_install (joy_static_stddrv);
   title_screen();
-  
   while(1)
   {
     byte joy;
@@ -1090,8 +1037,6 @@ joy_install (joy_static_stddrv);
     if(joy)
       break;
   }
-  
   while(1)
 play();
-
 }
