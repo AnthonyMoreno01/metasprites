@@ -36,7 +36,7 @@ DEF_METASPRITE_2x2(metasprite, 0xD8, 2);
 Hero heros;
 //creates heart sprite
 DEF_METASPRITE_2x2(metasprite1, 0xCC, 1);
-Heart hearts[8];
+Heart hearts[7];
 //creates enemy sprite
 DEF_METASPRITE_2x2(metasprite2, 0xF8, 1);
 Enemy enemy;
@@ -612,7 +612,7 @@ void create_right_area()
 {
   int x; 
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1); 
+  oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1); 
   //draw left area border
   draw_left_border();
   //draw top area border
@@ -650,14 +650,14 @@ void create_right_area()
       create_bottom_right_area();
     }
     // check for heart collision  
-    if(hearts[5].x == heros.x && hearts[5].y == heros.y)
+    if(hearts[4].x == heros.x && hearts[4].y == heros.y)
     {
-      hearts[5].x = 240;
-      hearts[5].y = 240;
+      hearts[4].x = 240;
+      hearts[4].y = 240;
       heros.lives++;
       cputcxy(11,1, heros.lives);
       vrambuf_flush();
-      oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1);    
+      oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);    
     }
       if(heros.lives == 0x30 || enemy.hp == 0x30)
         break;
@@ -669,7 +669,7 @@ void create_bottom_left_area()
 {
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1); 
+  oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1); 
   //draw right area border
   draw_right_border();
   //draw top area border
@@ -708,14 +708,14 @@ void create_bottom_left_area()
       create_boss_area();
     }  
     // check for heart collision  
-    if(hearts[6].x == heros.x && hearts[6].y == heros.y)
+    if(hearts[5].x == heros.x && hearts[5].y == heros.y)
     {
-      hearts[6].x = 240;
-      hearts[6].y = 240;
+      hearts[5].x = 240;
+      hearts[5].y = 240;
       heros.lives++;
       cputcxy(11,1, heros.lives);
       vrambuf_flush();
-      oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1);    
+      oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1);    
     }
       if(heros.lives == 0x30 || enemy.hp == 0x30)
         break;
@@ -728,7 +728,7 @@ void create_bottom_area()
 {
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1); 
+  oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1); 
   //draw right area border
   draw_right_border();
   //draw left area border
@@ -765,14 +765,14 @@ void create_bottom_area()
       create_start_area();
     }
     // check for heart collision 
-    if(hearts[7].x == heros.x && hearts[7].y == heros.y)
+    if(hearts[6].x == heros.x && hearts[6].y == heros.y)
     {
-      hearts[7].x = 240;
-      hearts[7].y = 240;
+      hearts[6].x = 240;
+      hearts[6].y = 240;
       heros.lives++;
       cputcxy(11,1, heros.lives);
       vrambuf_flush();
-      oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
+      oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1);    
     }
       if(heros.lives == 0x30 || enemy.hp == 0x30)
         break;
@@ -784,7 +784,7 @@ void create_bottom_right_area()
 {
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  oam_meta_spr(hearts[8].x, hearts[8].y, 20, metasprite1); 
+  oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1); 
   //draw left area border
   draw_left_border();
   //draw top area border
@@ -813,14 +813,14 @@ void create_bottom_right_area()
       create_right_area();
     } 
     // check for heart collision 
-    if(hearts[8].x == heros.x && hearts[8].y == heros.y)
+    if(hearts[7].x == heros.x && hearts[7].y == heros.y)
     {
-      hearts[8].x = 240;
-      hearts[8].y = 240;
+      hearts[7].x = 240;
+      hearts[7].y = 240;
       heros.lives++;
         cputcxy(11,1, heros.lives);
       vrambuf_flush();
-      oam_meta_spr(hearts[8].x, hearts[8].y, 20, metasprite1);    
+      oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
     }
       if(heros.lives == 0x30 || enemy.hp == 0x30)
         break;
@@ -832,7 +832,7 @@ void create_bottom_right_area()
 void create_boss_area()
 {
   int x,i,y, p;
-  p = 1000;
+  p = 600;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   
  //draw tip
@@ -916,12 +916,12 @@ void create_boss_area()
       //when enemy hp is 3 increase movement
       if(enemy.hp == 0x33)
       {
-       p = 750;
+       p = 500;
       }
       //when enemy hp is 1 increase movement
       if(enemy.hp == 0x31)
       {
-       p = 600;
+       p = 400;
       } 
       //when enemy hp is 0 you win
      if(enemy.hp == 0x30)
