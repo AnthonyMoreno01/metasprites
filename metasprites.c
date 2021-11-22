@@ -1011,7 +1011,7 @@ void title_screen()
   ppu_on_all();
   vrambuf_clear();
   cputsxy(18,6,"Dungeon Crawl");
-  cputsxy(13,10,"Collect the Hearts");
+  cputsxy(17,10,"Collect Hearts");
   cputsxy(12,12,"And Defeat the Boss");
   cputsxy(15,14,"to Beat the Game");
   cputsxy(15,18,"Press Any Button");
