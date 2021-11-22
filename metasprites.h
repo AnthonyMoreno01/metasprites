@@ -18,6 +18,7 @@ typedef struct {
   byte y;
   byte hp;
   byte dir;
+  int id;
   bool is_alive;
 } Enemy;
 
@@ -50,7 +51,7 @@ void create_right_area(void); //heart 5
 void create_bottom_left_area(void); //heart 6
 void create_bottom_area(void); //heart 7
 void create_bottom_right_area(void); //heart 8
-void create_boss_area(void);
+void create_boss_area(Enemy*);
 
 void shoot(Enemy*);
 void check_bullet_collision(void);
@@ -60,8 +61,3 @@ void draw_left_border(void);
 void draw_right_border(void);
 void draw_bottom_border(void);
 void draw_top_border(void);
-
-void create_top_left_boss_area(void);
-void create_top_right_boss_area(void);
-void create_bottom_left_boss_area(void);
-void create_bottom_right_boss_area(void);
