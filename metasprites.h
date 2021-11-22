@@ -61,3 +61,7 @@ void draw_right_border(void);
 void draw_bottom_border(void);
 void draw_top_border(void);
 
+void create_top_left_boss_area(void);
+void create_top_right_boss_area(void);
+void create_bottom_left_boss_area(void);
+void create_bottom_right_boss_area(void);
