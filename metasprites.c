@@ -102,20 +102,20 @@ void movement(Hero* h)
   h->dir = dir;
 }
 //function moves enemy[0] in appropriate direction
-void move_enemy(Enemy* h)
+void move_enemy(Enemy* e)
 {
-  h->x += DIR_X[h->dir];
-  h->y += DIR_Y[h->dir];
+  e->x += DIR_X[e->dir];
+  e->y += DIR_Y[e->dir];
 }
 // moves enemy[0] based on hero location
-void enemy_movement(Enemy* h)
+void enemy_movement(Enemy* e)
 {
   byte dir;
-  if (h->x > heros.x) dir = D_LEFT;	else
-  if (h->x < heros.x) dir = D_RIGHT;	else
-  if (h->y > heros.y) dir = D_UP;	else
-  if (h->y < heros.y) dir = D_DOWN;
-  h->dir = dir;
+  if (e->x > heros.x) dir = D_LEFT;	else
+  if (e->x < heros.x) dir = D_RIGHT;	else
+  if (e->y > heros.y) dir = D_UP;	else
+  if (e->y < heros.y) dir = D_DOWN;
+  e->dir = dir;
 }
 //function displays text
 void cputcxy(byte x, byte y, char ch) 
@@ -277,6 +277,12 @@ void shoot(Enemy* e){
         {   
 	e->is_alive = false;
         e->hp = e->hp-1;
+          if(e->hp == 0x33){
+          e->is_low = true;
+          }
+          if(e->hp == 0x31){
+          e->is_critical = true;
+          }
         //cputsxy(19,1,"BOSS:");
         cputcxy(28,1,e->hp);
         vrambuf_flush();
@@ -341,6 +347,8 @@ void init_game()
     enemy[i].y = 20;
     enemy[i].is_alive= true;
     enemy[i].hp = 0x39;
+    enemy[i].is_low = false;
+    enemy[i].is_critical = false;
   }
 }
 //creates start area
@@ -922,7 +930,7 @@ void create_boss_area(Enemy* e)
       p = 500;
       e->x = 20;
       e->y = 20;
-    default: p = 600; break;
+    break;
   }
   
   
@@ -949,28 +957,30 @@ void create_boss_area(Enemy* e)
   vrambuf_flush();
     while (1) 
     {
-     if(e->hp == 0x33)
+     if(e->is_low == true)
       {
+       e->is_low = false;
 	switch(e->id)
         {
-          case 1: p = 800; break;
-          case 2: p = 700; break;
-          case 3: p = 600; break;
-          case 4: p = 600; break;
-          case 5: p = 500; break;
-          default: p = 400; break;
+          case 1: p = 800; y = 0;break;
+          case 2: p = 700; y = 0;break;
+          case 3: p = 600; y = 0;break;
+          case 4: p = 600; y = 0;break;
+          case 5: p = 500; y = 0;break;
+          default: p = 400;
         }
       }
       //when enemy[0] hp is 1 increase movement
-      if(e->hp == 0x31)
+      if(e->is_critical == true)
       {
+        e->is_critical = false;
         switch(e->id){
-          case 1: p = 700; break;
-          case 2: p = 600; break;
-          case 3: p = 500; break;
-          case 4: p = 500; break;
-          case 5: p = 400; break;
-          default: p = 300; break;
+          case 1: p = 700; y = 0;break;
+          case 2: p = 600; y = 0;break;
+          case 3: p = 500; y = 0;break;
+          case 4: p = 500; y = 0;break;
+          case 5: p = 400; y = 0;break;
+          //default: p = 300; break;
         }
       } 
      if(x == 300)
@@ -983,6 +993,7 @@ void create_boss_area(Enemy* e)
       x=0;
     }
     x++;
+      y++;
       if(y == p)
       {
         enemy_movement(e);
@@ -1036,7 +1047,7 @@ void create_boss_area(Enemy* e)
         }
         y = 0;
       }
-       y++;
+       
       //when enemy[0] hp is 3 increase movement
 
       //when enemy[0] hp is 0 you win
@@ -1057,7 +1068,7 @@ void create_boss_area(Enemy* e)
        cputcxy(26,1,0x00);
        cputcxy(27,1,0x00);
        cputcxy(28,1,0x00);
-       
+       y = 0;
        //cputcxy();
        switch(e->id){
          case 1: 

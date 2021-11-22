@@ -20,6 +20,8 @@ typedef struct {
   byte dir;
   int id;
   bool is_alive;
+  bool is_low;
+  bool is_critical;
 } Enemy;
 
 struct Actor{
