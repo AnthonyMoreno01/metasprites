@@ -117,6 +117,17 @@ void enemy_movement(Enemy* e)
   if (e->y < heros.y) dir = D_DOWN;
   e->dir = dir;
 }
+
+void wylie_movement(Enemy* e)
+{
+  byte dir;
+  if (e->y > heros.y) dir = D_UP;	else
+  if (e->y < heros.y) dir = D_DOWN;	else
+  if (e->x > heros.x) dir = D_LEFT;	else
+  if (e->x < heros.x) dir = D_RIGHT;	
+  
+  e->dir = dir;
+}
 //function displays text
 void cputcxy(byte x, byte y, char ch) 
 {
@@ -141,6 +152,7 @@ joy_install (joy_static_stddrv);
   cputsxy(2,22," To Play Again");
   vrambuf_flush();
   delay(100);
+  
   while(1)
   {
    byte joy;
@@ -163,6 +175,7 @@ void win_screen()
   cputsxy(2,22," To Play Again");
   vrambuf_flush();
   delay(100);
+  heros.lives = 0x30;
   while(1)
   {
     byte joy;
@@ -975,8 +988,13 @@ void create_boss_area(Enemy* e)
       y++;
       if(y == p)
       {
+        if(e->id == 5){
+          wylie_movement(e);
+          move_enemy(e);
+        }else{
         enemy_movement(e);
         move_enemy(e);
+        }
         //check for collision between enemy[0] and hero
         if(heros.x > e->x-11 && heros.x < e->x+11 &&heros.y == e->y)  
         {
