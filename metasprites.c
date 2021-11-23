@@ -244,6 +244,53 @@ void draw_bottom_border()
   cputcxy(18,27,0x08);
 }
 
+void draw_top_danger_entrance()
+{
+  draw_top_border();
+  cputsxy(5,2,"DANGER");
+  cputsxy(21,2,"DANGER");
+}
+
+void draw_bottom_danger_entrance()
+{
+  draw_bottom_border();
+  cputsxy(5,27,"DANGER");
+  cputsxy(21,27,"DANGER");
+}
+
+void draw_left_danger_entrance()
+{
+  cputsxy(1,5,"D");
+  cputsxy(1,6,"A");
+  cputsxy(1,7,"N");
+  cputsxy(1,8,"G");
+  cputsxy(1,9,"E");
+  cputsxy(1,10,"R");
+  draw_left_border();
+  cputsxy(1,18,"D");
+  cputsxy(1,19,"A");
+  cputsxy(1,20,"N");
+  cputsxy(1,21,"G");
+  cputsxy(1,22,"E");
+  cputsxy(1,23,"R");
+}
+
+void draw_right_danger_entrance()
+{
+  cputsxy(30,5,"D");
+  cputsxy(30,6,"A");
+  cputsxy(30,7,"N");
+  cputsxy(30,8,"G");
+  cputsxy(30,9,"E");
+  cputsxy(30,10,"R");
+  draw_right_border();
+  cputsxy(30,18,"D");
+  cputsxy(30,19,"A");
+  cputsxy(30,20,"N");
+  cputsxy(30,21,"G");
+  cputsxy(30,22,"E");
+  cputsxy(30,23,"R");
+}
 //spawns bullet that interacts with enemy[0]
 void shoot(Enemy* e){
   struct Actor bullet_player;
@@ -480,6 +527,10 @@ void create_top_area()
   //draw left area border
   draw_left_border();
   //draw start area border
+    if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
+     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+    draw_bottom_danger_entrance();
+  }
   draw_bottom_border();
   vrambuf_flush();
     while (1) 
@@ -590,6 +641,10 @@ void create_left_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1); 
   //draw right area border
+    if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
+     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+    draw_right_danger_entrance();
+  }
   draw_right_border();
   //draw top area border
   draw_top_border();
@@ -645,6 +700,10 @@ void create_right_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1); 
   //draw left area border
+  if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
+     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+    draw_left_danger_entrance();
+  }
   draw_left_border();
   //draw top area border
   draw_top_border();
@@ -766,6 +825,10 @@ void create_bottom_area()
   //draw left area border
   draw_left_border();
   //draw top area border
+  if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
+     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+    draw_top_danger_entrance();
+  }
   draw_top_border();
   vrambuf_flush();
   while (1)
