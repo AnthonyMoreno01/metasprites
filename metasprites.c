@@ -43,7 +43,6 @@ Enemy enemy[6];
 //character set for box
 const char BOX_CHARS[8]={0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A};
 
-
 unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
 byte slain = 0x30;
@@ -125,23 +124,25 @@ void wylie_movement(Enemy* e)
   if (e->y < heros.y) dir = D_DOWN;	else
   if (e->x > heros.x) dir = D_LEFT;	else
   if (e->x < heros.x) dir = D_RIGHT;	
-  
   e->dir = dir;
 }
+
 //function displays text
 void cputcxy(byte x, byte y, char ch) 
 {
   vrambuf_put(NTADR_A(x,y), &ch, 1);
 }
+
 //function displays text
 void cputsxy(byte x, byte y, const char* str) 
 {
   vrambuf_put(NTADR_A(x,y), str, strlen(str));
 }
+
 //function displays lose screen and waits for input to play again
 void game_over()
 {
-joy_install (joy_static_stddrv);
+  joy_install (joy_static_stddrv);
   clrscrn();
   vrambuf_flush();
   oam_clear();
@@ -155,12 +156,13 @@ joy_install (joy_static_stddrv);
   
   while(1)
   {
-   byte joy;
-   joy = joy_read (JOY_1);
-   if(joy)
-    break;
+    byte joy;
+    joy = joy_read (JOY_1);
+    if(joy)
+      break;
   }
 }
+
 //function displays win screen and waits for input to play again
 void win_screen()
 {
@@ -251,55 +253,54 @@ void shoot(Enemy* e){
   if (pad1 & PAD_A && !bullet_exists)
   {
       //Spawns bullet in front of hero location
-      bullet_player.x = heros.x;
-      bullet_player.y = heros.y - 12;
-      bullet_exists = true;
-    }
-    //if bullet exists 
-    if (bullet_exists){
-      
-      // Check for enemy[0] collision
-      for(i=0; i<2; i++)
-      {
-        bullet_player.y--;
-        oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
-        if(e->is_alive && 
-           (bullet_player.x > e->x-11 && bullet_player.x < e->x+11 && bullet_player.y == e->y
-          ))
-        {   
-	e->is_alive = false;
+    bullet_player.x = heros.x;
+    bullet_player.y = heros.y - 12;
+    bullet_exists = true;
+  }
+  //if bullet exists
+  if (bullet_exists){
+    // Check for enemy[0] collision
+    for(i=0; i<2; i++)
+    {
+      bullet_player.y--;
+      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+      if(e->is_alive && 
+        (bullet_player.x > e->x-11 && bullet_player.x < e->x+11 && bullet_player.y == e->y))
+      { 
+        e->is_alive = false;
         e->hp = e->hp-1;
-          if(e->hp == 0x33){
+        if(e->hp == 0x33)
+        {
           e->is_low = true;
-          }
-          if(e->hp == 0x31){
+        }
+        if(e->hp == 0x31){
           e->is_critical = true;
-          }
-        //cputsxy(19,1,"BOSS:");
+        }
         cputcxy(28,1,e->hp);
         vrambuf_flush();
-          break;
-        }
-      }
-      //check if bullet hit enemy[0]
-      if(e->is_alive == false)
-      {
-        bullet_exists = false;
-        bullet_player.x = 240;
-        bullet_player.y = 240;
-        e->is_alive = true;
-        oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
-      }
-      //check if bullet is out of bounds
-      if (bullet_player.y < 1 || bullet_player.y > 190)
-      {
-        bullet_exists = false;
-        bullet_player.x = 240;
-        bullet_player.y = 240;
-        oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+        break;
       }
     }
+    //check if bullet hit enemy[0]
+    if(e->is_alive == false)
+    {
+      bullet_exists = false;
+      bullet_player.x = 240;
+      bullet_player.y = 240;
+      e->is_alive = true;
+      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+    }
+    //check if bullet is out of bounds
+    if (bullet_player.y < 1 || bullet_player.y > 190)
+    {
+      bullet_exists = false;
+      bullet_player.x = 240;
+      bullet_player.y = 240;
+      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+    }
+  }
 }
+
 //reset game
 void clrscrn()
 {
@@ -313,7 +314,6 @@ void clrscrn()
 void init_game()
 {
   int i;
-  
   clrscrn();
   vrambuf_clear();
   heros.lives = 0x31;
@@ -328,7 +328,7 @@ void init_game()
   cputcxy(8,1,'1');
   ppu_on_all();
   vrambuf_clear();
-    for(i =0; i<9;i++)
+  for(i =0; i<9;i++)
   {
     hearts[i].x = 150;
     hearts[i].y = 100;
@@ -349,7 +349,6 @@ void create_start_area()
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(240, 240, 20, metasprite1);
-
   //draw right area border
   draw_right_border();
   //draw left area border
@@ -360,8 +359,8 @@ void create_start_area()
   draw_bottom_border();
   
   vrambuf_flush();
-    while (1) 
-    {
+  while (1) 
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -393,20 +392,19 @@ void create_start_area()
       heros.y = 24;
       create_bottom_area();
     }
-   if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
-     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
-    
-    create_boss_area(&enemy[5]);
-  }
-      if(heros.lives == 0x30 ){
-        
-        enemy[1].hp = 0x39;
-        enemy[2].hp = 0x39;
-        enemy[3].hp = 0x39;
-        enemy[4].hp = 0x39;
-        enemy[5].hp = 0x39;
-        break;
-      }
+    if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
+       enemy[3].hp == 0x30 && enemy[4].hp == 0x30)
+    {
+      create_boss_area(&enemy[5]);
+    }
+    if(heros.lives == 0x30 ){
+      enemy[1].hp = 0x39;
+      enemy[2].hp = 0x39;
+      enemy[3].hp = 0x39;
+      enemy[4].hp = 0x39;
+      enemy[5].hp = 0x39;
+      break;
+    }
     x++;
   } 
 }
@@ -414,25 +412,23 @@ void create_start_area()
 void create_top_left_area()
 {
   int x;
-  
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);
-  
   //draw right area border
   draw_right_border();
   //draw bottom area border
   draw_bottom_border();
-  
   //draw boss border
-  if(enemy[1].hp != 0x30){
+  if(enemy[1].hp != 0x30)
+  {
   cputsxy(5,2,"DANGER");
   draw_top_border();
   cputsxy(21,2,"DANGER");
   }
   
   vrambuf_flush();
-    while (1) 
-    {
+  while (1) 
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -479,56 +475,51 @@ void create_top_area()
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1); 
-  
   //draw right area border
   draw_right_border();
   //draw left area border
   draw_left_border();
   //draw start area border
   draw_bottom_border();
-  
-  
-  
   vrambuf_flush();
     while (1) 
     {
-    if(x == 300)
-    {
-      movement(&heros);
-      move_player(&heros);
-      oam_meta_spr(heros.x, heros.y, 4, metasprite); 
-      x=0;
-    }
-    // move to top right area
-    if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
-    {
-      heros.x = 14;
-      create_top_right_area();
-    }
-    // move to top left area
-    if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
-    {
-      heros.x = 220;
-      create_top_left_area();
-    }      
-    // move to start area
-    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
-    {
-      heros.y = 24;
-      create_start_area();
-    }
-    // check for heart collision    
-    if(hearts[1].x == heros.x && hearts[1].y == heros.y)
-    {
-      hearts[1].x = 240;
-      hearts[1].y = 240;
-      heros.lives++;
-      cputcxy(8,1, heros.lives);
-      vrambuf_flush();
-      oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1);    
-    }
-      
-      if(heros.lives == 0x30 )
+      if(x == 300)
+      {
+        movement(&heros);
+        move_player(&heros);
+        oam_meta_spr(heros.x, heros.y, 4, metasprite); 
+        x=0;
+      }
+      // move to top right area
+      if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
+      {
+        heros.x = 14;
+        create_top_right_area();
+      }
+      // move to top left area
+      if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
+      {
+        heros.x = 220;
+        create_top_left_area();
+      }      
+      // move to start area
+      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
+      {
+        heros.y = 24;
+        create_start_area();
+      }
+      // check for heart collision    
+      if(hearts[1].x == heros.x && hearts[1].y == heros.y)
+      {
+        hearts[1].x = 240;
+        hearts[1].y = 240;
+        heros.lives++;
+        cputcxy(8,1, heros.lives);
+        vrambuf_flush();
+        oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1);    
+      }
+      if(heros.lives == 0x30)
         break;
     x++;
   }
@@ -539,20 +530,19 @@ void create_top_right_area()
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1); 
-  
   //draw left area border
   draw_left_border();
   //draw bottom area border
   draw_bottom_border();
-  if(enemy[2].hp != 0x30){
+  if(enemy[2].hp != 0x30)
+  {
   cputsxy(5,2,"DANGER");
   draw_top_border();
   cputsxy(21,2,"DANGER");
   }
   vrambuf_flush();
-    while (1) 
-    {
-    
+  while (1) 
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -599,18 +589,15 @@ void create_left_area()
   int x;
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1); 
-  
   //draw right area border
   draw_right_border();
   //draw top area border
   draw_top_border();
   //draw bottom area border
   draw_bottom_border();
-
   vrambuf_flush();
-  
-    while (1) 
-    {
+  while (1) 
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -646,8 +633,8 @@ void create_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 )
-        break;
+    if(heros.lives == 0x30 )
+      break;
     x++;
   }
 }
@@ -663,10 +650,9 @@ void create_right_area()
   draw_top_border();
   //draw bottom area border
   draw_bottom_border();
-  
   vrambuf_flush();
-    while (1) 
-    {
+  while (1)
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -674,7 +660,6 @@ void create_right_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
     }
-
     // move to start area
     if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
     {
@@ -703,8 +688,8 @@ void create_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30)
-        break;
+    if(heros.lives == 0x30)
+      break;
     x++;
   }
 }
@@ -719,15 +704,15 @@ void create_bottom_left_area()
   //draw top area border
   draw_top_border();
   //draw boss area border
-  
-  if(enemy[3].hp != 0x30){
+  if(enemy[3].hp != 0x30)
+  {
   cputsxy(5,27,"DANGER");
   draw_bottom_border();
   cputsxy(21,27,"DANGER");
   }
   vrambuf_flush();
-    while (1) 
-    {
+  while (1) 
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -764,12 +749,10 @@ void create_bottom_left_area()
       vrambuf_flush();
       oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1);    
     }
-    
-      if(heros.lives == 0x30)
-        break;
+    if(heros.lives == 0x30)
+      break;
     x++;
   }
-  
 }
 
 
@@ -784,12 +767,9 @@ void create_bottom_area()
   draw_left_border();
   //draw top area border
   draw_top_border();
-  
-
-  
   vrambuf_flush();
-    while (1) 
-    {
+  while (1)
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -815,7 +795,6 @@ void create_bottom_area()
       heros.y = 194;
       create_start_area();
     }
-
     // check for heart collision 
     if(hearts[6].x == heros.x && hearts[6].y == heros.y)
     {
@@ -826,8 +805,8 @@ void create_bottom_area()
       vrambuf_flush();
       oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 )
-        break;
+    if(heros.lives == 0x30)
+      break;
     x++;
   }
 }
@@ -841,14 +820,15 @@ void create_bottom_right_area()
   draw_left_border();
   //draw top area border
   draw_top_border();
-  if(enemy[4].hp != 0x30){
+  if(enemy[4].hp != 0x30)
+  {
   cputsxy(5,27,"DANGER");
   draw_bottom_border();
   cputsxy(21,27,"DANGER");
   }
   vrambuf_flush();
-    while (1) 
-    {
+  while (1) 
+  {
     if(x == 300)
     {
       movement(&heros);
@@ -884,8 +864,8 @@ void create_bottom_right_area()
       vrambuf_flush();
       oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
     }
-      if(heros.lives == 0x30 )
-        break;
+    if(heros.lives == 0x30 )
+      break;
     x++;
   }
 }
@@ -894,89 +874,80 @@ void create_bottom_right_area()
 void create_boss_area(Enemy* e)
 {
   int x,y,p;
-
-  switch(e->id){
-
-
-     case 1: 
+  switch(e->id)
+  {
+    case 1:
       p = 1000;    
       e->x = 20;
       e->y = 20;
-      break;
-      case 2: 
+    break;
+    case 2: 
       p = 900;
       e->x = 20;
       e->y = 20;
-      break;
-      case 3: 
+    break;
+    case 3: 
       p = 800;    
       e->x = 20;
       e->y = 20;
-      break;
-      case 4: 
+    break;
+    case 4: 
       p = 700;    
       e->x = 20;
       e->y = 20;
-      break;
-      case 5:
+    break;
+    case 5:
       p = 500;
       e->x = 20;
       e->y = 20;
     break;
   }
-  
-  
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
-  
- //draw tip
- cputsxy(6,27,"PRESS SPACE TO SHOOT");
-
-
+  //draw tip
+  cputsxy(6,27,"PRESS SPACE TO SHOOT");
   oam_meta_spr(e->x, e->y, 48, metasprite2); 
   e->hp = 0x39;
   e->is_alive = true;
- 
- switch(e->id){
-     case 1: cputsxy(21,1,"BOSS 1:"); break;
-     case 2: cputsxy(21,1,"BOSS 2:"); break;
-     case 3: cputsxy(21,1,"BOSS 3:"); break;
-     case 4: cputsxy(21,1,"BOSS 4:"); break;
-     case 5: cputsxy(21,1," WYLIE:"); break;
- }
-  
+  switch(e->id)
+  {
+    case 1: cputsxy(21,1,"BOSS 1:"); break;
+    case 2: cputsxy(21,1,"BOSS 2:"); break;
+    case 3: cputsxy(21,1,"BOSS 3:"); break;
+    case 4: cputsxy(21,1,"BOSS 4:"); break;
+    case 5: cputsxy(21,1," WYLIE:"); break;
+  }
   cputcxy(28,1,e->hp);
   vrambuf_flush();
   vrambuf_flush();
-    while (1) 
+  while (1)
+  {
+    if(e->is_low == true)
     {
-     if(e->is_low == true)
+      e->is_low = false;
+      switch(e->id)
       {
-       e->is_low = false;
-	switch(e->id)
-        {
-          case 1: p = 800; y = 0;break;
-          case 2: p = 700; y = 0;break;
-          case 3: p = 600; y = 0;break;
-          case 4: p = 600; y = 0;break;
-          case 5: p = 500; y = 0;break;
-          default: p = 400;
-        }
+        case 1: p = 800; y = 0;break;
+        case 2: p = 700; y = 0;break;
+        case 3: p = 600; y = 0;break;
+        case 4: p = 600; y = 0;break;
+        case 5: p = 500; y = 0;break;
       }
+    }
       //when enemy[0] hp is 1 increase movement
-      if(e->is_critical == true)
+    if(e->is_critical == true)
+    {
+      e->is_critical = false;
+      switch(e->id)
       {
-        e->is_critical = false;
-        switch(e->id){
-          case 1: p = 700; y = 0;break;
-          case 2: p = 600; y = 0;break;
-          case 3: p = 500; y = 0;break;
-          case 4: p = 500; y = 0;break;
-          case 5: p = 400; y = 0;break;
-          //default: p = 300; break;
-        }
-      } 
-     if(x == 300)
-     {
+        case 1: p = 700; y = 0;break;
+        case 2: p = 600; y = 0;break;
+        case 3: p = 500; y = 0;break;
+        case 4: p = 500; y = 0;break;
+        case 5: p = 400; y = 0;break;
+      }
+    }
+    if(x == 300)
+    {
       shoot(e);
       movement(&heros);
       move_player(&heros);
@@ -985,92 +956,89 @@ void create_boss_area(Enemy* e)
       x=0;
     }
     x++;
-      y++;
-      if(y == p)
+    y++;
+    if(y == p)
+    {
+      if(e->id == 5)
       {
-        if(e->id == 5){
-          wylie_movement(e);
-          move_enemy(e);
-        }else{
+        wylie_movement(e);
+        move_enemy(e);
+      }
+      else
+      {
         enemy_movement(e);
         move_enemy(e);
-        }
-        //check for collision between enemy[0] and hero
-        if(heros.x > e->x-11 && heros.x < e->x+11 &&heros.y == e->y)  
-        {
-          //if collision hero hp drops 1 and reset player to middle of screen
-          heros.lives--;
-          heros.x = 120;
-          heros.y = 120;
-          //when heros hp is 0 game over
+      }
+      //check for collision between enemy[0] and hero
+      if(heros.x > e->x-11 && heros.x < e->x+11 &&heros.y == e->y)  
+      {
+        //if collision hero hp drops 1 and reset player to middle of screen
+        heros.lives--;
+        heros.x = 120;
+        heros.y = 120;
+        //when heros hp is 0 game over
         if(heros.lives == 0x30)
         {
-        enemy[1].hp = 0x39;
-        enemy[2].hp = 0x39;
-        enemy[3].hp = 0x39;
-        enemy[4].hp = 0x39;
-        enemy[5].hp = 0x39;
+          enemy[1].hp = 0x39;
+          enemy[2].hp = 0x39;
+          enemy[3].hp = 0x39;
+          enemy[4].hp = 0x39;
+          enemy[5].hp = 0x39;
           game_over();
           break;
         }
         else
         {
-        cputcxy(8,1, heros.lives);
+          cputcxy(8,1, heros.lives);
           vrambuf_flush();
         }
-        }
-        y = 0;
       }
-       
-      //when enemy[0] hp is 3 increase movement
-
-      //when enemy[0] hp is 0 you win
-     if(e->hp == 0x30)
-     {
-       e->x = 240;
-       e->y = 240;
-       
-       oam_meta_spr(e->x, e->y, 48, metasprite2); 
-       slain++;
-       cputsxy(13,1,"SLAIN:");
-       cputcxy(19,1,slain);
-       cputcxy(21,1,0x00);
-       cputcxy(22,1,0x00);
-       cputcxy(23,1,0x00);
-       cputcxy(24,1,0x00);
-       cputcxy(25,1,0x00);
-       cputcxy(26,1,0x00);
-       cputcxy(27,1,0x00);
-       cputcxy(28,1,0x00);
-       y = 0;
-       //cputcxy();
-       switch(e->id){
-         case 1: 
-           heros.y = 14;
-           create_top_left_area();
-           break;
-         case 2: 
-           heros.y = 14;
-           create_top_right_area();
-           break;
-         case 3: 
-           heros.y = 194;
-           create_bottom_left_area();
-           break;
-         case 4: 
-           heros.y = 194;
-           create_bottom_right_area();
-           break;
-         case 5: 
-           win_screen();
-           break;
-       }     
-       //win_screen();
-       break;
-     }
-     
+      y = 0;
+    }
+    if(e->hp == 0x30)
+    {
+      e->x = 240;
+      e->y = 240;
+      oam_meta_spr(e->x, e->y, 48, metasprite2); 
+      slain++;
+      cputsxy(13,1,"SLAIN:");
+      cputcxy(19,1,slain);
+      cputcxy(21,1,0x00);
+      cputcxy(22,1,0x00);
+      cputcxy(23,1,0x00);
+      cputcxy(24,1,0x00);
+      cputcxy(25,1,0x00);
+      cputcxy(26,1,0x00);
+      cputcxy(27,1,0x00);
+      cputcxy(28,1,0x00);
+      y = 0;
+      switch(e->id)
+      {
+        case 1:
+          heros.y = 14;
+          create_top_left_area();
+        break;
+        case 2: 
+          heros.y = 14;
+          create_top_right_area();
+        break;
+        case 3:
+          heros.y = 194;
+          create_bottom_left_area();
+        break;
+        case 4: 
+          heros.y = 194;
+          create_bottom_right_area();
+        break;
+        case 5: 
+          win_screen();
+        break;
+      }     
+      break;
+    }
   }
-}//creates title screen
+}
+//creates title screen
 void title_screen()
 {
   pal_all(PALETTE);
@@ -1110,5 +1078,5 @@ void main()
       break;
   }
   while(1)
-play();
+    play();
 }
