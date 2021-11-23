@@ -251,29 +251,8 @@ void shoot(Enemy* e){
         bullet_player.y--;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
         if(e->is_alive && 
-          (bullet_player.x == e -> x-11 && bullet_player.y == e->y)  || 
-          (bullet_player.x == e ->x-10 && bullet_player.y == e->y)  || 
-          (bullet_player.x == e ->x-9  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e ->x-8  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e ->x-7  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e ->x-6  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e ->x-5  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x-4  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x-3  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x-2  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x-1  && bullet_player.y == e->y)  ||  
-          (bullet_player.x == e->x    && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+2  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+1  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+4  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+3  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+5  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+6  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+7  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+8  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+9  && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+10 && bullet_player.y == e->y)  || 
-          (bullet_player.x == e->x+11 && bullet_player.y == e->y)    )
+           (bullet_player.x > e->x-11 && bullet_player.x < e->x+11 && bullet_player.y == e->y
+          ))
         {   
 	e->is_alive = false;
         e->hp = e->hp-1;
@@ -999,30 +978,7 @@ void create_boss_area(Enemy* e)
         enemy_movement(e);
         move_enemy(e);
         //check for collision between enemy[0] and hero
-        if(
-          (heros.x == e->x-11 && heros.y == e->y)  || 
-          (heros.x == e->x-10 && heros.y == e->y)  || 
-          (heros.x == e->x-9  && heros.y == e->y)  || 
-          (heros.x == e->x-8  && heros.y == e->y)  || 
-          (heros.x == e->x-7  && heros.y == e->y)  || 
-          (heros.x == e->x-6  && heros.y == e->y)  || 
-          (heros.x == e->x-5  && heros.y == e->y)  || 
-          (heros.x == e->x-4  && heros.y == e->y)  || 
-          (heros.x == e->x-3  && heros.y == e->y)  || 
-          (heros.x == e->x-2  && heros.y == e->y)  || 
-          (heros.x == e->x-1  && heros.y == e->y)  ||  
-          (heros.x == e->x    && heros.y == e->y)  || 
-          (heros.x == e->x+1  && heros.y == e->y)  || 
-          (heros.x == e->x+2  && heros.y == e->y)  || 
-          (heros.x == e->x+3  && heros.y == e->y)  || 
-          (heros.x == e->x+4  && heros.y == e->y)  || 
-          (heros.x == e->x+5  && heros.y == e->y)  || 
-          (heros.x == e->x+6  && heros.y == e->y)  || 
-          (heros.x == e->x+7  && heros.y == e->y)  || 
-          (heros.x == e->x+8  && heros.y == e->y)  || 
-          (heros.x == e->x+9  && heros.y == e->y)  || 
-          (heros.x == e->x+10 && heros.y == e->y)  || 
-          (heros.x == e->x+11 && heros.y == e->y))  
+        if(heros.x > e->x-11 && heros.x < e->x+11 &&heros.y == e->y)  
         {
           //if collision hero hp drops 1 and reset player to middle of screen
           heros.lives--;
