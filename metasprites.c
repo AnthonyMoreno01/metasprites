@@ -10,8 +10,6 @@
 //#link "chr_generic.s"
 #define COLS 32
 #define ROWS 27
-
-
 #define DEF_METASPRITE_2x2static(name,code,pal)\
 const unsigned char name[]={\
         0,      0,      0xA2,   pal, \
@@ -19,7 +17,15 @@ const unsigned char name[]={\
         8,      0,      0xA2,   pal, \
         8,      8,      0xA2,   pal, \
         128};
- 
+
+#define DEF_METASPRITE_2x2static2(name,code,pal)\
+const unsigned char name[]={\
+        0,      0,      0xA1,   pal, \
+        0,      8,      0xA1,   pal, \
+        8,      0,      0xA1,   pal, \
+        8,      8,      0xA1,   pal, \
+        128};
+
 #define DEF_METASPRITE_2x2(name,code,pal)\
 const unsigned char name[]={\
         0,      0,      code,     pal, \
@@ -27,9 +33,9 @@ const unsigned char name[]={\
         8,      0,      code+2,   pal, \
         8,      8,      code+3,   pal, \
         128};
-
 //creates bullet sprite
-DEF_METASPRITE_2x2static(bullet, 0xe4, 0);
+DEF_METASPRITE_2x2static(bullet1, 0xe4, 0);
+DEF_METASPRITE_2x2static2(bullet2, 0xe4, 0);
 bool bullet_exists = false;
 //creates hero sprite
 DEF_METASPRITE_2x2(metasprite, 0xD8, 2);
@@ -42,7 +48,6 @@ DEF_METASPRITE_2x2(metasprite2, 0xF8, 1);
 Enemy enemy[6];
 //character set for box
 const char BOX_CHARS[8]={0x8D,0x8E,0x87,0x8B,0x8C,0x83,0x85,0x8A};
-
 unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
 byte slain = 0x30;
@@ -81,10 +86,8 @@ void movement(Hero* h)
   if (pad1 & JOY_RIGHT_MASK) dir = D_RIGHT;	else
   if (pad1 & JOY_UP_MASK) dir = D_UP;		else
   if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;	else
-   
     //stops player from moving before input is read
-	dir = D_STAND;
-  
+    dir = D_STAND;
   //stops player from moving out of bounds
   if (heros.x < 10){
     dir = D_RIGHT;
@@ -116,7 +119,6 @@ void enemy_movement(Enemy* e)
   if (e->y < heros.y) dir = D_DOWN;
   e->dir = dir;
 }
-
 void wylie_movement(Enemy* e)
 {
   byte dir;
@@ -132,13 +134,11 @@ void cputcxy(byte x, byte y, char ch)
 {
   vrambuf_put(NTADR_A(x,y), &ch, 1);
 }
-
 //function displays text
 void cputsxy(byte x, byte y, const char* str) 
 {
   vrambuf_put(NTADR_A(x,y), str, strlen(str));
 }
-
 //function displays lose screen and waits for input to play again
 void game_over()
 {
@@ -153,7 +153,7 @@ void game_over()
   cputsxy(2,22," To Play Again");
   vrambuf_flush();
   delay(100);
-  
+  slain = 0x30;
   while(1)
   {
     byte joy;
@@ -178,6 +178,7 @@ void win_screen()
   vrambuf_flush();
   delay(100);
   heros.lives = 0x30;
+  slain = 0x30;
   while(1)
   {
     byte joy;
@@ -297,20 +298,64 @@ void shoot(Enemy* e){
   int i;
   pad1_new = pad_trigger(0);
   pad1 = pad_state(0);
-  if (pad1 & PAD_A && !bullet_exists)
+  //bullet_exists
+  if(!bullet_exists){
+  if (pad1 & PAD_A && pad1 & JOY_UP_MASK && !bullet_exists)
   {
       //Spawns bullet in front of hero location
     bullet_player.x = heros.x;
     bullet_player.y = heros.y - 12;
     bullet_exists = true;
+    bullet_player.dir = D_UP;
+  }
+  if (pad1 & PAD_A && pad1 & JOY_LEFT_MASK && !bullet_exists)
+  {
+      //Spawns bullet in front of hero location
+    bullet_player.x = heros.x-12;
+    bullet_player.y = heros.y;
+    bullet_exists = true;
+    bullet_player.dir = D_LEFT;
+  }
+  if (pad1 & PAD_A && pad1 & JOY_RIGHT_MASK && !bullet_exists)
+  {
+      //Spawns bullet in front of hero location
+    bullet_player.x = heros.x+12;
+    bullet_player.y = heros.y;
+    bullet_exists = true;
+    bullet_player.dir = D_RIGHT;
+  }
+  if (pad1 & PAD_A && pad1 & JOY_DOWN_MASK && !bullet_exists)
+  {
+      //Spawns bullet in front of hero location
+    bullet_player.x = heros.x;
+    bullet_player.y = heros.y + 12;
+    bullet_exists = true;
+    bullet_player.dir = D_DOWN;
+  	}
   }
   //if bullet exists
   if (bullet_exists){
     // Check for enemy[0] collision
     for(i=0; i<2; i++)
     {
-      bullet_player.y--;
-      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+      if(bullet_player.dir == D_UP){
+        bullet_player.y = bullet_player.y -2;
+        oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
+      }
+      if(bullet_player.dir == D_LEFT){
+         bullet_player.x = bullet_player.x -2;
+        oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
+      }
+      if(bullet_player.dir == D_RIGHT){
+        bullet_player.x = bullet_player.x +2;
+        oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
+      }
+      if(bullet_player.dir == D_DOWN){
+        bullet_player.y = bullet_player.y +2;
+        oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
+      }
+      
+      
       if(e->is_alive && 
         (bullet_player.x > e->x-11 && bullet_player.x < e->x+11 && bullet_player.y == e->y))
       { 
@@ -335,15 +380,24 @@ void shoot(Enemy* e){
       bullet_player.x = 240;
       bullet_player.y = 240;
       e->is_alive = true;
-      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
+      oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
     }
     //check if bullet is out of bounds
-    if (bullet_player.y < 1 || bullet_player.y > 190)
+    if ((bullet_player.dir == D_UP || bullet_player.dir == D_DOWN)&& (bullet_player.y < 1 || bullet_player.y > 190))
     {
       bullet_exists = false;
       bullet_player.x = 240;
       bullet_player.y = 240;
-      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet);
+      oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
+    }
+    
+    if ((bullet_player.dir == D_LEFT || bullet_player.dir == D_RIGHT) && (bullet_player.x < 1 || bullet_player.x > 240))
+    {
+      bullet_exists = false;
+      bullet_player.x = 240;
+      bullet_player.y = 240;
+      oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
     }
   }
 }
@@ -799,7 +853,7 @@ void create_bottom_left_area()
       create_boss_area(&enemy[3]);
     }  
     // check for heart collision  
-    if(hearts[5].x == heros.x && hearts[5].y == heros.y)
+    if(hearts[5].x == heros.x+8 && hearts[5].y == heros.y)
     {
       hearts[5].x = 240;
       hearts[5].y = 240;
@@ -1033,7 +1087,7 @@ void create_boss_area(Enemy* e)
         move_enemy(e);
       }
       //check for collision between enemy[0] and hero
-      if(heros.x > e->x-11 && heros.x < e->x+11 &&heros.y == e->y)  
+      if(heros.x == e->x &&heros.y == e->y)  
       {
         //if collision hero hp drops 1 and reset player to middle of screen
         heros.lives--;

@@ -32,6 +32,7 @@ struct Actor{
   sbyte dy; // Delta-y
   bool is_alive; // Is the actor supposed to be 'alive' right now?
   byte lives; // How many lives does it have?
+  byte dir;
 };
 //Prototypes;
 
