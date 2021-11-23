@@ -296,12 +296,12 @@ void draw_right_danger_entrance()
 void shoot(Enemy* e){
   struct Actor bullet_player;
   int i;
-  pad1_new = pad_trigger(0);
-  pad1 = pad_state(0);
+  char pad2_new = pad_trigger(1);
+  char pad2 = pad_state(1);
   //bullet_exists
   if(!bullet_exists)
   {
-    if (pad1 & PAD_A && pad1 & JOY_UP_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad2 & JOY_UP_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x;
@@ -309,7 +309,7 @@ void shoot(Enemy* e){
       bullet_exists = true;
       bullet_player.dir = D_UP;
     }
-    if (pad1 & PAD_A && pad1 & JOY_LEFT_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad2 & JOY_LEFT_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x-12;
@@ -317,7 +317,7 @@ void shoot(Enemy* e){
       bullet_exists = true;
       bullet_player.dir = D_LEFT;
     }
-    if (pad1 & PAD_A && pad1 & JOY_RIGHT_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad2 & JOY_RIGHT_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x+12;
@@ -325,7 +325,7 @@ void shoot(Enemy* e){
       bullet_exists = true;
       bullet_player.dir = D_RIGHT;
     }
-    if (pad1 & PAD_A && pad1 & JOY_DOWN_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad2 & JOY_DOWN_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x;
@@ -858,7 +858,7 @@ void create_bottom_left_area()
       create_boss_area(&enemy[3]);
     }  
     // check for heart collision  
-    if(hearts[5].x == heros.x+8 && hearts[5].y == heros.y)
+    if(hearts[5].x == heros.x && hearts[5].y == heros.y)
     {
       hearts[5].x = 240;
       hearts[5].y = 240;
