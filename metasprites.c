@@ -299,63 +299,67 @@ void shoot(Enemy* e){
   pad1_new = pad_trigger(0);
   pad1 = pad_state(0);
   //bullet_exists
-  if(!bullet_exists){
-  if (pad1 & PAD_A && pad1 & JOY_UP_MASK && !bullet_exists)
+  if(!bullet_exists)
   {
+    if (pad1 & PAD_A && pad1 & JOY_UP_MASK && !bullet_exists)
+    {
       //Spawns bullet in front of hero location
-    bullet_player.x = heros.x;
-    bullet_player.y = heros.y - 12;
-    bullet_exists = true;
-    bullet_player.dir = D_UP;
-  }
-  if (pad1 & PAD_A && pad1 & JOY_LEFT_MASK && !bullet_exists)
-  {
+      bullet_player.x = heros.x;
+      bullet_player.y = heros.y - 12;
+      bullet_exists = true;
+      bullet_player.dir = D_UP;
+    }
+    if (pad1 & PAD_A && pad1 & JOY_LEFT_MASK && !bullet_exists)
+    {
       //Spawns bullet in front of hero location
-    bullet_player.x = heros.x-12;
-    bullet_player.y = heros.y;
-    bullet_exists = true;
-    bullet_player.dir = D_LEFT;
-  }
-  if (pad1 & PAD_A && pad1 & JOY_RIGHT_MASK && !bullet_exists)
-  {
+      bullet_player.x = heros.x-12;
+      bullet_player.y = heros.y;
+      bullet_exists = true;
+      bullet_player.dir = D_LEFT;
+    }
+    if (pad1 & PAD_A && pad1 & JOY_RIGHT_MASK && !bullet_exists)
+    {
       //Spawns bullet in front of hero location
-    bullet_player.x = heros.x+12;
-    bullet_player.y = heros.y;
-    bullet_exists = true;
-    bullet_player.dir = D_RIGHT;
-  }
-  if (pad1 & PAD_A && pad1 & JOY_DOWN_MASK && !bullet_exists)
-  {
+      bullet_player.x = heros.x+12;
+      bullet_player.y = heros.y;
+      bullet_exists = true;
+      bullet_player.dir = D_RIGHT;
+    }
+    if (pad1 & PAD_A && pad1 & JOY_DOWN_MASK && !bullet_exists)
+    {
       //Spawns bullet in front of hero location
-    bullet_player.x = heros.x;
-    bullet_player.y = heros.y + 12;
-    bullet_exists = true;
-    bullet_player.dir = D_DOWN;
-  	}
+      bullet_player.x = heros.x;
+      bullet_player.y = heros.y + 12;
+      bullet_exists = true;
+      bullet_player.dir = D_DOWN;
+    }
   }
   //if bullet exists
-  if (bullet_exists){
+  if (bullet_exists)
+  {
     // Check for enemy[0] collision
     for(i=0; i<2; i++)
     {
-      if(bullet_player.dir == D_UP){
+      if(bullet_player.dir == D_UP)
+      {
         bullet_player.y = bullet_player.y -2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
       }
-      if(bullet_player.dir == D_LEFT){
+      if(bullet_player.dir == D_LEFT)
+      {
          bullet_player.x = bullet_player.x -2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
       }
-      if(bullet_player.dir == D_RIGHT){
+      if(bullet_player.dir == D_RIGHT)
+      {
         bullet_player.x = bullet_player.x +2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
       }
-      if(bullet_player.dir == D_DOWN){
+      if(bullet_player.dir == D_DOWN)
+      {
         bullet_player.y = bullet_player.y +2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
       }
-      
-      
       if(e->is_alive && 
         (bullet_player.x > e->x-11 && bullet_player.x < e->x+11 && bullet_player.y == e->y))
       { 
@@ -365,7 +369,8 @@ void shoot(Enemy* e){
         {
           e->is_low = true;
         }
-        if(e->hp == 0x31){
+        if(e->hp == 0x31)
+        {
           e->is_critical = true;
         }
         cputcxy(28,1,e->hp);
