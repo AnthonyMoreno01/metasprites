@@ -153,7 +153,7 @@ void game_over()
   cputsxy(2,20,"Press Any Button");
   cputsxy(2,22," To Play Again");
   vrambuf_flush();
-  delay(100);
+  delay(60);
   while(1)
   {
     byte joy;
@@ -164,6 +164,48 @@ void game_over()
   room_id = 15;
 }
 
+
+void clear_text(){
+
+
+  
+  vrambuf_flush();
+  set_vram_update(updbuf);
+  cputsxy(2,19,0x00);
+  cputsxy(3,19,0x00);
+  cputsxy(4,19,0x00);
+  cputsxy(5,19,0x00);
+  cputsxy(6,19,0x00);
+  cputsxy(7,19,0x00);
+  cputsxy(8,19,0x00);
+  cputsxy(9,19,0x00);
+
+  
+  vrambuf_flush();
+  set_vram_update(updbuf);
+  cputsxy(10,19,0x00);
+  cputsxy(11,19,0x00);
+  cputsxy(12,19,0x00);
+  cputsxy(13,19,0x00);
+  cputsxy(14,19,0x00);
+  cputsxy(15,19,0x00);
+  cputsxy(16,19,0x00);
+  cputsxy(17,19,0x00);
+  cputsxy(18,19,0x00);
+  cputsxy(19,19,0x00);
+
+  
+  vrambuf_flush();
+  set_vram_update(updbuf);
+  cputsxy(20,19,0x00);
+  cputsxy(21,19,0x00);
+  cputsxy(22,19,0x00);
+  cputsxy(23,19,0x00);
+  cputsxy(24,19,0x00);
+  cputsxy(25,19,0x00);
+  cputsxy(26,19,0x00);
+  vrambuf_flush();
+}
 //function displays win screen and waits for input to play again
 void win_screen()
 {
@@ -177,7 +219,7 @@ void win_screen()
   cputsxy(2,20,"Press Any Button");
   cputsxy(2,22," To Play Again");
   vrambuf_flush();
-  delay(100);
+  delay(60);
 
   while(1)
   {
@@ -467,6 +509,7 @@ void create_start_area()
   draw_top_border();
   //draw bottom area border
   draw_bottom_border();
+
   
   vrambuf_flush();
   while (1) 
@@ -556,11 +599,12 @@ void create_top_left_area()
       room_id = 4;
       break;
     }
+    //move to boss area
     if((heros.x <= 150 && heros.x >= 90) && 
        (heros.y <= 20  && heros.y >= 5)  && enemy[1].hp != 0x30)
     {
-      heros.y = 194;
-      oam_clear();
+      heros.y = 150;
+      heros.x = 120;
       room_id = 10;
       break;
     }     
@@ -860,7 +904,7 @@ void create_bottom_left_area()
     // move to boss area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[3].hp != 0x30)
     {
-      heros.y = 24;
+      heros.y = 150;
       oam_clear();
       room_id = 12;
       break;
@@ -1002,7 +1046,9 @@ void create_bottom_right_area()
 //creates boss zone and allows player to shoot
 void create_boss_area(Enemy* e)
 {
-  int x,y,p;
+  int x,y,p,i,j;
+  joy_install (joy_static_stddrv);
+  
   switch(e->id)
   {
     case 1:
@@ -1039,11 +1085,137 @@ void create_boss_area(Enemy* e)
   e->is_alive = true;
   switch(e->id)
   {
-    case 1: cputsxy(21,1,"BOSS 1:"); break;
-    case 2: cputsxy(21,1,"BOSS 2:"); break;
-    case 3: cputsxy(21,1,"BOSS 3:"); break;
-    case 4: cputsxy(21,1,"BOSS 4:"); break;
-    case 5: cputsxy(21,1," WYLIE:"); break;
+    case 1: 
+      vrambuf_flush();
+      cputsxy(21,1,"MOLINA:");
+      draw_box(1,2, COLS-2, 19,BOX_CHARS);
+      cputsxy(4, 19, "MOLINA");
+      delay(20);
+      cputsxy(7, 21, "I Choow You The End!");
+      vrambuf_flush();
+      while(1)
+      {
+        byte joy;
+        joy = joy_read (JOY_1);
+        if(joy)
+          break;
+      }
+      for(i = 19; i < ROWS-1;i++){
+        for(j = 2; j < COLS-2; j++){
+          cputcxy(j,i,0x00);
+        }
+      }
+      vrambuf_flush();
+      cputcxy(1,19,0x85);
+      vrambuf_flush();
+      cputcxy(30,19,0x8A);
+      delay(60);
+    break; 
+    case 2: cputsxy(21,1,"  KHAN:"); 
+      draw_box(1,2, COLS-2, 19,BOX_CHARS);
+      cputsxy(4, 19, "KHAN");
+      delay(20);
+      cputsxy(7, 21, "No Phones During Class!!");
+      vrambuf_flush();
+      while(1)
+      {
+        byte joy;
+        joy = joy_read (JOY_1);
+        if(joy)
+          break;
+      }
+      for(i = 19; i < ROWS-1;i++){
+        for(j = 2; j < COLS-2; j++){
+          cputcxy(j,i,0x00);
+        }
+      }
+      vrambuf_flush();
+      cputcxy(1,19,0x85);
+      vrambuf_flush();
+      cputcxy(30,19,0x8A);
+      delay(60);
+    break;
+    case 3: cputsxy(21,1," ZHANG:"); 
+      draw_box(1,2, COLS-2, 19,BOX_CHARS);
+      cputsxy(4, 19, "ZHANG");
+      delay(20);
+      vrambuf_flush();
+      cputsxy(9, 21, "I Will Beat You");
+      vrambuf_flush();
+      cputsxy(10, 23, "in O(n) Time!");
+      vrambuf_flush();
+      while(1)
+      {
+        byte joy;
+        joy = joy_read (JOY_1);
+        if(joy)
+          break;
+      }
+      for(i = 19; i < ROWS-1;i++){
+        for(j = 2; j < COLS-2; j++){
+          cputcxy(j,i,0x00);
+        }
+      }
+      vrambuf_flush();
+      cputcxy(1,19,0x85);
+      vrambuf_flush();
+      cputcxy(30,19,0x8A);
+      delay(60);
+    break;
+    case 4: cputsxy(21,1," TOMAI:");
+      draw_box(1,2, COLS-2, 19,BOX_CHARS);
+      cputsxy(4, 19, "TOMAI");
+      delay(20);
+      vrambuf_flush();
+      cputsxy(10, 21, "FAQ Update: ");
+      vrambuf_flush();
+      cputsxy(9, 23, "You Will Lose!");
+      vrambuf_flush();
+      while(1)
+      {
+        byte joy;
+        joy = joy_read (JOY_1);
+        if(joy)
+          break;
+      }
+      for(i = 19; i < ROWS-1;i++){
+        for(j = 2; j < COLS-2; j++){
+          cputcxy(j,i,0x00);
+        }
+      }
+      vrambuf_flush();
+      cputcxy(1,19,0x85);
+      vrambuf_flush();
+      cputcxy(30,19,0x8A);
+      delay(60);
+    break;
+    case 5: cputsxy(21,1," WYLIE:"); 
+      draw_box(1,2, COLS-2, 19,BOX_CHARS);
+      cputsxy(4, 19, "WYLIE");
+      delay(20);
+      vrambuf_flush();
+      cputsxy(9,21,"You Will Laugh At");
+      vrambuf_flush();
+      cputsxy(10,23, "My Comic Strips!");
+      vrambuf_flush();
+      while(1)
+      {
+        byte joy;
+        joy = joy_read (JOY_1);
+        if(joy)
+          break;
+      }
+      for(i = 19; i < ROWS-1;i++){
+        for(j = 2; j < COLS-2; j++){
+          cputcxy(j,i,0x00);
+        }
+      }
+      vrambuf_flush();
+      cputcxy(1,19,0x85);
+      vrambuf_flush();
+      cputcxy(30,19,0x8A);
+      delay(60);
+    break;
   }
   cputcxy(28,1,e->hp);
   vrambuf_flush();
@@ -1141,20 +1313,120 @@ void create_boss_area(Enemy* e)
         case 1:
           heros.y = 14;
           room_id = 1;
+          draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          cputsxy(4, 19, "MOLINA");
+          delay(20);
+          vrambuf_flush();
+          cputsxy(9,21, "The Dean Will");
+          vrambuf_flush();
+          cputsxy(10,23,"Hear About This");
+          vrambuf_flush();
+          for(i = 19; i < ROWS-1;i++)
+          {
+            for(j = 2; j < COLS-2; j++)
+            {
+              cputcxy(j,i,0x00);
+            }
+          }
+          vrambuf_flush();
+          cputcxy(1,19,0x85);
+          vrambuf_flush();
+          cputcxy(30,19,0x8A);
+          delay(60);
         break;
         case 2: 
           heros.y = 14;
           room_id = 3;
+          draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          cputsxy(4, 19, "KHAN");
+          delay(20);
+          vrambuf_flush();
+          cputsxy(9,21, "I Suspect You");
+          vrambuf_flush();
+          cputsxy(10,23,"Cheated");
+          vrambuf_flush();
+          for(i = 19; i < ROWS-1;i++)
+          {
+            for(j = 2; j < COLS-2; j++)
+            {
+              cputcxy(j,i,0x00);
+            }
+          }
+          vrambuf_flush();
+          cputcxy(1,19,0x85);
+          vrambuf_flush();
+          cputcxy(30,19,0x8A);
+          delay(60);
         break;
         case 3:
           heros.y = 194;
           room_id = 7;
+          draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          cputsxy(4, 19, "ZHANG");
+          delay(20);
+          vrambuf_flush();
+          cputsxy(9,21, "...");
+          vrambuf_flush();
+          for(i = 19; i < ROWS-1;i++)
+          {
+            for(j = 2; j < COLS-2; j++)
+            {
+              cputcxy(j,i,0x00);
+            }
+          }
+          vrambuf_flush();
+          cputcxy(1,19,0x85);
+          vrambuf_flush();
+          cputcxy(30,19,0x8A);
+          delay(60);
         break;
         case 4: 
           heros.y = 194;
           room_id = 9;
+          draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          cputsxy(4, 19, "TOMAI");
+          delay(20);
+          vrambuf_flush();
+          cputsxy(9,21, "FAQ Update:");
+          vrambuf_flush();
+          cputsxy(10,23,"Wylie Will Have");
+          vrambuf_flush();
+          cputsxy(11,23,"The Last Laugh");
+          vrambuf_flush();
+          for(i = 19; i < ROWS-1;i++)
+          {
+            for(j = 2; j < COLS-2; j++)
+            {
+              cputcxy(j,i,0x00);
+            }
+          }
+          vrambuf_flush();
+          cputcxy(1,19,0x85);
+          vrambuf_flush();
+          cputcxy(30,19,0x8A);
+          delay(60);
         break;
-        case 5: 
+        case 5:
+          draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          cputsxy(4, 19, "WYLIE");
+          delay(20);
+          vrambuf_flush();
+          cputsxy(9,21, "I Could Have Won");
+          vrambuf_flush();
+          cputsxy(10,23,"If I Had My Coffee");
+          vrambuf_flush();
+          for(i = 19; i < ROWS-1;i++)
+          {
+            for(j = 2; j < COLS-2; j++)
+            {
+              cputcxy(j,i,0x00);
+            }
+          }
+          vrambuf_flush();
+          cputcxy(1,19,0x85);
+          vrambuf_flush();
+          cputcxy(30,19,0x8A);
+          delay(60);
           win_screen();
         break;
       }     
@@ -1172,10 +1444,10 @@ void title_screen()
   oam_clear();
   ppu_on_all();
   vrambuf_clear();
-  cputsxy(10,6,"Dungeon Crawl");
-  cputsxy(4,10,"Collect Hearts");
-  cputsxy(4,12,"& Defeat God King Wylie");
-  cputsxy(4,14,"to Beat the Game");
+  cputsxy(10,6,"Grad Grind");
+  cputsxy(4,10,"Collect Hearts &");
+  cputsxy(4,12,"Defeat God King Wylie");
+  cputsxy(4,14,"to Graduate");
   cputsxy(8,18,"Press Any Button");
   cputsxy(13,20,"To Play");
   vrambuf_flush();
