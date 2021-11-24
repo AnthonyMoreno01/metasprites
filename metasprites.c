@@ -1514,7 +1514,7 @@ void difficulty_screen(){
   int i;
   char pad1_new = pad_trigger(0);
   char pad1 = pad_state(0);
-  
+
 //up is easy
 //left is intermediate
 //right is hard
@@ -1623,7 +1623,25 @@ void main()
       break;
   }
   while(1){
-    
+    pal_all(PALETTE);
+  init_game();
+  clrscrn();
+  vrambuf_flush();
+  oam_clear();
+  ppu_on_all();
+  vrambuf_clear();
+  
+  cputsxy(7,6,"Difficulty Level");
+  cputcxy(10,10,0x1C);
+  cputsxy(15,10,"Easy");
+  cputcxy(10,12,0x1E);
+  cputsxy(15,12,"Hard");
+  cputcxy(10,14,0x1F);
+  cputsxy(15,14,"Insane");
+  cputcxy(10,16,0x1D);
+  cputsxy(15,16,"Extreme");
+
+  vrambuf_flush();
     while(1){
       if (selection == 0)
     difficulty_screen();
