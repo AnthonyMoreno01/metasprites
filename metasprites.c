@@ -38,6 +38,9 @@ DEF_METASPRITE_2x2static(bullet1, 0xe4, 0);
 DEF_METASPRITE_2x2static2(bullet2, 0xe4, 0);
 bool bullet_exists = false;
 int room_id;
+int selection;
+byte global_health;
+byte wylie_health;
 //creates hero sprite
 DEF_METASPRITE_2x2(metasprite, 0xD8, 2);
 Hero heros;
@@ -164,48 +167,6 @@ void game_over()
   room_id = 15;
 }
 
-
-void clear_text(){
-
-
-  
-  vrambuf_flush();
-  set_vram_update(updbuf);
-  cputsxy(2,19,0x00);
-  cputsxy(3,19,0x00);
-  cputsxy(4,19,0x00);
-  cputsxy(5,19,0x00);
-  cputsxy(6,19,0x00);
-  cputsxy(7,19,0x00);
-  cputsxy(8,19,0x00);
-  cputsxy(9,19,0x00);
-
-  
-  vrambuf_flush();
-  set_vram_update(updbuf);
-  cputsxy(10,19,0x00);
-  cputsxy(11,19,0x00);
-  cputsxy(12,19,0x00);
-  cputsxy(13,19,0x00);
-  cputsxy(14,19,0x00);
-  cputsxy(15,19,0x00);
-  cputsxy(16,19,0x00);
-  cputsxy(17,19,0x00);
-  cputsxy(18,19,0x00);
-  cputsxy(19,19,0x00);
-
-  
-  vrambuf_flush();
-  set_vram_update(updbuf);
-  cputsxy(20,19,0x00);
-  cputsxy(21,19,0x00);
-  cputsxy(22,19,0x00);
-  cputsxy(23,19,0x00);
-  cputsxy(24,19,0x00);
-  cputsxy(25,19,0x00);
-  cputsxy(26,19,0x00);
-  vrambuf_flush();
-}
 //function displays win screen and waits for input to play again
 void win_screen()
 {
@@ -286,6 +247,39 @@ void draw_bottom_border()
   cputcxy(16,27,0x08);
   cputcxy(17,27,0x08); 
   cputcxy(18,27,0x08);
+}
+void decrement_hp(Enemy *h){
+
+  if(h->hp4 == 0x30 && h->hp3 == 0x30 && h->hp2 == 0x30 && h->hp1 == 0x30){
+  h->is_dead = true;
+  }else{
+    
+   h->hp4--;  
+    
+  if(h->hp4 == 0x2F){
+    h->hp3--;
+    h->hp4=0x39;
+  }
+    
+  if(h->hp3 == 0x2F){
+    h->hp2--;
+    h->hp3=0x39;
+    h->hp4=0x39;
+    
+  }
+     
+  if(h->hp2 == 0x2F){
+    h->hp1--;
+    h->hp2=0x39;
+    h->hp3=0x39;
+    h->hp4=0x39;
+  }
+    cputcxy(23,1,h->hp1);
+    cputcxy(24,1,h->hp2);
+    cputcxy(25,1,h->hp3);
+    cputcxy(26,1,h->hp4);
+
+  }
 }
 
 void draw_top_danger_entrance()
@@ -385,38 +379,37 @@ void shoot(Enemy* e){
     {
       if(bullet_player.dir == D_UP)
       {
-        bullet_player.y = bullet_player.y -2;
+        bullet_player.y = bullet_player.y-2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
       }
       if(bullet_player.dir == D_LEFT)
       {
-         bullet_player.x = bullet_player.x -2;
+        bullet_player.x = bullet_player.x-2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
       }
       if(bullet_player.dir == D_RIGHT)
       {
-        bullet_player.x = bullet_player.x +2;
+        bullet_player.x = bullet_player.x+2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 88, bullet2);
       }
       if(bullet_player.dir == D_DOWN)
       {
-        bullet_player.y = bullet_player.y +2;
+        bullet_player.y = bullet_player.y+2;
         oam_meta_spr(bullet_player.x, bullet_player.y, 64, bullet1);
       }
       if(e->is_alive && 
         (bullet_player.x > e->x-11 && bullet_player.x < e->x+11 && bullet_player.y == e->y))
       { 
         e->is_alive = false;
-        e->hp = e->hp-1;
-        if(e->hp == 0x33)
+        decrement_hp(e);
+        if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 &&  e->hp4 == 0x33)
         {
           e->is_low = true;
         }
-        if(e->hp == 0x31)
+        if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 &&  e->hp4 == 0x31)
         {
           e->is_critical = true;
         }
-        cputcxy(28,1,e->hp);
         vrambuf_flush();
         break;
       }
@@ -490,9 +483,9 @@ void init_game()
     enemy[i].x = 20;
     enemy[i].y = 20;
     enemy[i].is_alive= true;
-    enemy[i].hp = 0x39;
     enemy[i].is_low = false;
     enemy[i].is_critical = false;
+    enemy[i].is_dead = false;
   }
 }
 //creates start area
@@ -510,12 +503,16 @@ void create_start_area()
   //draw bottom area border
   draw_bottom_border();
 
+ 
   
   vrambuf_flush();
   while (1) 
-  {
+  { 
+    
     if(x == 300)
     {
+      //decrement_hp(&enemy[1]);
+      vrambuf_flush();
       movement(&heros);
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
@@ -549,8 +546,8 @@ void create_start_area()
       room_id = 8;
       break;
     }
-    if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
-       enemy[3].hp == 0x30 && enemy[4].hp == 0x30)
+    if(enemy[1].is_dead == true && enemy[2].is_dead == true && 
+       enemy[3].is_dead == true && enemy[4].is_dead == true)
     {
       create_boss_area(&enemy[5]);
     }
@@ -568,7 +565,7 @@ void create_top_left_area()
   //draw bottom area border
   draw_bottom_border();
   //draw boss border
-  if(enemy[1].hp != 0x30)
+  if(enemy[1].is_dead == false)
   {
   cputsxy(5,2,"DANGER");
   draw_top_border();
@@ -601,7 +598,7 @@ void create_top_left_area()
     }
     //move to boss area
     if((heros.x <= 150 && heros.x >= 90) && 
-       (heros.y <= 20  && heros.y >= 5)  && enemy[1].hp != 0x30)
+       (heros.y <= 20  && heros.y >= 5)  && enemy[1].is_dead == false)
     {
       heros.y = 150;
       heros.x = 120;
@@ -632,8 +629,8 @@ void create_top_area()
   //draw left area border
   draw_left_border();
   //draw start area border
-    if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
-     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+    if(enemy[1].hp4 == 0x30 && enemy[2].hp4 == 0x30 && 
+     enemy[3].hp4 == 0x30 && enemy[4].hp4 == 0x30){
     draw_bottom_danger_entrance();
   }
   draw_bottom_border();
@@ -691,7 +688,7 @@ void create_top_right_area()
   draw_left_border();
   //draw bottom area border
   draw_bottom_border();
-  if(enemy[2].hp != 0x30)
+  if(enemy[2].hp4 != 0x30)
   {
   cputsxy(5,2,"DANGER");
   draw_top_border();
@@ -721,7 +718,7 @@ void create_top_right_area()
       room_id = 6;
       break;
     }
-    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)&& enemy[2].hp != 0x30)
+    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)&& enemy[2].hp4 != 0x30)
     {
       heros.y = 194;
       oam_clear();
@@ -748,8 +745,8 @@ void create_left_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1); 
   //draw right area border
-    if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
-     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+    if(enemy[1].hp4 == 0x30 && enemy[2].hp4 == 0x30 && 
+     enemy[3].hp4 == 0x30 && enemy[4].hp4 == 0x30){
     draw_right_danger_entrance();
   }
   draw_right_border();
@@ -808,8 +805,8 @@ void create_right_area()
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
   oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1); 
   //draw left area border
-  if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
-     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+  if(enemy[1].hp4 == 0x30 && enemy[2].hp4 == 0x30 && 
+     enemy[3].hp4 == 0x30 && enemy[4].hp4 == 0x30){
     draw_left_danger_entrance();
   }
   draw_left_border();
@@ -872,7 +869,7 @@ void create_bottom_left_area()
   //draw top area border
   draw_top_border();
   //draw boss area border
-  if(enemy[3].hp != 0x30)
+  if(enemy[3].hp4 != 0x30)
   {
   cputsxy(5,27,"DANGER");
   draw_bottom_border();
@@ -903,7 +900,7 @@ void create_bottom_left_area()
       break;
     }    
     // move to boss area
-    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[3].hp != 0x30)
+    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[3].hp4 != 0x30)
     {
       heros.y = 150;
       room_id = 12;
@@ -934,8 +931,8 @@ void create_bottom_area()
   //draw left area border
   draw_left_border();
   //draw top area border
-  if(enemy[1].hp == 0x30 && enemy[2].hp == 0x30 && 
-     enemy[3].hp == 0x30 && enemy[4].hp == 0x30){
+  if(enemy[1].hp4 == 0x30 && enemy[2].hp4 == 0x30 && 
+     enemy[3].hp4 == 0x30 && enemy[4].hp4 == 0x30){
     draw_top_danger_entrance();
   }
   draw_top_border();
@@ -993,7 +990,7 @@ void create_bottom_right_area()
   draw_left_border();
   //draw top area border
   draw_top_border();
-  if(enemy[4].hp != 0x30)
+  if(enemy[4].hp4 != 0x30)
   {
   cputsxy(5,27,"DANGER");
   draw_bottom_border();
@@ -1023,7 +1020,7 @@ void create_bottom_right_area()
       room_id = 6;
       break;
     } 
-    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[4].hp != 0x30)
+    if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[4].hp4 != 0x30)
     {
       heros.y = 24;
       room_id = 13;
@@ -1081,18 +1078,23 @@ void create_boss_area(Enemy* e)
   //draw tip
   cputsxy(6,27,"PRESS SPACE TO SHOOT");
   oam_meta_spr(e->x, e->y, 48, metasprite2); 
-  e->hp = 0x39;
   e->is_alive = true;
+  cputcxy(23,1,e->hp1);
+  cputcxy(24,1,e->hp2);
+  cputcxy(25,1,e->hp3);
+  cputcxy(26,1,e->hp4);
   switch(e->id)
   {
     case 1: 
       vrambuf_flush();
-      cputsxy(21,1,"MOLINA:");
+      cputsxy(16,1,"MOLINA:");
       draw_box(1,2, COLS-2, 19,BOX_CHARS);
       cputsxy(4, 19, "MOLINA");
+
       delay(20);
       cputsxy(7, 21, "I Choow You The End!");
       vrambuf_flush();
+      
       while(1)
       {
         byte joy;
@@ -1220,7 +1222,6 @@ void create_boss_area(Enemy* e)
       delay(60);
     break;
   }
-  cputcxy(28,1,e->hp);
   vrambuf_flush();
   vrambuf_flush();
   while (1)
@@ -1294,9 +1295,9 @@ void create_boss_area(Enemy* e)
       }
       y = 0;
     }
-    if(e->hp == 0x30)
+    if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 && e->hp4 == 0x30)
     {
-
+      e->is_dead = true;
       slain++;
       cputsxy(13,1,"SLAIN:");
       cputcxy(19,1,slain);
@@ -1317,6 +1318,7 @@ void create_boss_area(Enemy* e)
           draw_box(1,2, COLS-2, 19,BOX_CHARS);
           vrambuf_flush();
           cputsxy(4, 19, "MOLINA");
+
           delay(20);
           vrambuf_flush();
           cputsxy(9,21, "The Dean Will");
@@ -1507,6 +1509,72 @@ void title_screen()
   cputsxy(13,20,"To Play");
   vrambuf_flush();
 }
+
+void difficulty_screen(){
+  int i;
+  char pad1_new = pad_trigger(0);
+  char pad1 = pad_state(0);
+  
+//up is easy
+//left is intermediate
+//right is hard
+//down is insane
+  if(pad1 & JOY_UP_MASK){
+    selection =1;
+    for(i=0; i < 5; i++){
+     enemy[i].hp1 = 0x30; 
+     enemy[i].hp2 = 0x30;
+     enemy[i].hp3 = 0x30;
+     enemy[i].hp4 = 0x39;
+    }
+    enemy[5].hp1 = 0x30;
+    enemy[5].hp2 = 0x30;
+    enemy[5].hp3 = 0x30;
+    enemy[5].hp4 = 0x39;
+  }else
+  if(pad1 & JOY_LEFT_MASK){
+    
+    for(i=0; i < 5; i++){
+     enemy[i].hp1 = 0x30; 
+     enemy[i].hp2 = 0x30;
+     enemy[i].hp3 = 0x35;
+     enemy[i].hp4 = 0x30;
+    }
+    
+    enemy[5].hp1 = 0x30;
+    enemy[5].hp2 = 0x31;
+    enemy[5].hp3 = 0x30;
+    enemy[5].hp4 = 0x30;
+    selection =1;
+  }else
+  if(pad1 & JOY_RIGHT_MASK){
+        for(i=0; i < 5; i++){
+     enemy[i].hp1 = 0x30; 
+     enemy[i].hp2 = 0x31;
+     enemy[i].hp3 = 0x30;
+     enemy[i].hp4 = 0x30;
+    }
+    enemy[5].hp1 = 0x30;
+    enemy[5].hp2 = 0x35;
+    enemy[5].hp3 = 0x30;
+    enemy[5].hp4 = 0x30;
+    selection =1;
+  }else
+  if(pad1 & JOY_DOWN_MASK){
+     for(i=0; i < 5; i++){
+     enemy[i].hp1 = 0x30; 
+     enemy[i].hp2 = 0x35;
+     enemy[i].hp3 = 0x30;
+     enemy[i].hp4 = 0x30;
+    }
+    enemy[5].hp1 = 0x31;
+    enemy[5].hp2 = 0x30;
+    enemy[5].hp3 = 0x30;
+    enemy[5].hp4 = 0x30;
+    
+    selection =1;
+  }else selection = 0;
+}
 //endless function
 void play()
 {
@@ -1545,13 +1613,24 @@ void main()
 {
   joy_install (joy_static_stddrv);
   title_screen();
+  selection = 0;
   while(1)
   {
     byte joy;
     joy = joy_read (JOY_1);
     if(joy)
+      
       break;
   }
-  while(1)
+  while(1){
+    
+    while(1){
+      if (selection == 0)
+    difficulty_screen();
+          else
+      break;
+    }
+    
     play();
+}
 }

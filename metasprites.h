@@ -16,7 +16,11 @@ typedef struct {
 typedef struct {
   byte x;
   byte y;
-  byte hp;
+  byte hp1;
+  byte hp2;
+  byte hp3;
+  byte hp4;
+  bool is_dead;
   byte dir;
   int id;
   bool is_alive;
@@ -63,3 +67,4 @@ void draw_left_border(void);
 void draw_right_border(void);
 void draw_bottom_border(void);
 void draw_top_border(void);
+void difficulty_screen(void);
