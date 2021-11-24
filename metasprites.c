@@ -339,12 +339,12 @@ void draw_right_danger_entrance()
 void shoot(Enemy* e){
   struct Actor bullet_player;
   int i;
-  char pad2_new = pad_trigger(0);
-  char pad2 = pad_state(0);
+  char pad1_new = pad_trigger(0);
+  char pad1 = pad_state(0);
   //bullet_exists
   if(!bullet_exists)
   {
-    if (pad1 & PAD_A && pad2 & JOY_UP_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad1 & JOY_UP_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x;
@@ -352,7 +352,7 @@ void shoot(Enemy* e){
       bullet_exists = true;
       bullet_player.dir = D_UP;
     }
-    if (pad1 & PAD_A && pad2 & JOY_LEFT_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad1 & JOY_LEFT_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x-12;
@@ -360,7 +360,7 @@ void shoot(Enemy* e){
       bullet_exists = true;
       bullet_player.dir = D_LEFT;
     }
-    if (pad1 & PAD_A && pad2 & JOY_RIGHT_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad1 & JOY_RIGHT_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x+12;
@@ -368,7 +368,7 @@ void shoot(Enemy* e){
       bullet_exists = true;
       bullet_player.dir = D_RIGHT;
     }
-    if (pad1 & PAD_A && pad2 & JOY_DOWN_MASK && !bullet_exists)
+    if (pad1 & PAD_A && pad1 & JOY_DOWN_MASK && !bullet_exists)
     {
       //Spawns bullet in front of hero location
       bullet_player.x = heros.x;
@@ -899,13 +899,13 @@ void create_bottom_left_area()
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
     {
       heros.y = 194;
-      create_left_area();
+      room_id = 4;
+      break;
     }    
     // move to boss area
     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[3].hp != 0x30)
     {
       heros.y = 150;
-      oam_clear();
       room_id = 12;
       break;
     }  
@@ -1115,7 +1115,10 @@ void create_boss_area(Enemy* e)
       draw_box(1,2, COLS-2, 19,BOX_CHARS);
       cputsxy(4, 19, "KHAN");
       delay(20);
-      cputsxy(7, 21, "No Phones During Class!!");
+      vrambuf_flush();
+      cputsxy(11, 21, "No Phones");
+      vrambuf_flush();
+      cputsxy(10, 23, "During Class!!");
       vrambuf_flush();
       while(1)
       {
@@ -1271,7 +1274,7 @@ void create_boss_area(Enemy* e)
         move_enemy(e);
       }
       //check for collision between enemy[0] and hero
-      if(heros.x == e->x &&heros.y == e->y)  
+      if(heros.x == e->x && heros.y == e->y)  
       {
         //if collision hero hp drops 1 and reset player to middle of screen
         heros.lives--;
@@ -1293,9 +1296,7 @@ void create_boss_area(Enemy* e)
     }
     if(e->hp == 0x30)
     {
-      e->x = 240;
-      e->y = 240;
-      oam_meta_spr(e->x, e->y, 48, metasprite2); 
+
       slain++;
       cputsxy(13,1,"SLAIN:");
       cputcxy(19,1,slain);
@@ -1307,13 +1308,14 @@ void create_boss_area(Enemy* e)
       cputcxy(26,1,0x00);
       cputcxy(27,1,0x00);
       cputcxy(28,1,0x00);
+      vrambuf_flush();
       y = 0;
       switch(e->id)
       {
         case 1:
-          heros.y = 14;
-          room_id = 1;
+
           draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          vrambuf_flush();
           cputsxy(4, 19, "MOLINA");
           delay(20);
           vrambuf_flush();
@@ -1321,6 +1323,13 @@ void create_boss_area(Enemy* e)
           vrambuf_flush();
           cputsxy(10,23,"Hear About This");
           vrambuf_flush();
+          while(1)
+          {
+            byte joy;
+            joy = joy_read (JOY_1);
+            if(joy)
+              break;
+          }
           for(i = 19; i < ROWS-1;i++)
           {
             for(j = 2; j < COLS-2; j++)
@@ -1328,16 +1337,23 @@ void create_boss_area(Enemy* e)
               cputcxy(j,i,0x00);
             }
           }
+                
           vrambuf_flush();
           cputcxy(1,19,0x85);
           vrambuf_flush();
           cputcxy(30,19,0x8A);
           delay(60);
+          heros.y = 14;
+          room_id = 1;
+          e->x = 240;
+          e->y = 240;
+          oam_meta_spr(e->x, e->y, 48, metasprite2); 
         break;
         case 2: 
           heros.y = 14;
           room_id = 3;
           draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          vrambuf_flush();
           cputsxy(4, 19, "KHAN");
           delay(20);
           vrambuf_flush();
@@ -1345,6 +1361,13 @@ void create_boss_area(Enemy* e)
           vrambuf_flush();
           cputsxy(10,23,"Cheated");
           vrambuf_flush();
+          while(1)
+          {
+            byte joy;
+            joy = joy_read (JOY_1);
+            if(joy)
+              break;
+          }
           for(i = 19; i < ROWS-1;i++)
           {
             for(j = 2; j < COLS-2; j++)
@@ -1362,11 +1385,19 @@ void create_boss_area(Enemy* e)
           heros.y = 194;
           room_id = 7;
           draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          vrambuf_flush();
           cputsxy(4, 19, "ZHANG");
           delay(20);
           vrambuf_flush();
           cputsxy(9,21, "...");
           vrambuf_flush();
+          while(1)
+          {
+            byte joy;
+            joy = joy_read (JOY_1);
+            if(joy)
+              break;
+          }
           for(i = 19; i < ROWS-1;i++)
           {
             for(j = 2; j < COLS-2; j++)
@@ -1379,20 +1410,31 @@ void create_boss_area(Enemy* e)
           vrambuf_flush();
           cputcxy(30,19,0x8A);
           delay(60);
+          e->x = 240;
+          e->y = 240;
+          oam_meta_spr(e->x, e->y, 48, metasprite2); 
         break;
         case 4: 
           heros.y = 194;
           room_id = 9;
           draw_box(1,2, COLS-2, 19,BOX_CHARS);
+          vrambuf_flush();
           cputsxy(4, 19, "TOMAI");
           delay(20);
           vrambuf_flush();
-          cputsxy(9,21, "FAQ Update:");
+          cputsxy(11,21, "FAQ Update:");
           vrambuf_flush();
           cputsxy(10,23,"Wylie Will Have");
           vrambuf_flush();
-          cputsxy(11,23,"The Last Laugh");
+          cputsxy(10,24,"The Last Laugh");
           vrambuf_flush();
+          while(1)
+          {
+            byte joy;
+            joy = joy_read (JOY_1);
+            if(joy)
+              break;
+          }
           for(i = 19; i < ROWS-1;i++)
           {
             for(j = 2; j < COLS-2; j++)
@@ -1405,6 +1447,9 @@ void create_boss_area(Enemy* e)
           vrambuf_flush();
           cputcxy(30,19,0x8A);
           delay(60);
+          e->x = 240;
+          e->y = 240;
+          oam_meta_spr(e->x, e->y, 48, metasprite2); 
         break;
         case 5:
           draw_box(1,2, COLS-2, 19,BOX_CHARS);
@@ -1413,8 +1458,15 @@ void create_boss_area(Enemy* e)
           vrambuf_flush();
           cputsxy(9,21, "I Could Have Won");
           vrambuf_flush();
-          cputsxy(10,23,"If I Had My Coffee");
+          cputsxy(7,23,"If I Had My Coffee!!!");
           vrambuf_flush();
+          while(1)
+          {
+            byte joy;
+            joy = joy_read (JOY_1);
+            if(joy)
+              break;
+          }
           for(i = 19; i < ROWS-1;i++)
           {
             for(j = 2; j < COLS-2; j++)
@@ -1427,6 +1479,9 @@ void create_boss_area(Enemy* e)
           vrambuf_flush();
           cputcxy(30,19,0x8A);
           delay(60);
+          e->x = 240;
+          e->y = 240;
+          oam_meta_spr(e->x, e->y, 48, metasprite2); 
           win_screen();
         break;
       }     
