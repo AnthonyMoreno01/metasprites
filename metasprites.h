@@ -45,7 +45,6 @@ void title_screen(void);
 void play(void);
 
 void create_start_area(void); 
-
 void create_top_left_area(void); //heart 0
 void create_top_area(void); //heart 1
 void create_top_right_area(void); //heart 2
