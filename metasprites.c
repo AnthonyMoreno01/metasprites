@@ -1066,7 +1066,7 @@ void create_boss_area(Enemy* e)
         e->y = 20;
       break;
       case 5:
-        p = 500;
+        p = 600;
         e->x = 20;
         e->y = 20;
       break;
@@ -1097,7 +1097,7 @@ void create_boss_area(Enemy* e)
         e->y = 20;
       break;
       case 5:
-        p = 500;
+        p = 550;
         e->x = 20;
         e->y = 20;
      break;
@@ -1159,7 +1159,7 @@ void create_boss_area(Enemy* e)
         e->y = 20;
       break;
       case 5:
-        p = 400;
+        p = 450;
         e->x = 20;
         e->y = 20;
       break;
@@ -1396,9 +1396,6 @@ void create_boss_area(Enemy* e)
     if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 && e->hp4 == 0x30)
     {
       e->is_dead = true;
-      slain++;
-      cputsxy(13,1,"SLAIN:");
-      cputcxy(19,1,slain);
       cputcxy(21,1,0x00);
       cputcxy(22,1,0x00);
       cputcxy(23,1,0x00);
@@ -1686,6 +1683,10 @@ void play()
   room_id = 5;
   while(1){
     oam_clear();
+    enemy[1].is_dead = true;
+    enemy[2].is_dead = true;
+    enemy[3].is_dead = true;
+    enemy[4].is_dead = true;
   switch(room_id)
     {
     case 1:  create_top_left_area();      break;
@@ -1722,32 +1723,33 @@ void main()
       
       break;
   }
-  while(1){
+  while(1)
+  {
     pal_all(PALETTE);
-  init_game();
-  clrscrn();
-  vrambuf_flush();
-  oam_clear();
-  ppu_on_all();
-  vrambuf_clear();
-  
-  cputsxy(7,6,"Difficulty Level");
-  cputcxy(10,10,0x1C);
-  cputsxy(15,10,"Easy");
-  cputcxy(10,12,0x1E);
-  cputsxy(15,12,"Hard");
-  cputcxy(10,14,0x1F);
-  cputsxy(15,14,"Insane");
-  cputcxy(10,16,0x1D);
-  cputsxy(15,16,"Extreme");
-  vrambuf_flush();
+    init_game();
+    clrscrn();
+    vrambuf_flush();
+    oam_clear();
+    ppu_on_all();
+    vrambuf_clear();
+    cputsxy(7,6,"Difficulty Level");
+    cputcxy(10,10,0x1C);
+    cputsxy(15,10,"Easy");
+    cputcxy(10,12,0x1E);
+    cputsxy(15,12,"Hard");
+    cputcxy(10,14,0x1F);
+    cputsxy(15,14,"Insane");
+    cputcxy(10,16,0x1D);
+    cputsxy(15,16,"Extreme");
+    vrambuf_flush();
     difficulty = 0;
-    while(1){
+      while(1)
+      {
       if (selection == 0)
-    difficulty_screen();
-          else
-      break;
-    }
+        difficulty_screen();
+      else
+        break;
+      }
     play();
-}
+  }
 }
