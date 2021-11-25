@@ -49,9 +49,9 @@ unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
 byte slain = 0x30;
 //Direction array affects movement and gravity
-typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_STAND } dir_t;
-const char DIR_X[5] = { 2, 0, -2, 0, 0};
-const char DIR_Y[5] = { 0, 2, 0, -2, 0};
+typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_UP_LEFT, D_UP_RIGHT, D_DOWN_LEFT, D_DOWN_RIGHT, D_STAND } dir_t;
+const char DIR_X[9] = { 2, 0, -2, 0, -2, 2,-2, 2, 0};
+const char DIR_Y[9] = { 0, 2, 0, -2, -2,-2, 2, 2, 0};
 /*{pal:"nes",layout:"nes"}*/
 const char PALETTE[32] = { 
   0x0C,			// screen color
@@ -79,8 +79,24 @@ void movement(Hero* h)
   pad1_new = pad_trigger(1); // read the first controller
   pad1 = pad_state(1);
   
-  if (pad1 & JOY_LEFT_MASK) dir = D_LEFT;	else
-  if (pad1 & JOY_RIGHT_MASK) dir = D_RIGHT;	else
+  if (pad1 & JOY_LEFT_MASK){ 
+    if(pad1 & JOY_UP_MASK) 
+      dir = D_UP_LEFT;
+    else
+    if(pad1 & JOY_DOWN_MASK)
+      dir = D_DOWN_LEFT;
+    else
+      dir = D_LEFT;
+    }else
+  if (pad1 & JOY_RIGHT_MASK){     
+    if(pad1 & JOY_UP_MASK) 
+      	dir = D_UP_RIGHT;
+    else
+    if(pad1 & JOY_DOWN_MASK)
+        dir = D_DOWN_RIGHT;
+    else
+        dir = D_RIGHT;	
+  }else
   if (pad1 & JOY_UP_MASK) dir = D_UP;		else
   if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;	else
     //stops player from moving before input is read
@@ -110,19 +126,14 @@ void move_enemy(Enemy* e)
 void enemy_movement(Enemy* e)
 {
   byte dir;
-  if (e->x > heros.x) dir = D_LEFT;	else
-  if (e->x < heros.x) dir = D_RIGHT;	else
-  if (e->y > heros.y) dir = D_UP;	else
-  if (e->y < heros.y) dir = D_DOWN;
-  e->dir = dir;
-}
-void wylie_movement(Enemy* e)
-{
-  byte dir;
-  if (e->y > heros.y) dir = D_UP;	else
-  if (e->y < heros.y) dir = D_DOWN;	else
-  if (e->x > heros.x) dir = D_LEFT;	else
-  if (e->x < heros.x) dir = D_RIGHT;	
+  if (e->x  > heros.x && e->y  < heros.y) dir = D_DOWN_LEFT;  else
+  if (e->x  < heros.x && e->y  < heros.y) dir = D_DOWN_RIGHT; else
+  if (e->x  < heros.x && e->y  > heros.y) dir = D_UP_RIGHT;   else
+  if (e->x  > heros.x && e->y  > heros.y) dir = D_UP_LEFT;    else
+  if (e->x == heros.x && e->y  < heros.y) dir = D_DOWN;       else
+  if (e->x == heros.x && e->y  > heros.y) dir = D_UP;         else   
+  if (e->x  < heros.x && e->y == heros.y) dir = D_RIGHT;      else
+  if (e->x  > heros.x && e->y == heros.y) dir = D_LEFT;     
   e->dir = dir;
 }
 //function displays text
@@ -179,11 +190,6 @@ void win_screen()
     if(joy)
       break;
   }
-  enemy[1].is_dead=false;
-  enemy[2].is_dead=false;
-  enemy[3].is_dead=false;
-  enemy[4].is_dead=false;
-  enemy[5].is_dead=false;
   room_id = 15;
 }
 //function creates border
@@ -481,6 +487,7 @@ void init_game()
     enemy[i].is_critical = false;
     enemy[i].is_dead = false;
   }
+
 }
 //creates start area
 void create_start_area()
@@ -1286,16 +1293,9 @@ void create_boss_area(Enemy* e)
     
     if(y == p)
     {
-      if(e->id == 5)
-      {
-        wylie_movement(e);
-        move_enemy(e);
-      }
-      else
-      {
         enemy_movement(e);
         move_enemy(e);
-      }
+      
       //check for collision between enemy[0] and hero
       if(heros.x == e->x && heros.y == e->y)  
       {
@@ -1492,7 +1492,7 @@ void create_boss_area(Enemy* e)
           delay(60);
           e->x = 240;
           e->y = 240;
-          oam_meta_spr(e->x, e->y, 48, metasprite2); 
+          oam_meta_spr(e->x, e->y, 48, metasprite2);
           win_screen();
         break;
       }
@@ -1524,7 +1524,7 @@ void title_screen()
   oam_clear();
   ppu_on_all();
   vrambuf_clear();
-  cputsxy(10,6,"Grad Grind");
+  cputsxy(9,6,"Undergrad Grind");
   cputsxy(4,10,"Collect Hearts &");
   cputsxy(4,12,"Defeat God King Wylie");
   cputsxy(4,14,"to Graduate");
@@ -1632,6 +1632,7 @@ void play()
       case 12: create_boss_area(&enemy[3]); break;
       case 13: create_boss_area(&enemy[4]); break;
       case 14: create_boss_area(&enemy[5]); break;
+      default: break;
     }
   if (room_id == 15)
        break;
@@ -1644,15 +1645,22 @@ void main()
 
   while(1)
   {
-title_screen();
-  selection = 0;
-  while(1)
-  {
-    byte joy;
-    joy = joy_read (JOY_1);
-    if(joy)
-      break;
-  }
+    pal_all(PALETTE);
+    init_game();
+    clrscrn();
+    vrambuf_flush();
+    oam_clear();
+    ppu_on_all();
+    vrambuf_clear();
+    title_screen();
+    selection = 0;
+    while(1)
+    {
+      byte joy;
+      joy = joy_read (JOY_1);
+      if(joy)
+        break;
+    }
     pal_all(PALETTE);
     init_game();
     clrscrn();
@@ -1671,13 +1679,16 @@ title_screen();
     cputsxy(15,16,"Extreme");
     vrambuf_flush();
     difficulty = 0;
-      while(1)
-      {
+    selection = 0;
+    while(1)
+    {
       if (selection == 0)
         difficulty_screen();
       else
         break;
-      }
+    }
     play();
+    vrambuf_clear();
+    break;
   }
 }
