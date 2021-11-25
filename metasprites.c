@@ -125,7 +125,6 @@ void wylie_movement(Enemy* e)
   if (e->x < heros.x) dir = D_RIGHT;	
   e->dir = dir;
 }
-
 //function displays text
 void cputcxy(byte x, byte y, char ch) 
 {
@@ -159,7 +158,6 @@ void game_over()
   }
   room_id = 15;
 }
-
 //function displays win screen and waits for input to play again
 void win_screen()
 {
@@ -241,7 +239,9 @@ void draw_bottom_border()
   cputcxy(18,27,0x08);
 }
 void decrement_hp(Enemy *h){
-  if(h->hp4 == 0x30 && h->hp3 == 0x30 && h->hp2 == 0x30 && h->hp1 == 0x30){
+  if(h->hp4 == 0x30 && h->hp3 == 0x30 && 
+     h->hp2 == 0x30 && h->hp1 == 0x30)
+  {
     h->is_dead = true;
   }
   else
@@ -492,11 +492,11 @@ void create_start_area()
   //draw bottom area border
   draw_bottom_border(); 
   vrambuf_flush();
-      if(enemy[1].is_dead == true && enemy[2].is_dead == true && 
-       enemy[3].is_dead == true && enemy[4].is_dead == true)
-    {
-      create_boss_area(&enemy[5]);
-    }
+  if(enemy[1].is_dead == true && enemy[2].is_dead == true && 
+     enemy[3].is_dead == true && enemy[4].is_dead == true)
+  {
+    create_boss_area(&enemy[5]);
+  }
   while (1) 
   {     
     if(x == 300)
@@ -565,7 +565,8 @@ void create_top_left_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
       // check for heart collision    
-     if(hearts[0].x+6 > heros.x && hearts[0].x-6 < heros.x && hearts[0].y+6 > heros.y && hearts[0].y-6 < heros.y )
+     if(hearts[0].x+6 > heros.x && hearts[0].x-6 < heros.x &&
+        hearts[0].y+6 > heros.y && hearts[0].y-6 < heros.y )
      {
        hearts[0].x = 240;
        hearts[0].y = 240;
@@ -627,7 +628,8 @@ void create_top_area()
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
-      if(hearts[1].x+6 > heros.x && hearts[1].x-6 < heros.x && hearts[1].y+6 > heros.y && hearts[1].y-6 < heros.y)
+      if(hearts[1].x+6 > heros.x && hearts[1].x-6 < heros.x && 
+         hearts[1].y+6 > heros.y && hearts[1].y-6 < heros.y)
       {
         hearts[1].x = 240;
         hearts[1].y = 240;
@@ -687,7 +689,8 @@ void create_top_right_area()
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
-      if(hearts[2].x+6 > heros.x && hearts[2].x-6 < heros.x && hearts[2].y+6 > heros.y && hearts[2].y-6 < heros.y)
+      if(hearts[2].x+6 > heros.x && hearts[2].x-6 < heros.x && 
+         hearts[2].y+6 > heros.y && hearts[2].y-6 < heros.y)
       {
         hearts[2].x = 240;
         hearts[2].y = 240;
@@ -710,7 +713,8 @@ void create_top_right_area()
         room_id = 6;
         break;
       }
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)&& enemy[2].is_dead==false)
+      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)&& 
+         enemy[2].is_dead==false)
       {
         heros.y = 194;
         oam_clear();
@@ -747,7 +751,8 @@ void create_left_area()
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
-      if(hearts[3].x+6 > heros.x && hearts[3].x-6 < heros.x && hearts[3].y+6 > heros.y && hearts[3].y-6 < heros.y)
+      if(hearts[3].x+6 > heros.x && hearts[3].x-6 < heros.x && 
+         hearts[3].y+6 > heros.y && hearts[3].y-6 < heros.y)
       {
         hearts[3].x = 240;
         hearts[3].y = 240;
@@ -807,7 +812,8 @@ void create_right_area()
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
-      if(hearts[4].x+6 > heros.x && hearts[4].x-6 < heros.x && hearts[4].y+6 > heros.y && hearts[4].y-6 < heros.y)
+      if(hearts[4].x+6 > heros.x && hearts[4].x-6 < heros.x && 
+         hearts[4].y+6 > heros.y && hearts[4].y-6 < heros.y)
       {
         hearts[4].x = 240;
         hearts[4].y = 240;
@@ -867,7 +873,8 @@ void create_bottom_left_area()
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
-      if(hearts[5].x+6 > heros.x && hearts[5].x-6 < heros.x && hearts[5].y+6 > heros.y && hearts[5].y-6 < heros.y)
+      if(hearts[5].x+6 > heros.x && hearts[5].x-6 < heros.x && 
+         hearts[5].y+6 > heros.y && hearts[5].y-6 < heros.y)
       {
         hearts[5].x = 240;
         hearts[5].y = 240;
@@ -891,7 +898,8 @@ void create_bottom_left_area()
         break;
       }    
       // move to boss area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[3].is_dead == false)
+      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& 
+         enemy[3].is_dead == false)
       {
         heros.y = 150;
         room_id = 12;
@@ -928,7 +936,8 @@ void create_bottom_area()
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
-     if(hearts[6].x+6 > heros.x && hearts[6].x-6 < heros.x && hearts[6].y+6 > heros.y && hearts[6].y-6 < heros.y)
+     if(hearts[6].x+6 > heros.x && hearts[6].x-6 < heros.x && 
+        hearts[6].y+6 > heros.y && hearts[6].y-6 < heros.y)
       {
         hearts[6].x = 240;
         hearts[6].y = 240;
@@ -988,7 +997,8 @@ void create_bottom_right_area()
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
      // check for heart collision 
-     if(hearts[7].x+6 > heros.x && hearts[7].x-6 < heros.x && hearts[7].y+6 > heros.y && hearts[7].y-6 < heros.y)
+     if(hearts[7].x+6 > heros.x && hearts[7].x-6 < heros.x && 
+        hearts[7].y+6 > heros.y && hearts[7].y-6 < heros.y)
      {
         hearts[7].x = 240;
         hearts[7].y = 240;
@@ -1011,7 +1021,8 @@ void create_bottom_right_area()
         room_id = 6;
         break;
       } 
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& enemy[4].is_dead == false)
+      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& 
+         enemy[4].is_dead == false)
       {
         heros.y = 24;
         room_id = 13;
