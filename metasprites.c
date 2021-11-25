@@ -1641,7 +1641,10 @@ void play()
 void main() 
 {
   joy_install (joy_static_stddrv);
-  title_screen();
+
+  while(1)
+  {
+title_screen();
   selection = 0;
   while(1)
   {
@@ -1650,8 +1653,6 @@ void main()
     if(joy)
       break;
   }
-  while(1)
-  {
     pal_all(PALETTE);
     init_game();
     clrscrn();
