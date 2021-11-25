@@ -179,6 +179,11 @@ void win_screen()
     if(joy)
       break;
   }
+  enemy[1].is_dead=false;
+  enemy[2].is_dead=false;
+  enemy[3].is_dead=false;
+  enemy[4].is_dead=false;
+  enemy[5].is_dead=false;
   room_id = 15;
 }
 //function creates border
