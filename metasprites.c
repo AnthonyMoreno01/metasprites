@@ -78,42 +78,27 @@ void movement(Hero* h)
   byte dir;
   pad1_new = pad_trigger(1); // read the first controller
   pad1 = pad_state(1);
-  
-  if (pad1 & JOY_LEFT_MASK){ 
-    if(pad1 & JOY_UP_MASK) 
-      dir = D_UP_LEFT;
-    else
-    if(pad1 & JOY_DOWN_MASK)
-      dir = D_DOWN_LEFT;
-    else
+  if (pad1 & JOY_LEFT_MASK)
+  { 
+    if (pad1 & JOY_UP_MASK)   dir = D_UP_LEFT;   else
+    if (pad1 & JOY_DOWN_MASK) dir = D_DOWN_LEFT; else
       dir = D_LEFT;
-    }else
-  if (pad1 & JOY_RIGHT_MASK){     
-    if(pad1 & JOY_UP_MASK) 
-      	dir = D_UP_RIGHT;
-    else
-    if(pad1 & JOY_DOWN_MASK)
-        dir = D_DOWN_RIGHT;
-    else
-        dir = D_RIGHT;	
   }else
-  if (pad1 & JOY_UP_MASK) dir = D_UP;		else
-  if (pad1 & JOY_DOWN_MASK) dir = D_DOWN;	else
-    //stops player from moving before input is read
-    dir = D_STAND;
+  if (pad1 & JOY_RIGHT_MASK)
+  {     
+    if (pad1 & JOY_UP_MASK)   dir = D_UP_RIGHT;   else
+    if (pad1 & JOY_DOWN_MASK) dir = D_DOWN_RIGHT; else 
+      dir = D_RIGHT;	
+  }else
+  if (pad1 & JOY_UP_MASK) dir = D_UP;	  else
+  if (pad1 & JOY_DOWN_MASK) dir = D_DOWN; else
+  //stops player from moving before input is read
+  dir = D_STAND;
   //stops player from moving out of bounds
-  if (heros.x < 10){
-    dir = D_RIGHT;
-  }
-  if (heros.x > 230){
-    dir = D_LEFT;
-  }
-  if (heros.y < 15){
-    dir = D_DOWN;
-  }
-  if (heros.y > 200){
-    dir = D_UP;
-  }
+  if (heros.x < 10) { dir = D_RIGHT;}
+  if (heros.x > 230){ dir = D_LEFT; }
+  if (heros.y < 15) { dir = D_DOWN; }
+  if (heros.y > 200){ dir = D_UP;   }
   h->dir = dir;
 }
 //function moves enemy[0] in appropriate direction
@@ -547,6 +532,8 @@ void create_start_area()
         break;
       }
     }
+    if (room_id == 15)
+      break;
     x++;
   } 
 }
@@ -1533,7 +1520,7 @@ void title_screen()
   vrambuf_flush();
 }
 
-void difficulty_screen()
+void set_difficulty()
 {
   int i;
   char pad1_new = pad_trigger(0);
@@ -1605,6 +1592,25 @@ void difficulty_screen()
       selection =1;
   }else selection = 0;
 }
+void difficulty_screen(){
+  pal_all(PALETTE);
+    init_game();
+    clrscrn();
+    vrambuf_flush();
+    oam_clear();
+    ppu_on_all();
+    vrambuf_clear();
+    cputsxy(7,6,"Difficulty Level");
+    cputcxy(10,10,0x1C);
+    cputsxy(15,10,"Easy");
+    cputcxy(10,12,0x1E);
+    cputsxy(15,12,"Hard");
+    cputcxy(10,14,0x1F);
+    cputsxy(15,14,"Insane");
+    cputcxy(10,16,0x1D);
+    cputsxy(15,16,"Extreme");
+    vrambuf_flush();
+}
 //endless function
 void play()
 {
@@ -1645,13 +1651,7 @@ void main()
 
   while(1)
   {
-    pal_all(PALETTE);
-    init_game();
-    clrscrn();
-    vrambuf_flush();
-    oam_clear();
-    ppu_on_all();
-    vrambuf_clear();
+    
     title_screen();
     selection = 0;
     while(1)
@@ -1661,34 +1661,16 @@ void main()
       if(joy)
         break;
     }
-    pal_all(PALETTE);
-    init_game();
-    clrscrn();
-    vrambuf_flush();
-    oam_clear();
-    ppu_on_all();
-    vrambuf_clear();
-    cputsxy(7,6,"Difficulty Level");
-    cputcxy(10,10,0x1C);
-    cputsxy(15,10,"Easy");
-    cputcxy(10,12,0x1E);
-    cputsxy(15,12,"Hard");
-    cputcxy(10,14,0x1F);
-    cputsxy(15,14,"Insane");
-    cputcxy(10,16,0x1D);
-    cputsxy(15,16,"Extreme");
-    vrambuf_flush();
+    difficulty_screen();
     difficulty = 0;
     selection = 0;
     while(1)
     {
       if (selection == 0)
-        difficulty_screen();
+        set_difficulty();
       else
         break;
     }
     play();
-    vrambuf_clear();
-    break;
   }
 }
