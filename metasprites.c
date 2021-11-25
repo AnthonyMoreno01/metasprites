@@ -1042,124 +1042,44 @@ void create_boss_area(Enemy* e)
   {
     switch(e->id)
     {
-      case 1:
-        p = 1000;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 2: 
-        p = 900;
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 3: 
-        p = 800;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 4: 
-        p = 700;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 5:
-        p = 600;
-        e->x = 20;
-        e->y = 20;
-      break;
+      case 1: p = 1000; e->x = 20; e->y = 20; break;
+      case 2: p = 900;  e->x = 20; e->y = 20; break;
+      case 3: p = 800;  e->x = 20; e->y = 20; break;
+      case 4: p = 700;  e->x = 20; e->y = 20; break;
+      case 5: p = 600;  e->x = 20; e->y = 20; break;
     }
   }
   else if(difficulty == 2)
   {
     switch(e->id)
     {
-      case 1:
-        p = 950;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 2: 
-        p = 850;
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 3: 
-        p = 750;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 4: 
-        p = 650;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 5:
-        p = 550;
-        e->x = 20;
-        e->y = 20;
-     break;
+      case 1: p = 950; e->x = 20; e->y = 20; break;
+      case 2: p = 850; e->x = 20; e->y = 20; break;
+      case 3: p = 750; e->x = 20; e->y = 20; break;
+      case 4: p = 650; e->x = 20; e->y = 20; break;
+      case 5: p = 550; e->x = 20; e->y = 20; break;
     }
   }
   else if(difficulty == 3)
   {
     switch(e->id)
     {
-      case 1:
-        p = 900;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 2: 
-        p = 800;
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 3: 
-        p = 700;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 4: 
-        p = 600;    
-        e->x = 20;
-        e->y = 20;
-      break;
-    case 5:
-      p = 450;
-      e->x = 20;
-      e->y = 20;
-    break;
+      case 1: p = 900; e->x = 20; e->y = 20; break;
+      case 2: p = 800; e->x = 20; e->y = 20; break;
+      case 3: p = 700; e->x = 20; e->y = 20; break;
+      case 4: p = 600; e->x = 20; e->y = 20; break;
+      case 5: p = 450; e->x = 20; e->y = 20; break;
     }
   }
   else if(difficulty == 4)
   {
     switch(e->id)
     {
-      case 1:
-        p = 850;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 2: 
-        p = 750;
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 3: 
-        p = 650;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 4: 
-        p = 550;    
-        e->x = 20;
-        e->y = 20;
-      break;
-      case 5:
-        p = 450;
-        e->x = 20;
-        e->y = 20;
-      break;
+      case 1: p = 850; e->x = 20; e->y = 20; break;
+      case 2: p = 750; e->x = 20; e->y = 20; break;
+      case 3: p = 650; e->x = 20; e->y = 20; break;
+      case 4: p = 550; e->x = 20; e->y = 20; break;
+      case 5: p = 450; e->x = 20; e->y = 20; break;
     }
   }
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
@@ -1326,11 +1246,11 @@ void create_boss_area(Enemy* e)
       
       switch(e->id)
       {
-        case 1: p = p-100; y = 0;break;
-        case 2: p = p-100; y = 0;break;
-        case 3: p = p-100; y = 0;break;
-        case 4: p = p-100; y = 0;break;
-        case 5: p = p-100; y = 0;break;
+        case 1: p = p-100; y = 0; break;
+        case 2: p = p-100; y = 0; break;
+        case 3: p = p-100; y = 0; break;
+        case 4: p = p-100; y = 0; break;
+        case 5: p = p-100; y = 0; break;
       }
     }
     //when enemy[0] hp is 1 increase movement
@@ -1339,11 +1259,11 @@ void create_boss_area(Enemy* e)
       e->is_critical = false;
       switch(e->id)
       {
-        case 1: p = p-100; y = 0;break;
-        case 2: p = p-100; y = 0;break;
-        case 3: p = p-100; y = 0;break;
-        case 4: p = p-100; y = 0;break;
-        case 5: p = p-100; y = 0;break;
+        case 1: p = p-100; y = 0; break;
+        case 2: p = p-100; y = 0; break;
+        case 3: p = p-100; y = 0; break;
+        case 4: p = p-100; y = 0; break;
+        case 5: p = p-100; y = 0; break;
       }
     }
     if(x == 200)
