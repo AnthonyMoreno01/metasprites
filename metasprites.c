@@ -12,18 +12,10 @@
 #define ROWS 27
 #define DEF_METASPRITE_2x2static(name,code,pal)\
 const unsigned char name[]={\
-        0,      0,      0xA2,   pal, \
-        0,      8,      0xA2,   pal, \
-        8,      0,      0xA2,   pal, \
-        8,      8,      0xA2,   pal, \
-        128};
-
-#define DEF_METASPRITE_2x2static2(name,code,pal)\
-const unsigned char name[]={\
-        0,      0,      0xA1,   pal, \
-        0,      8,      0xA1,   pal, \
-        8,      0,      0xA1,   pal, \
-        8,      8,      0xA1,   pal, \
+        0,      0,      code,   pal, \
+        0,      8,      code,   pal, \
+        8,      0,      code,   pal, \
+        8,      8,      code,   pal, \
         128};
 
 #define DEF_METASPRITE_2x2(name,code,pal)\
@@ -34,8 +26,8 @@ const unsigned char name[]={\
         8,      8,      code+3,   pal, \
         128};
 //creates bullet sprite
-DEF_METASPRITE_2x2static(bullet1, 0xe4, 0);
-DEF_METASPRITE_2x2static2(bullet2, 0xe4, 0);
+DEF_METASPRITE_2x2static(bullet1, 0xA2, 0);
+DEF_METASPRITE_2x2static(bullet2, 0xA1, 0);
 bool bullet_exists = false;
 int room_id;
 int selection;
@@ -1610,9 +1602,9 @@ void difficulty_screen(){
   char pad1 = pad_state(0);
 
 //up is easy
-//left is intermediate
-//right is hard
-//down is insane
+//left is hard
+//right is insane
+//down is extreme
   if(pad1 & JOY_UP_MASK){
     selection =1;
     difficulty = 1;
@@ -1681,34 +1673,30 @@ void play()
   clrscrn();
   init_game();
   room_id = 5;
-  while(1){
+  while(1)
+  {
     oam_clear();
-    enemy[1].is_dead = true;
-    enemy[2].is_dead = true;
-    enemy[3].is_dead = true;
-    enemy[4].is_dead = true;
-  switch(room_id)
+    switch(room_id)
     {
-    case 1:  create_top_left_area();      break;
-    case 2:  create_top_area();           break;
-    case 3:  create_top_right_area();     break;
-    case 4:  create_left_area();          break;
-    case 5:  create_start_area();         break;
-    case 6:  create_right_area();         break;
-    case 7:  create_bottom_left_area();   break;
-    case 8:  create_bottom_area();        break;
-    case 9:  create_bottom_right_area();  break;
-    case 10: create_boss_area(&enemy[1]); break;
-    case 11: create_boss_area(&enemy[2]); break;
-    case 12: create_boss_area(&enemy[3]); break;
-    case 13: create_boss_area(&enemy[4]); break;
-    case 14: create_boss_area(&enemy[5]); break;
+      case 1:  create_top_left_area();      break;
+      case 2:  create_top_area();           break;
+      case 3:  create_top_right_area();     break;
+      case 4:  create_left_area();          break;
+      case 5:  create_start_area();         break;
+      case 6:  create_right_area();         break;
+      case 7:  create_bottom_left_area();   break;
+      case 8:  create_bottom_area();        break;
+      case 9:  create_bottom_right_area();  break;
+      case 10: create_boss_area(&enemy[1]); break;
+      case 11: create_boss_area(&enemy[2]); break;
+      case 12: create_boss_area(&enemy[3]); break;
+      case 13: create_boss_area(&enemy[4]); break;
+      case 14: create_boss_area(&enemy[5]); break;
     }
   if (room_id == 15)
        break;
   }
 }
-
 // main program
 void main() 
 {
