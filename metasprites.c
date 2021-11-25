@@ -558,7 +558,7 @@ void create_top_left_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -622,7 +622,7 @@ void create_top_area()
   vrambuf_flush();
   while (1)
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -683,7 +683,7 @@ void create_top_right_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -745,7 +745,7 @@ void create_left_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -806,7 +806,7 @@ void create_right_area()
   vrambuf_flush();
   while (1)
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -867,7 +867,7 @@ void create_bottom_left_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -930,7 +930,7 @@ void create_bottom_area()
   vrambuf_flush();
   while (1)
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -990,7 +990,7 @@ void create_bottom_right_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 300)
+    if(x == 500)
     {
       movement(&heros);
       move_player(&heros);
@@ -1346,7 +1346,7 @@ void create_boss_area(Enemy* e)
         case 5: p = p-100; y = 0;break;
       }
     }
-    if(x == 300)
+    if(x == 200)
     {
       shoot(e);
       movement(&heros);
@@ -1355,8 +1355,10 @@ void create_boss_area(Enemy* e)
       oam_meta_spr(e->x, e->y, 48, metasprite2); 
       x=0;
     }
+
     x++;
     y++;
+    
     if(y == p)
     {
       if(e->id == 5)
@@ -1393,15 +1395,6 @@ void create_boss_area(Enemy* e)
     if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 && e->hp4 == 0x30)
     {
       e->is_dead = true;
-      cputcxy(21,1,0x00);
-      cputcxy(22,1,0x00);
-      cputcxy(23,1,0x00);
-      cputcxy(24,1,0x00);
-      cputcxy(25,1,0x00);
-      cputcxy(26,1,0x00);
-      cputcxy(27,1,0x00);
-      cputcxy(28,1,0x00);
-      vrambuf_flush();
       y = 0;
       switch(e->id)
       {
@@ -1577,7 +1570,21 @@ void create_boss_area(Enemy* e)
           oam_meta_spr(e->x, e->y, 48, metasprite2); 
           win_screen();
         break;
-      }     
+      }
+      cputcxy(16,1,0x00);
+      cputcxy(17,1,0x00);
+      cputcxy(18,1,0x00);
+      cputcxy(19,1,0x00);
+      cputcxy(20,1,0x00);
+      cputcxy(21,1,0x00);
+      cputcxy(22,1,0x00);
+      cputcxy(23,1,0x00);
+      cputcxy(24,1,0x00);
+      cputcxy(25,1,0x00);
+      cputcxy(26,1,0x00);
+      cputcxy(27,1,0x00);
+      cputcxy(28,1,0x00);
+      vrambuf_flush();
       break;
     }
   }
