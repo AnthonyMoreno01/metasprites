@@ -49,9 +49,21 @@ unsigned char pad1;	// joystick
 unsigned char pad1_new; // joystick
 byte slain = 0x30;
 //Direction array affects movement and gravity
-typedef enum { D_RIGHT, D_DOWN, D_LEFT, D_UP, D_UP_LEFT, D_UP_RIGHT, D_DOWN_LEFT, D_DOWN_RIGHT, D_STAND } dir_t;
-const char DIR_X[9] = { 2, 0, -2, 0, -2, 2,-2, 2, 0};
-const char DIR_Y[9] = { 0, 2, 0, -2, -2,-2, 2, 2, 0};
+typedef enum { D_RIGHT, D_DOWN, 
+              D_LEFT, D_UP, 
+              D_UP_LEFT, D_UP_RIGHT, 
+              D_DOWN_LEFT, D_DOWN_RIGHT, 
+              D_STAND } dir_t;
+const char DIR_X[9] = { 2, 0, 
+                       -2, 0, 
+                       -2, 2,
+                       -2, 2, 
+                       0};
+const char DIR_Y[9] = { 0,  2,
+                        0, -2, 
+                       -2, -2, 
+                        2,  2, 
+                       0};
 /*{pal:"nes",layout:"nes"}*/
 const char PALETTE[32] = { 
   0x0C,			// screen color
@@ -388,11 +400,11 @@ void shoot(Enemy* e){
       { 
         e->is_alive = false;
         decrement_hp(e);
-        if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 &&  e->hp4 == 0x33)
+        if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 &&  e->hp4 == 0x37)
         {
           e->is_low = true;
         }
-        if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 &&  e->hp4 == 0x31)
+        if(e->hp1 == 0x30 && e->hp2 == 0x30 && e->hp3 == 0x30 &&  e->hp4 == 0x35)
         {
           e->is_critical = true;
         }
@@ -557,7 +569,7 @@ void create_top_left_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -621,7 +633,7 @@ void create_top_area()
   vrambuf_flush();
   while (1)
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -682,7 +694,7 @@ void create_top_right_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -744,7 +756,7 @@ void create_left_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -805,7 +817,7 @@ void create_right_area()
   vrambuf_flush();
   while (1)
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -866,7 +878,7 @@ void create_bottom_left_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -929,7 +941,7 @@ void create_bottom_area()
   vrambuf_flush();
   while (1)
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -989,7 +1001,7 @@ void create_bottom_right_area()
   vrambuf_flush();
   while (1) 
   {
-    if(x == 500)
+    if(x == 700)
     {
       movement(&heros);
       move_player(&heros);
@@ -1037,48 +1049,50 @@ void create_boss_area(Enemy* e)
 {
   int x,y,p,i,j;
   joy_install (joy_static_stddrv);
+  heros.x = 120;
+  heros.y = 150;
   if(difficulty == 1)
   {
     switch(e->id)
     {
-      case 1: p = 1000; e->x = 20; e->y = 20; break;
-      case 2: p = 900;  e->x = 20; e->y = 20; break;
-      case 3: p = 800;  e->x = 20; e->y = 20; break;
-      case 4: p = 700;  e->x = 20; e->y = 20; break;
-      case 5: p = 600;  e->x = 20; e->y = 20; break;
+      case 1: p = 1000; e->x = 120; e->y = 40; break;
+      case 2: p = 900;  e->x = 120; e->y = 40; break;
+      case 3: p = 800;  e->x = 120; e->y = 40; break;
+      case 4: p = 700;  e->x = 120; e->y = 40; break;
+      case 5: p = 600;  e->x = 120; e->y = 40; break;
     }
   }
   else if(difficulty == 2)
   {
     switch(e->id)
     {
-      case 1: p = 950; e->x = 20; e->y = 20; break;
-      case 2: p = 850; e->x = 20; e->y = 20; break;
-      case 3: p = 750; e->x = 20; e->y = 20; break;
-      case 4: p = 650; e->x = 20; e->y = 20; break;
-      case 5: p = 550; e->x = 20; e->y = 20; break;
+      case 1: p = 950; e->x = 120; e->y = 40; break;
+      case 2: p = 850; e->x = 120; e->y = 40; break;
+      case 3: p = 750; e->x = 120; e->y = 40; break;
+      case 4: p = 650; e->x = 120; e->y = 40; break;
+      case 5: p = 550; e->x = 120; e->y = 40; break;
     }
   }
   else if(difficulty == 3)
   {
     switch(e->id)
     {
-      case 1: p = 900; e->x = 20; e->y = 20; break;
-      case 2: p = 800; e->x = 20; e->y = 20; break;
-      case 3: p = 700; e->x = 20; e->y = 20; break;
-      case 4: p = 600; e->x = 20; e->y = 20; break;
-      case 5: p = 450; e->x = 20; e->y = 20; break;
+      case 1: p = 900; e->x = 120; e->y = 40; break;
+      case 2: p = 800; e->x = 120; e->y = 40; break;
+      case 3: p = 700; e->x = 120; e->y = 40; break;
+      case 4: p = 600; e->x = 120; e->y = 40; break;
+      case 5: p = 450; e->x = 120; e->y = 40; break;
     }
   }
   else if(difficulty == 4)
   {
     switch(e->id)
     {
-      case 1: p = 850; e->x = 20; e->y = 20; break;
-      case 2: p = 750; e->x = 20; e->y = 20; break;
-      case 3: p = 650; e->x = 20; e->y = 20; break;
-      case 4: p = 550; e->x = 20; e->y = 20; break;
-      case 5: p = 450; e->x = 20; e->y = 20; break;
+      case 1: p = 850; e->x = 120; e->y = 40; break;
+      case 2: p = 750; e->x = 120; e->y = 40; break;
+      case 3: p = 650; e->x = 120; e->y = 40; break;
+      case 4: p = 550; e->x = 120; e->y = 40; break;
+      case 5: p = 450; e->x = 120; e->y = 40; break;
     }
   }
   draw_box(1,2,COLS-2,ROWS,BOX_CHARS);
@@ -1242,28 +1256,13 @@ void create_boss_area(Enemy* e)
     if(e->is_low == true)
     {
       e->is_low = false;
-      
-      switch(e->id)
-      {
-        case 1: p = p-100; y = 0; break;
-        case 2: p = p-100; y = 0; break;
-        case 3: p = p-100; y = 0; break;
-        case 4: p = p-100; y = 0; break;
-        case 5: p = p-100; y = 0; break;
-      }
+      p = p-100; y = 0; 
     }
     //when enemy[0] hp is 1 increase movement
     if(e->is_critical == true)
     {
       e->is_critical = false;
-      switch(e->id)
-      {
-        case 1: p = p-100; y = 0; break;
-        case 2: p = p-100; y = 0; break;
-        case 3: p = p-100; y = 0; break;
-        case 4: p = p-100; y = 0; break;
-        case 5: p = p-100; y = 0; break;
-      }
+      p = p-100; y = 0;
     }
     if(x == 200)
     {
