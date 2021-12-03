@@ -25,6 +25,18 @@ const unsigned char name[]={\
         8,      0,      code+2,   pal, \
         8,      8,      code+3,   pal, \
         128};
+
+//#link "famitone2.s"
+void __fastcall__ famitone_update(void);
+//#link "music_aftertherain.s"
+extern char after_the_rain_music_data[];
+
+//#link "music_dangerstreets.s"
+extern char danger_streets_music_data[];
+//#link "demosounds.s"
+extern char demo_sounds[];
+
+
 //creates bullet sprite
 DEF_METASPRITE_2x2static(bullet1, 0xA2, 0);
 DEF_METASPRITE_2x2static(bullet2, 0xA1, 0);
@@ -484,7 +496,6 @@ void init_game()
     enemy[i].is_critical = false;
     enemy[i].is_dead = false;
   }
-
 }
 //creates start area
 void create_start_area()
@@ -516,28 +527,32 @@ void create_start_area()
       move_player(&heros);
       oam_meta_spr(heros.x, heros.y, 4, metasprite); 
       x=0;
-      if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <= 240 && heros.x >= 230) && 
+         (heros.y <= 120 && heros.y >=  90))
       {
         heros.x = 14;
         room_id = 6;
         break;
       }
       // move to left area
-      if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <=  10 && heros.x >=  1) && 
+         (heros.y <= 120 && heros.y >= 90))
       {
         heros.x = 220;
         room_id = 4;
         break;
       }    
       // move to top area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
+      if((heros.x <= 150 && heros.x >= 90) && 
+         (heros.y <=  20 && heros.y >=  5))
       {
         heros.y = 194;
         room_id = 2;
         break;
       }    
       // move to bottom area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
+      if((heros.x <= 150 && heros.x >=  90) && 
+         (heros.y <= 220 && heros.y >= 200))
       {
         heros.y = 24;
         room_id = 8;
@@ -587,14 +602,16 @@ void create_top_left_area()
        oam_meta_spr(hearts[0].x, hearts[0].y, 20, metasprite1);    
      }
      // move to top area
-      if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <= 240 && heros.x >= 230) && 
+         (heros.y <= 120 && heros.y >=  90))
       {
         heros.x = 14;
         room_id = 2;
         break;
       }
      // move to left area
-     if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
+     if((heros.x <= 150 && heros.x >=  90) && 
+        (heros.y <= 220 && heros.y >= 200))
      {
        heros.y = 24;
        room_id = 4;
@@ -602,7 +619,7 @@ void create_top_left_area()
      }
      //move to boss area
       if((heros.x <= 150 && heros.x >= 90) && 
-         (heros.y <= 20  && heros.y >= 5)  && enemy[1].is_dead == false)
+         (heros.y <=  20  && heros.y >= 5) && enemy[1].is_dead == false)
       {
         heros.y = 150;
         heros.x = 120;
@@ -650,28 +667,30 @@ void create_top_area()
         oam_meta_spr(hearts[1].x, hearts[1].y, 20, metasprite1);    
       }
       // move to top right area
-      if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <= 240 && heros.x >= 230) && 
+         (heros.y <= 120 && heros.y >=  90))
       {
         heros.x = 14;
         room_id = 3;
         break;
       }
       // move to top left area
-      if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <=  10 && heros.x >=  1) && 
+         (heros.y <= 120 && heros.y >= 90))
       {
         heros.x = 220;
         room_id = 1;
         break;
       }      
       // move to start area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
+      if((heros.x <= 150 && heros.x >=  90) && 
+         (heros.y <= 220 && heros.y >= 200))
       {
         heros.y = 24;
         room_id = 5;
         break;
       }
-    }
-    // check for heart collision    
+    }   
     x++;
   }
 }
@@ -711,21 +730,23 @@ void create_top_right_area()
         oam_meta_spr(hearts[2].x, hearts[2].y, 20, metasprite1);    
       }
       // move to top area
-      if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <=  10 && heros.x >=  1) && 
+         (heros.y <= 120 && heros.y >= 90))
       {
         heros.x = 220;
         room_id = 2;
         break;
       }    
       // start right area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
+      if((heros.x <= 150 && heros.x >=  90) && 
+         (heros.y <= 220 && heros.y >= 200))
       {
         heros.y = 24;
         room_id = 6;
         break;
       }
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5)&& 
-         enemy[2].is_dead==false)
+      if((heros.x <= 150 && heros.x >= 90) && 
+         (heros.y <=  20 && heros.y >=  5)   && enemy[2].is_dead==false)
       {
         heros.y = 194;
         oam_clear();
@@ -773,21 +794,24 @@ void create_left_area()
         oam_meta_spr(hearts[3].x, hearts[3].y, 20, metasprite1);    
       }
       // move to start area
-      if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <= 240 && heros.x >= 230) && 
+         (heros.y <= 120 && heros.y >=  90))
       {
         heros.x = 14;
         room_id = 5;
         break;
       }  
       // move to top left area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
+      if((heros.x <= 150 && heros.x >= 90) && 
+         (heros.y <=  20 && heros.y >=  5))
       {
         heros.y = 194;
         room_id = 1;
         break;
       }    
       // move to bottom left area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
+      if((heros.x <= 150 && heros.x >=  90) && 
+         (heros.y <= 220 && heros.y >= 200))
       {
         heros.y = 24;
         room_id = 7;
@@ -834,21 +858,24 @@ void create_right_area()
         oam_meta_spr(hearts[4].x, hearts[4].y, 20, metasprite1);    
       }
       // move to start area
-      if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <=  10 && heros.x >=  1) && 
+         (heros.y <= 120 && heros.y >= 90))
       {
         heros.x = 220;
         room_id = 5;
         break;
       }    
       // move to top right area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
+      if((heros.x <= 150 && heros.x >= 90) && 
+         (heros.y <=  20 && heros.y >=  5))
       {
         heros.y = 194;
         room_id = 3;
         break;
       }    
       // move to bottom right area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200))
+      if((heros.x <= 150 && heros.x >=  90) && 
+         (heros.y <= 220 && heros.y >= 200))
       {
         heros.y = 24;
         room_id = 9;
@@ -895,22 +922,24 @@ void create_bottom_left_area()
         oam_meta_spr(hearts[5].x, hearts[5].y, 20, metasprite1);    
       }
       // move to bottom area
-      if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <= 240 && heros.x >= 230) && 
+         (heros.y <= 120 && heros.y >=  90))
       {
         heros.x = 14;
         room_id = 8;
         break;
       }
       // move to left area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
+      if((heros.x <= 150 && heros.x >= 90) && 
+         (heros.y <=  20 && heros.y >=  5))
       {
         heros.y = 194;
         room_id = 4;
         break;
       }    
       // move to boss area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& 
-         enemy[3].is_dead == false)
+      if((heros.x <= 150 && heros.x >=  90)  && 
+         (heros.y <= 220 && heros.y >= 200) && enemy[3].is_dead == false)
       {
         heros.y = 150;
         room_id = 12;
@@ -958,21 +987,24 @@ void create_bottom_area()
         oam_meta_spr(hearts[6].x, hearts[6].y, 20, metasprite1);    
       }
       // move to bottom right area
-      if((heros.x <= 240 && heros.x >= 230) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <= 240 && heros.x >= 230) && 
+         (heros.y <= 120 && heros.y >=  90))
       {
         heros.x = 14;
         room_id = 9;
         break;
       }
       // move to bottom left area
-      if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <=  10 && heros.x >=  1) && 
+         (heros.y <= 120 && heros.y >= 90))
       {
         heros.x = 224;
         room_id = 7;
         break;
       }    
       // move to start area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
+      if((heros.x <= 150 && heros.x >= 90) && 
+         (heros.y <=  20 && heros.y >=  5))
       {
         heros.y = 194;
         room_id = 5;
@@ -1019,21 +1051,23 @@ void create_bottom_right_area()
         oam_meta_spr(hearts[7].x, hearts[7].y, 20, metasprite1);    
       }
       // move to bottom area
-      if((heros.x <= 10 && heros.x >= 1) && (heros.y <= 120 && heros.y >= 90))
+      if((heros.x <=  10 && heros.x >=  1) && 
+         (heros.y <= 120 && heros.y >= 90))
       {
         heros.x = 220;
         room_id = 8;
         break;
       } 
       // move to right area
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 20 && heros.y >= 5))
+      if((heros.x <= 150 && heros.x >= 90) && 
+         (heros.y <=  20 && heros.y >= 5))
       {
         heros.y = 194;
         room_id = 6;
         break;
       } 
-      if((heros.x <= 150 && heros.x >= 90) && (heros.y <= 220 && heros.y >= 200)&& 
-         enemy[4].is_dead == false)
+      if((heros.x <= 150 && heros.x >= 90)  && 
+         (heros.y <= 220 && heros.y >= 200) && enemy[4].is_dead == false)
       {
         heros.y = 24;
         room_id = 13;
@@ -1108,11 +1142,11 @@ void create_boss_area(Enemy* e)
   {
     case 1: 
       vrambuf_flush();
-      cputsxy(16,1,"MOLINA:");
+      cputsxy(16,1, "MOLINA:");
       draw_box(1,2, COLS-2, 19,BOX_CHARS);
-      cputsxy(4, 19, "MOLINA");
+      cputsxy(4,19, "MOLINA");
       delay(20);
-      cputsxy(7, 21, "I Choow You The End!");
+      cputsxy(7,21, "I Choow You The End!");
       vrambuf_flush();
       while(1)
       {
@@ -1121,8 +1155,10 @@ void create_boss_area(Enemy* e)
         if(joy)
           break;
       }
-      for(i = 19; i < ROWS-1;i++){
-        for(j = 2; j < COLS-2; j++){
+      for(i=19;i<ROWS-1;i++)
+      {
+        for(j=2;j<COLS-2;j++)
+        {
           cputcxy(j,i,0x00);
         }
       }
@@ -1134,14 +1170,14 @@ void create_boss_area(Enemy* e)
     break; 
     case 2: 
       vrambuf_flush();
-      cputsxy(16,1,"  KHAN:"); 
+      cputsxy(16,1, "  KHAN:"); 
       draw_box(1,2, COLS-2, 19,BOX_CHARS);
-      cputsxy(4, 19, "KHAN");
+      cputsxy(4,19, "KHAN");
       delay(20);
       vrambuf_flush();
-      cputsxy(11, 21, "No Phones");
+      cputsxy(11,21, "No Phones");
       vrambuf_flush();
-      cputsxy(10, 23, "During Class!!");
+      cputsxy(10,23, "During Class!!");
       vrambuf_flush();
       while(1)
       {
@@ -1150,8 +1186,10 @@ void create_boss_area(Enemy* e)
         if(joy)
           break;
       }
-      for(i = 19; i < ROWS-1;i++){
-        for(j = 2; j < COLS-2; j++){
+      for(i=19;i<ROWS-1;i++)
+      {
+        for(j=2;j<COLS-2;j++)
+        {
           cputcxy(j,i,0x00);
         }
       }
@@ -1163,14 +1201,14 @@ void create_boss_area(Enemy* e)
     break;
     case 3: 
       vrambuf_flush();
-      cputsxy(16,1," ZHANG:"); 
+      cputsxy(16,1, " ZHANG:"); 
       draw_box(1,2, COLS-2, 19,BOX_CHARS);
-      cputsxy(4, 19, "ZHANG");
+      cputsxy(4,19, "ZHANG");
       delay(20);
       vrambuf_flush();
-      cputsxy(9, 21, "I Will Beat You");
+      cputsxy(9,21, "I Will Beat You");
       vrambuf_flush();
-      cputsxy(10, 23, "in O(n) Time!");
+      cputsxy(10,23, "in O(n) Time!");
       vrambuf_flush();
       while(1)
       {
@@ -1179,8 +1217,10 @@ void create_boss_area(Enemy* e)
         if(joy)
           break;
       }
-      for(i = 19; i < ROWS-1;i++){
-        for(j = 2; j < COLS-2; j++){
+      for(i=19;i<ROWS-1;i++)
+      {
+        for(j=2;j<COLS-2;j++)
+        {
           cputcxy(j,i,0x00);
         }
       }
@@ -1192,14 +1232,14 @@ void create_boss_area(Enemy* e)
     break;
     case 4: 
       vrambuf_flush();
-      cputsxy(16,1," TOMAI:");
+      cputsxy(16,1, " TOMAI:");
       draw_box(1,2, COLS-2, 19,BOX_CHARS);
-      cputsxy(4, 19, "TOMAI");
+      cputsxy(4,19, "TOMAI");
       delay(20);
       vrambuf_flush();
-      cputsxy(10, 21, "FAQ Update: ");
+      cputsxy(10,21, "FAQ Update: ");
       vrambuf_flush();
-      cputsxy(9, 23, "You Will Lose!");
+      cputsxy(9,23, "You Will Lose!");
       vrambuf_flush();
       while(1)
       {
@@ -1208,8 +1248,10 @@ void create_boss_area(Enemy* e)
         if(joy)
           break;
       }
-      for(i = 19; i < ROWS-1;i++){
-        for(j = 2; j < COLS-2; j++){
+      for(i=19;i<ROWS-1;i++)
+      {
+        for(j=2;j<COLS-2;j++)
+        {
           cputcxy(j,i,0x00);
         }
       }
@@ -1221,9 +1263,9 @@ void create_boss_area(Enemy* e)
     break;
     case 5: 
       vrambuf_flush();
-      cputsxy(16,1," WYLIE:"); 
+      cputsxy(16,1, " WYLIE:"); 
       draw_box(1,2, COLS-2, 19,BOX_CHARS);
-      cputsxy(4, 19, "WYLIE");
+      cputsxy(4,19, "WYLIE");
       delay(20);
       vrambuf_flush();
       cputsxy(9,21,"You Will Laugh At");
@@ -1237,8 +1279,10 @@ void create_boss_area(Enemy* e)
         if(joy)
           break;
       }
-      for(i = 19; i < ROWS-1;i++){
-        for(j = 2; j < COLS-2; j++){
+      for(i=19;i<ROWS-1;i++)
+      {
+        for(j=2;j<COLS-2;j++)
+        {
           cputcxy(j,i,0x00);
         }
       }
@@ -1273,15 +1317,12 @@ void create_boss_area(Enemy* e)
       oam_meta_spr(e->x, e->y, 48, metasprite2); 
       x=0;
     }
-
     x++;
     y++;
-    
     if(y == p)
     {
-        enemy_movement(e);
-        move_enemy(e);
-      
+      enemy_movement(e);
+      move_enemy(e);
       //check for collision between enemy[0] and hero
       if(heros.x == e->x && heros.y == e->y)  
       {
@@ -1310,7 +1351,6 @@ void create_boss_area(Enemy* e)
       switch(e->id)
       {
         case 1:
-
           draw_box(1,2, COLS-2, 19,BOX_CHARS);
           vrambuf_flush();
           cputsxy(4, 19, "MOLINA");
@@ -1333,8 +1373,7 @@ void create_boss_area(Enemy* e)
             {
               cputcxy(j,i,0x00);
             }
-          }
-                
+          }     
           vrambuf_flush();
           cputcxy(1,19,0x85);
           vrambuf_flush();
@@ -1432,9 +1471,9 @@ void create_boss_area(Enemy* e)
             if(joy)
               break;
           }
-          for(i = 19; i < ROWS-1;i++)
+          for(i=19;i<ROWS-1;i++)
           {
-            for(j = 2; j < COLS-2; j++)
+            for(j=2;j<COLS-2;j++)
             {
               cputcxy(j,i,0x00);
             }
@@ -1464,9 +1503,9 @@ void create_boss_area(Enemy* e)
             if(joy)
               break;
           }
-          for(i = 19; i < ROWS-1;i++)
+          for(i=19;i<ROWS-1;i++)
           {
-            for(j = 2; j < COLS-2; j++)
+            for(j=2;j<COLS-2;j++)
             {
               cputcxy(j,i,0x00);
             }
@@ -1482,19 +1521,8 @@ void create_boss_area(Enemy* e)
           win_screen();
         break;
       }
-      cputcxy(16,1,0x00);
-      cputcxy(17,1,0x00);
-      cputcxy(18,1,0x00);
-      cputcxy(19,1,0x00);
-      cputcxy(20,1,0x00);
-      cputcxy(21,1,0x00);
-      cputcxy(22,1,0x00);
-      cputcxy(23,1,0x00);
-      cputcxy(24,1,0x00);
-      cputcxy(25,1,0x00);
-      cputcxy(26,1,0x00);
-      cputcxy(27,1,0x00);
-      cputcxy(28,1,0x00);
+      for(i=16; i < 29;i++)
+      cputcxy(i,1,0x00);
       vrambuf_flush();
       break;
     }
@@ -1524,11 +1552,6 @@ void set_difficulty()
   int i;
   char pad1_new = pad_trigger(0);
   char pad1 = pad_state(0);
-
-//up is easy
-//left is hard
-//right is insane
-//down is extreme
   if(pad1 & JOY_UP_MASK)
   {
     selection =1;
@@ -1540,25 +1563,25 @@ void set_difficulty()
        enemy[i].hp3 = 0x30;
        enemy[i].hp4 = 0x39;
     }
-      enemy[5].hp1 = 0x30;
-      enemy[5].hp2 = 0x30;
-      enemy[5].hp3 = 0x30;
-      enemy[5].hp4 = 0x39; 
+    enemy[5].hp1 = 0x30;
+    enemy[5].hp2 = 0x30;
+    enemy[5].hp3 = 0x30;
+    enemy[5].hp4 = 0x39; 
   }else if(pad1 & JOY_LEFT_MASK)
   {
     difficulty = 2;
     for(i=0; i < 5; i++)
     {
-       enemy[i].hp1 = 0x30; 
-       enemy[i].hp2 = 0x30;
-       enemy[i].hp3 = 0x35;
-       enemy[i].hp4 = 0x30;
+      enemy[i].hp1 = 0x30; 
+      enemy[i].hp2 = 0x30;
+      enemy[i].hp3 = 0x35;
+      enemy[i].hp4 = 0x30;
     } 
-      enemy[5].hp1 = 0x30;
-      enemy[5].hp2 = 0x31;
-      enemy[5].hp3 = 0x30;
-      enemy[5].hp4 = 0x30;
-      selection =1;
+    enemy[5].hp1 = 0x30;
+    enemy[5].hp2 = 0x31;
+    enemy[5].hp3 = 0x30;
+    enemy[5].hp4 = 0x30;
+    selection =1;
   }else if(pad1 & JOY_RIGHT_MASK)
   {
     difficulty = 3;
@@ -1584,11 +1607,11 @@ void set_difficulty()
       enemy[i].hp3 = 0x30;
       enemy[i].hp4 = 0x30;
     }
-      enemy[5].hp1 = 0x31;
-      enemy[5].hp2 = 0x30;
-      enemy[5].hp3 = 0x30;
-      enemy[5].hp4 = 0x30;  
-      selection =1;
+    enemy[5].hp1 = 0x31;
+    enemy[5].hp2 = 0x30;
+    enemy[5].hp3 = 0x30;
+    enemy[5].hp4 = 0x30;  
+    selection =1;
   }else selection = 0;
 }
 void difficulty_screen(){
@@ -1670,6 +1693,12 @@ void main()
       else
         break;
     }
+  famitone_init(danger_streets_music_data);
+  sfx_init(demo_sounds);
+  // set music callback function for NMI
+  nmi_set_callback(famitone_update);
+  // play music
+  music_play(0);
     play();
   }
 }
